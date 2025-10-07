@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -19,7 +10,7 @@ export const metadata: Metadata = {
   authors: [{ name: "FlexNet Team" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_DOMAIN_PAGE!),
 
-  // We need to add metadata for social media sharing (Open Graph and Twitter Cards)
+  // Todo:  Metadata Open Graph / Twitter Cards
 };
 
 export default function RootLayout({
@@ -29,10 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="antialiased">
+        <div className="flex flex-col">
+          <Header />
+          <main className="mx-auto min-h-screen">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
