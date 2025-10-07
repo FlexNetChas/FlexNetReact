@@ -7,7 +7,7 @@ interface ModelGLBProps {
   path: string;
 }
 
-export default function ModelGLB({ path }: ModelGLBProps) {
+export default function GLBloader({ path }: ModelGLBProps) {
   const { scene, animations } = useGLTF(path);
   const modelRef = useRef<Group>(null);
 

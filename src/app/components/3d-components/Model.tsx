@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Group } from "three";
-import ModelGLB from "./ModelGLB";
-import ModelFBX from "./ModelFBX";
+import GLBloader from "./GLBloader";
+import FBXloader from "./FBXloader";
 import { useThree } from "@react-three/fiber";
 
 interface ModelProps {
@@ -36,7 +36,7 @@ export default function Model({
       rotation={rotation}
       scale={finalScale}
     >
-      {isGLB ? <ModelGLB path={path} /> : <ModelFBX path={path} />}
+      {isGLB ? <GLBloader path={path} /> : <FBXloader path={path} />}
     </group>
   );
 }

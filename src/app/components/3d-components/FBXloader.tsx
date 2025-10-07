@@ -9,7 +9,7 @@ interface ModelFBXProps {
   scale?: number | [number, number, number];
 }
 
-export default function ModelFBX({
+export default function FBXloader({
   path,
   position = [0, 0, 0],
   scale = 1,
@@ -21,7 +21,7 @@ export default function ModelFBX({
   const mixerRef = useRef<AnimationMixer | null>(null);
 
   useEffect(() => {
-    if (!scene) return; // safety check
+    if (!scene) return;
     if (!animations || animations.length === 0) return;
 
     mixerRef.current = new AnimationMixer(scene);
