@@ -35,17 +35,17 @@ function Hero() {
 
       {/* Badges */}
       <div className="absolute bottom-10 right-10 flex flex-col gap-5 items-center">
-        <Badge className="flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2">
-          <Sparkles className="!h-5 !w-5 text-pink-600" />
+        <Badge className="flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
+          <Sparkles className="!h-5 !w-5 text-blue-500 animate-pulse" />
           <span>AI-Powered Conversations</span>
         </Badge>
 
-        <Badge className="flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2">
+        <Badge className="flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
           <DollarSign className="!h-5 !w-5 text-green-500" />
           <span>Free Registration</span>
         </Badge>
 
-        <Badge className="flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2">
+        <Badge className="flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
           <UserCog className="!h-5 !w-5 text-pink-500" />
           <span>Customizable Avatars</span>
         </Badge>

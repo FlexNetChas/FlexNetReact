@@ -181,11 +181,45 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+  }
+  .glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.03);
+    transition: all 0.4s ease;
   }
 
   /* Blurred containter - Use for Header and footer */
   .blurred-container {
     @apply border-primary/30 backdrop-blur-xs;
     background-color: oklch(0.12 0.05 250 / 0.6);
+  }
+
+  /* fade-in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  .animate-delay-1 {
+    animation-delay: 400ms;
+  }
+
+  .animate-delay-2 {
+    animation-delay: 800ms;
+  }
+
+  .animate-delay-3 {
+    animation-delay: 1200ms;
   }
 }
