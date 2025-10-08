@@ -23,7 +23,9 @@ export default function RootLayout({
       <body className="antialiased">
         <div className="flex flex-col">
           <Header />
-          <main className="mx-auto min-h-screen">{children}</main>
+          <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-5rem)]">
+            {children}
+          </main>
           <Footer />
         </div>
       </body>
