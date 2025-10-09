@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { UserProvider } from "@/context/UserContext";
+import { getCurrentUser } from "@/lib/api/actions/authActions";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -13,21 +15,28 @@ export const metadata: Metadata = {
   // Todo:  Metadata Open Graph / Twitter Cards
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch current user for UserContext (client component)
+  const user = await getCurrentUser();
+
   return (
     <html lang="en">
       <body className="antialiased">
-        <div className="flex flex-col">
-          <Header />
-          <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-5rem)]">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        {/* Client component can always access const user = useUser()
+            getSession() is only called server and jsut provides user value to UserProvider */}
+        <UserProvider user={user}>
+          <div className="flex flex-col">
+            <Header />
+            <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-5rem)]">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </UserProvider>
       </body>
     </html>
   );
