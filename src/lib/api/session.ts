@@ -24,7 +24,8 @@ export async function createSessionCookie(token: string) {
     httpOnly: true, // Cannot be accessed by JS on the client
     secure: true,
     expires: expiresAt,
-    sameSite: "none",
+    // For "lax" our backend needs to be on same domain. Ex: api.flexnet.com or api.flexnet.azurewebsites.net
+    sameSite: "lax",
     path: "/",
   });
 }
