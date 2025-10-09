@@ -14,7 +14,9 @@ export const authService = {
     });
 
     if (!response.ok) {
-      const error: any = new Error("Invalid email or password");
+      const error = new Error("Invalid email or password") as Error & {
+        status: number;
+      };
       error.status = response.status;
       throw error;
     }

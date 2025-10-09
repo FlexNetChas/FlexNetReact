@@ -26,7 +26,7 @@ const loginSchema = z.object({
 
 // Validate submitted email and password to loginSchema
 export async function login(
-  prevState: any,
+  prevState: LoginState | undefined,
   formData: FormData
 ): Promise<LoginState | undefined> {
   const result = loginSchema.safeParse(Object.fromEntries(formData));
@@ -40,17 +40,21 @@ export async function login(
   try {
     const response = await authService.login(result.data);
     await createSessionCookie(response.token);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "";
+
     // Network error
-    if (error.message?.includes("network")) {
+    if (errorMessage.includes("network")) {
       return {
         errors: {
           form: ["Unable to connect to the server"],
         },
       };
     }
+
     // API response error
-    switch (error.status) {
+    const errorStatus = (error as { status?: number }).status;
+    switch (errorStatus) {
       case 401:
         return {
           errors: {
@@ -66,7 +70,7 @@ export async function login(
         };
 
       default:
-        if (error.status >= 500) {
+        if (errorStatus && errorStatus >= 500) {
           return {
             errors: {
               form: ["Server error. Please try again"],
