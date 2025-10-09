@@ -1,7 +1,14 @@
-import React from "react";
+"use client";
 
-function page() {
-  return <div></div>;
+import React from "react";
+import LoginForm from "@/app/(auth)/login/LoginForm";
+
+function LoginPage() {
+  return (
+    <div className="flex items-center justify-center ">
+      <LoginForm />
+    </div>
+  );
 }
 
-export default page;
+export default LoginPage;
