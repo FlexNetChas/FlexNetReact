@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { login } from "@/lib/api/actions/authActions";
-import { Link } from "lucide-react";
 
 function LoginForm() {
   // Take a server action (login from authActions.ts) and return a action property (loginAction)
@@ -14,12 +15,13 @@ function LoginForm() {
   return (
     <>
       <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full ">
-        <img
+        <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
           width={120}
           height={120}
           className="mx-auto"
+          priority
         />
 
         <form

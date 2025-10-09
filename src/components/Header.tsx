@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import { logout } from "@/lib/api/actions/authActions";
@@ -17,7 +18,13 @@ export function Header() {
       >
         {/* Logo */}
         <Link href="/" className="transition-opacity hover:opacity-80">
-          <img src="/Logo.svg" alt="FlexNet Logo" width={90} height={90} />
+          <Image
+            src="/Logo.svg"
+            alt="FlexNet Logo"
+            width={90}
+            height={90}
+            priority
+          />
         </Link>
 
         {/* Auth Btn */}
