@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, DollarSign, UserCog } from "lucide-react";
@@ -6,18 +7,19 @@ import { Sparkles, DollarSign, UserCog } from "lucide-react";
 function Hero() {
   return (
     <section className="flex flex-col justify-center items-center text-center mt-10">
-      <img
+      <Image
         src="/Hero.png"
         alt="Group of people looking at the camera"
         width={200}
         height={200}
         className="mb-8 rounded-lg shadow-lg"
+        priority
       />
 
       <h1 className="gradient-text text-5xl">Welcome to Your Journey</h1>
 
       <div className="flex flex-col items-center">
-        <img src="/Logo.svg" alt="FlexNet Logo" width={150} height={150} />
+        <Image src="/Logo.svg" alt="FlexNet Logo" width={150} height={150} />{" "}
         <p className="text-xl text-muted-foreground mb-5">
           Find your path. Shape your future.
         </p>

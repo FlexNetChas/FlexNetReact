@@ -15,11 +15,6 @@ const axiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.request
-  .use
-  // Todo: get access and session Bearer token and save as a cookie or to localStorage?
-  ();
-
 // Global error handeling and logging
 axiosInstance.interceptors.response.use(
   (response) => response,

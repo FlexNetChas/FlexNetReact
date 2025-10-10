@@ -1,8 +1,27 @@
-import axiosInstance from "@/lib/api/config/axios";
+"server-only";
+
+import { LoginRequest, LoginResponse } from "@/types/auth";
+
+const API_BASE_URL = process.env.NEXT_API_BASE_URL;
 
 export const authService = {
-  login: (data: { email: string; password: string }) =>
-    axiosInstance.post("Auth/login", data),
+  login: async (data: LoginRequest): Promise<LoginResponse> => {
+    const response = await fetch(`${API_BASE_URL}/Auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      cache: "no-store",
+    });
 
-  logout: () => axiosInstance.post("Auth/logout"),
+    if (!response.ok) {
+      const error = new Error("Invalid email or password") as Error & {
+        status: number;
+      };
+      error.status = response.status;
+      throw error;
+    }
+
+    const responseBody = await response.text();
+    return JSON.parse(responseBody);
+  },
 };
