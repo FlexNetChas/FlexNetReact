@@ -6,7 +6,7 @@ import { Sparkles, DollarSign, UserCog } from "lucide-react";
 
 function Hero() {
   return (
-    <section className="flex flex-col justify-center items-center text-center mt-10">
+    <section className="flex flex-col justify-center items-center text-center mt-0 md:mt-10">
       <Image
         src="/Hero.png"
         alt="Group of people looking at the camera"
@@ -37,19 +37,19 @@ function Hero() {
 
       {/* Badges */}
       <div className="absolute bottom-10 right-10 flex flex-col gap-5 items-center">
-        <Badge className="flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
+        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
           <Sparkles className="!h-5 !w-5 text-blue-500 animate-pulse" />
-          <span>AI-Powered Conversations</span>
+          <span className="">AI-Powered Conversations</span>
         </Badge>
 
-        <Badge className="flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
+        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
           <DollarSign className="!h-5 !w-5 text-green-500" />
-          <span>Free Registration</span>
+          <span className="hidden md:inline">Free Registration</span>
         </Badge>
 
-        <Badge className="flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
+        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
           <UserCog className="!h-5 !w-5 text-pink-500" />
-          <span>Customizable Avatars</span>
+          <span className="hidden md:inline">Customizable Avatars</span>
         </Badge>
       </div>
     </section>
