@@ -14,28 +14,28 @@ function LoginForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full ">
+      <div className="px-6 md:px-8 lg:px-12 py-6 md:py-8 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
           width={120}
           height={120}
-          className="mx-auto"
+          className="mx-auto w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32"
           priority
         />
 
         <form
           action={loginAction}
-          className="flex flex-col gap-2 max-w-[300px]"
+          className="flex flex-col gap-3 md:gap-4 w-full"
         >
-          <h1 className="text-3xl">Login</h1>
-          <label htmlFor="email">Email</label>
+          <h1 className="text-2xl md:text-3xl">Login</h1>
+          <label htmlFor="email" className="text-sm font-medium">Email</label>
           <input
             id="email"
             name="email"
             type="email"
             placeholder="Email"
-            className="border border-form-foreground rounded-lg p-3"
+            className="border border-form-foreground rounded-lg p-3 text-sm md:text-base"
           />
           {/* Display form and backend http errors */}
           {state?.errors?.form && (
@@ -50,17 +50,17 @@ function LoginForm() {
             name="password"
             type="password"
             placeholder="Password"
-            className="border border-form-foreground rounded-lg p-3"
+            className="border border-form-foreground rounded-lg p-3 text-sm md:text-base"
           />
           {/* Display form and backend http errors */}
           {state?.errors?.password && (
-            <p className=" text-red-500">{state.errors.password}</p>
+            <p className="text-red-500 text-sm">{state.errors.password}</p>
           )}
           <SubmitButton />
         </form>
-        <p className="text-xs mt-4">
+        <p className="text-xs md:text-sm mt-4 text-center">
           Don&apos;t have an account yet? &nbsp;
-          <Link href="/register" className="text-xs">
+          <Link href="/register" className="text-xs md:text-sm">
             Register for free
           </Link>
         </p>
