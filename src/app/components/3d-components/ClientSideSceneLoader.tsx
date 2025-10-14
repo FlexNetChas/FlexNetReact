@@ -1,13 +1,9 @@
 "use client";
 import dynamic from "next/dynamic";
 
-//docs link https://nextjs.org/docs/pages/guides/lazy-loading#nextdynamic
-// Dynamically import the Scene component with SSR disabled, e.g., only render on the client side.
-const Scene = dynamic(() => import("./Scene"), {
-  ssr: false,
-  loading: () => <p>Loading Scene...</p>,
-});
+// Dynamically import Scene so it only renders on client
+const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
-export default function LazyScene() {
+export default function SceneWithContextProvider() {
   return <Scene />;
 }

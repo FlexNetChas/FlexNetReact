@@ -1,97 +1,79 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  OrbitControls,
-  Stars,
-  PerformanceMonitor,
-  Environment,
-} from "@react-three/drei";
+import React, { useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
-import { HDRLoader } from "three/examples/jsm/Addons.js";
-import Model from "./Model";
 
+// Custom created components
+import LightSetup from "./Lighting/LightSetup";
+import EnvironmentSetup from "./Lighting/EnvironmentSetup";
+import Model from "./Models/Model";
+import FPSWatcher from "./Performance/FPSWatcher";
+import PerformancePanel from "./Performance/PerformancePanel";
+
+// Main 3D Scene component, this is where the 3D "lives"
 export default function Scene() {
-  const [dpr, setDpr] = useState(1.5);
-  return (
-    <Canvas shadows camera={{ position: [0, 3, 6], fov: 75 }}>
-      <SceneContent />
-      <OrbitControls />
+  // dynamic performance settings to balance quality and performance
+  // Dpr is "device pixel ratio" (higher = sharper look, but more performance heavy).
+  const [degraded, setDegraded] = useState(false);
+  const [dpr, setDpr] = useState(2);
 
-      <PerformanceMonitor
-        bounds={(refreshRate) => (refreshRate > 90 ? [50, 90] : [50, 60])}
-        onIncline={({ factor }) => setDpr(Math.min(2, 1 + factor))}
-        onDecline={({ factor }) => setDpr(Math.max(1, 1 - factor))}
-        onChange={({ factor }) => setDpr(Math.floor(0.5 + 1.5 * factor))}
-        flipflops={3}
-        onFallback={() => setDpr(1)}
-      />
-    </Canvas>
-  );
-}
-
-function SceneContent() {
-  const { scene } = useThree();
-
-  // const hololonight = "/3d-assets/dikhololo_night_1k.hdr";
-  // const citysunset = "/3d-assets/city.hdr";
-  // const lakeside = "/3d-assets/lakeside_sunrise_1k.hdr";
-  // const photostudio = "/3d-assets/blue_photo_studio_1k.hdr";
-  // const metronoord = "/3d-assets/metro_noord_1k.hdr";
-  // const sunset = "/3d-assets/qwantani_sunset_puresky_1k.hdr";
-  // React.useEffect(() => {
-  //   const loader = new HDRLoader();
-  //   loader.load(
-  //     sunset,
-  //     (texture) => {
-  //       texture.mapping = THREE.EquirectangularReflectionMapping;
-  //       scene.environment = texture;
-  //     },
-  //     undefined,
-  //     (error) => {
-  //       console.error("Error loading HDR texture:", error);
-  //     }
-  //   );
-  // }, [scene]);
+  const minimumFPS = 30; // less than this and we consider performance to be poor.
+  const duration = 3; // the duration (in seconds) that the performance can be poor before we switch to 2D.
 
   return (
-    <group>
-      <directionalLight
-        intensity={1}
-        castShadow
-        position={[5, 10, 5]}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-bias={-0.0001}
-      />
-      ;
-      <Stars />
-      <ambientLight intensity={1.1} />
-      <pointLight position={[10, 10, 10]} />
-      <mesh receiveShadow position={[0, 0, 0]}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="green" />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, 0, 0]}>
-        <planeGeometry args={[10, 10]} />
-        <meshStandardMaterial color="gray" />
-      </mesh>
-      <mesh position={[0, 0, -2]} receiveShadow>
-        <planeGeometry args={[10, 10]} />
-        <meshStandardMaterial color="gray" />
-      </mesh>
+    // Canvas is the scene container from react-three-fiber lib, it's the world where all 3D objects are rendered.
+    // Camera and WebGL context (gl) are configured in the Canvas props.
+    <Canvas
+      shadows
+      dpr={dpr}
+      camera={{ position: [0, 4, 15], fov: 75, near: 0.1, far: 50 }}
+      gl={{
+        antialias: true,
+        powerPreference: "high-performance",
+        alpha: true,
+        stencil: false,
+        depth: true,
+        logarithmicDepthBuffer: true,
+      }}
+      style={{ background: "transparent" }}
+      onCreated={({ gl }) => {
+        gl.outputColorSpace = THREE.SRGBColorSpace;
+        gl.toneMapping = THREE.ACESFilmicToneMapping;
+        gl.toneMappingExposure = 1;
+        gl.setClearColor(new THREE.Color("#000000"), 0);
+        gl.shadowMap.enabled = true;
+        gl.shadowMap.type = THREE.PCFSoftShadowMap;
+      }}
+    >
+      {/* Environment and Lighting Setup */}
+      <EnvironmentSetup degraded={degraded} />
+      <LightSetup degraded={degraded} />
+
+      {/* Models in the Scene */}
       <Model
         path="/3d-assets/AnimatedRobot.glb"
-        position={[-2, 0, 0]}
-        scale={0.5}
+        position={[0, 0, 10]}
+        scale={1}
       />
-      <Model
-        path="/3d-assets/CoolBannanaGuy.glb"
-        position={[2, 0, 0]}
-        rotation={[0, -Math.PI / 2, 0]}
-        scale={0.5}
+
+      {/* Performance Monitor to adjust settings based on performance */}
+      {/* onDecline: when performance drops, we set degraded to true to reduce quality */}
+      {/* onIncline: when performance improves, we set degraded to false to increase quality */}
+      {/* onFallback: if performance is very low, we set dpr to 1 to improve performance */}
+      {/* These settings can be adjusted based on the desired performance and quality balance */}
+      {/* More info: https://docs.pmnd.rs/drei/performance/performancemonitor */}
+      <PerformanceMonitor
+        onDecline={() => setDegraded(false)}
+        onIncline={() => setDegraded(false)}
+        onFallback={() => setDpr(1)}
       />
-    </group>
+      {/* PerformanceMonitor will try to balance and get a stable fps, FPSWatcher will handle the kill-switch to 2D */}
+      {/* *threshold* is minimum fps and *duration* is how long it needs to be below threshold to trigger */}
+      <FPSWatcher threshold={minimumFPS} duration={duration} />
+
+      {/* !DEBUG! Performance Panel to display performance metrics for debugging and optimization */}
+      <PerformancePanel />
+    </Canvas>
   );
 }
