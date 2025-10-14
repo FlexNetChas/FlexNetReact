@@ -11,38 +11,37 @@ export function Header() {
   const user = useUser();
 
   return (
-    <header className="sticky top-0 w-full blurred-container border-b">
-      <nav
-        className="container mx-auto flex h-20 items-center justify-between"
-        aria-label="Main navigation"
-      >
-        {/* Logo */}
-        <Link href="/" className="transition-opacity hover:opacity-80">
-          <Image
-            src="/Logo.svg"
-            alt="FlexNet Logo"
-            width={90}
-            height={90}
-            priority
-          />
-        </Link>
+    <header className="sticky top-0 w-full border-b">
+      <nav className="w-full blurred-container flex items-center justify-between px-4 pt-4 md:pt-0 md:px-10">
+        <div className="mx-auto flex w-full items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="transition-opacity hover:opacity-80">
+            <Image
+              src="/Logo.svg"
+              alt="FlexNet Logo"
+              width={90}
+              height={90}
+              priority
+            />
+          </Link>
 
-        {/* Auth Btn */}
-        <div className="flex items-center gap-4">
-          {!user ? (
-            <Link href="/login">
-              <Button variant="outline">Login</Button>
-            </Link>
-          ) : (
-            <>
-              <span className="text-muted-foreground">
-                {user.firstName} {user.lastName}
-              </span>
-              <form action={logout}>
-                <LogoutButton />
-              </form>
-            </>
-          )}
+          {/* Auth Btn */}
+          <div className="flex items-center gap-4">
+            {!user ? (
+              <Link href="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+            ) : (
+              <>
+                <span className="text-muted-foreground">
+                  {user.firstName} {user.lastName}
+                </span>
+                <form action={logout}>
+                  <LogoutButton />
+                </form>
+              </>
+            )}
+          </div>
         </div>
       </nav>
     </header>
