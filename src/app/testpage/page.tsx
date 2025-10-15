@@ -1,9 +1,15 @@
 "use client";
 import Image from "next/image";
-import ClientSideSceneLoader from "./ClientSideSceneLoader";
-import { SceneContextProvider, useSceneContext } from "./SceneContext";
-import { AnimationProvider, useAnimation } from "./Animation/AnimationContext";
-import Chatbox from "./tempChatbox ";
+import ClientSideSceneLoader from "../components/3d-components/ClientSideSceneLoader";
+import {
+  SceneContextProvider,
+  useSceneContext,
+} from "../components/3d-components/SceneContext";
+import {
+  AnimationProvider,
+  useAnimation,
+} from "../components/3d-components/Animation/AnimationContext";
+import Chatbox from "../components/3d-components/tempChatbox ";
 
 //test page to wrap everything together and provide useContexts
 export default function TestPage() {
