@@ -7,13 +7,20 @@ import { Sparkles, DollarSign, UserCog } from "lucide-react";
 function Hero() {
   return (
     <section className="flex flex-col justify-center items-center text-center mt-0 md:mt-10">
-      <Image
+      {/* <Image
         src="/Hero.png"
         alt="Group of people looking at the camera"
         width={200}
         height={200}
         className="mb-8 rounded-lg shadow-lg"
         priority
+      /> */}
+      <video
+        src="/3d-assets/2d-animated.webm"
+        className="mb-8 max-w-[25%] max-h-[50%] w-auto h-auto"
+        autoPlay
+        loop
+        muted
       />
 
       <h1 className="gradient-text text-5xl">Welcome to Your Journey</h1>
