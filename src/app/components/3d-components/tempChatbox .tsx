@@ -52,7 +52,7 @@ export default function TempChatbox() {
   }, [messages]);
 
   return (
-    <div className="w-full h-[500px] flex flex-col text-white rounded-xl overflow-hidden">
+    <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
       {/* Scrollable chat log */}
       <div
         ref={logRef}

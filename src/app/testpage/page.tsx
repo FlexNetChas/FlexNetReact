@@ -27,16 +27,7 @@ function PageContent() {
   const { toggleAnimation } = useAnimation();
 
   return (
-    <div className="w-full h-screen bg-black flex flex-col items-center justify-between py-6">
-      {/* Red Line to Check Transparency */}
-      <div
-        className="absolute w-full h-[2px] bg-red-500"
-        style={{
-          top: "25%",
-          left: 0,
-        }}
-      ></div>
-
+    <div className="w-full  flex flex-col items-center justify-between py-6">
       {/* 3D Scene & 2D fallback card */}
       <button
         onClick={toggleAnimation}
@@ -45,7 +36,7 @@ function PageContent() {
         Toggle Animation outside of 3D scene
       </button>
       <div
-        className="rounded-xl shadow-lg overflow-hidden relative flex items-center justify-center"
+        className="overflow-hidden relative flex items-center justify-center"
         style={{ width: 400, height: 400 }}
       >
         {shouldRender === false ? (
