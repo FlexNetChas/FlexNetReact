@@ -43,19 +43,6 @@ function PageContent() {
         style={{ width: 400, height: 400 }}
       >
         {shouldRender === false ? (
-          // <video
-          //   src="/3d-assets/2d-animated.webm"
-          //   autoPlay={true}
-          //   loop={true}
-          //   muted={true}
-          //   controls={false}
-          //   style={{
-          //     objectFit: "cover",
-          //     width: "100%",
-          //     height: "100%",
-          //     backgroundColor: "transparent",
-          //   }}
-          // />
           <img
             src="/3d-assets/temp-2d-fallback-image.png" // Update with the path to your image
             alt="fallback 2D image if 3D fails"
