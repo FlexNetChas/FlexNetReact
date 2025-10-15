@@ -17,3 +17,27 @@ export type LoginState = {
     form?: string[];
   };
 };
+
+export type RegisterRequest = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type RegisterResponse = {
+  token: string;
+  user: SessionUser;
+};
+
+export type RegisterState = {
+  errors?: {
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+    form?: string[];
+  };
+};
