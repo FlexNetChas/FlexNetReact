@@ -1,7 +1,14 @@
-import React from "react";
+"use client";
 
-function page() {
-  return <div></div>;
+import React from "react";
+import RegisterForm from "@/app/(auth)/register/RegisterForm";
+
+function RegisterPage() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <RegisterForm />
+    </div>
+  );
 }
 
-export default page;
+export default RegisterPage;
