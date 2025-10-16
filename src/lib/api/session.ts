@@ -12,15 +12,15 @@ const secret = new TextEncoder().encode(JWT_SECRET);
 // Convert decrypted expiration time to a Date object
 const getExpirationDate = (exp: number): Date => new Date(exp * 1000);
 
-export async function createSessionCookie(token: string) {
-  const tokenPayload = await verifyToken(token);
+export async function createSessionCookie(accessToken: string) {
+  const tokenPayload = await verifyToken(accessToken);
   if (!tokenPayload) {
     throw new Error("Invalid token");
   }
 
   const expiresAt = getExpirationDate(tokenPayload.exp);
 
-  (await cookies()).set("session", token, {
+  (await cookies()).set("session", accessToken, {
     httpOnly: true, // Cannot be accessed by JS on the client
     secure: true,
     expires: expiresAt,
@@ -58,10 +58,12 @@ export async function getSession(): Promise<SessionCookiePayload | null> {
   };
 }
 
-export async function verifyToken(token: string): Promise<JWTClaims | null> {
+export async function verifyToken(
+  accessToken: string
+): Promise<JWTClaims | null> {
   try {
     // Verify the JWT token using the secret key with JOSE
-    const { payload } = await jwtVerify(token, secret, {
+    const { payload } = await jwtVerify(accessToken, secret, {
       issuer: process.env.JWT_ISSUER,
       audience: process.env.JWT_AUDIENCE,
     });

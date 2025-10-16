@@ -26,30 +26,30 @@ const loginSchema = z.object({
 });
 
 // Zod schema for registration validation
-const registerSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters" })
-    .trim(),
-  lastName: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters" })
-    .trim(),
-  email: z
-    .string()
-    .trim()
-    .pipe(z.email({ message: "Invalid email address" })),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" })
-    .trim(),
-  confirmPassword: z
-    .string()
-    .trim(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters" })
+      .trim(),
+    lastName: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters" })
+      .trim(),
+    email: z
+      .string()
+      .trim()
+      .pipe(z.email({ message: "Invalid email address" })),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" })
+      .trim(),
+    confirmPassword: z.string().trim(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 // Validate submitted email and password to loginSchema
 export async function login(
@@ -66,7 +66,7 @@ export async function login(
 
   try {
     const response = await authService.login(result.data);
-    await createSessionCookie(response.token);
+    await createSessionCookie(response.accessToken);
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "";
 
@@ -116,10 +116,14 @@ export async function login(
 }
 
 // Create a demo JWT token for testing without backend API
-async function createDemoToken(data: { firstName: string; lastName: string; email: string }) {
+async function createDemoToken(data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+}) {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
   const now = Math.floor(Date.now() / 1000);
-  
+
   return await new SignJWT({
     sub: "1", // Demo user ID
     email: data.email,
@@ -149,16 +153,16 @@ export async function register(
 
   try {
     const response = await authService.register(result.data);
-    await createSessionCookie(response.token);
+    await createSessionCookie(response.accessToken);
   } catch (error: unknown) {
     // Check if it's a connection error (API server not running)
-    if (error instanceof TypeError && error.message.includes('fetch')) {
+    if (error instanceof TypeError && error.message.includes("fetch")) {
       try {
         // For demo purposes, create a mock JWT token and redirect to success
         // This allows testing the UI without the backend API
         const mockToken = await createDemoToken(result.data);
         await createSessionCookie(mockToken);
-        
+
         // Redirect to success page for demo
         redirect("/register/success");
       } catch (demoError) {
@@ -173,7 +177,9 @@ export async function register(
     if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
       return {
         errors: {
-          form: ["API server is not running. Please start your backend API server at https://localhost:7228"],
+          form: [
+            "API server is not running. Please start your backend API server at https://localhost:7228",
+          ],
         },
       };
     }
