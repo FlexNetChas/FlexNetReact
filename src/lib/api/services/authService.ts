@@ -1,6 +1,11 @@
 "server-only";
 
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "@/types/auth";
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from "@/types/auth";
 
 const API_BASE_URL = process.env.NEXT_API_BASE_URL;
 
@@ -11,6 +16,7 @@ export const authService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
       cache: "no-store",
+      credentials: "include",
     });
 
     if (!response.ok) {

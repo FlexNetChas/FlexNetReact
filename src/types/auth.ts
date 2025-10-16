@@ -6,7 +6,7 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
-  token: string;
+  accessToken: string;
   user: SessionUser;
 };
 
@@ -27,7 +27,7 @@ export type RegisterRequest = {
 };
 
 export type RegisterResponse = {
-  token: string;
+  accessToken: string;
   user: SessionUser;
 };
 
