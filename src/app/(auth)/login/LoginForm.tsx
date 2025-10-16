@@ -14,7 +14,7 @@ function LoginForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full ">
+      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto mt-20">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
@@ -23,7 +23,6 @@ function LoginForm() {
           className="mx-auto"
           priority
         />
-
         <form
           action={loginAction}
           className="flex flex-col gap-2 max-w-[300px]"

@@ -73,7 +73,7 @@ export default function Scene() {
       <FPSWatcher threshold={minimumFPS} duration={duration} />
 
       {/* !DEBUG! Performance Panel to display performance metrics for debugging and optimization */}
-      <PerformancePanel />
+      {/* <PerformancePanel /> */}
     </Canvas>
   );
 }

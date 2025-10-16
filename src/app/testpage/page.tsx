@@ -31,7 +31,7 @@ function PageContent() {
       {/* 3D Scene & 2D fallback card */}
       <button
         onClick={toggleAnimation}
-        className="absolute left-4 top-1/2 -translate-y-1/2 px-1 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 shadow-lg z-10"
+        className="absolute right-4 top-1/2 -translate-y-1/2 px-1 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 shadow-lg z-10"
       >
         Toggle Animation outside of 3D scene
       </button>

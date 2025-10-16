@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserProvider } from "@/context/UserContext";
 import { getCurrentUser } from "@/lib/api/actions/authActions";
+import PreviousChatSessions from "@/components/chatsidebar/PreviousChatSessions";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -23,17 +24,47 @@ export default async function RootLayout({
   // Fetch current user for UserContext (client component)
   const user = await getCurrentUser();
 
+  // SIDEBAR STYLED TO EXIST ON THE SIDE OF THE PAGE
+  // return (
+  //   <html lang="en">
+  //     <body className="antialiased">
+  //       {/* Client component can always access const user = useUser()
+  //           getSession() is only called server and jsut provides user value to UserProvider */}
+  //       <UserProvider user={user}>
+  //         <div className="flex min-h-screen">
+  //           {user && (
+  //             <aside className="h-screen sticky top-0 overflow-y-auto">
+  //               <PreviousChatSessions />
+  //             </aside>
+  //           )}
+  //           <div className="flex flex-col flex-1 min-h-screen">
+  //             <Header />
+  //             <main className="flex-1 overflow-auto">{children}</main>
+  //             <Footer />
+  //           </div>
+  //         </div>
+  //       </UserProvider>
+  //     </body>
+  //   </html>
+  // );
+
+  // SIDEBAR STYLED TO EXIST BETWEEN HEADER AND FOOTER
   return (
     <html lang="en">
       <body className="antialiased">
-        {/* Client component can always access const user = useUser()
-            getSession() is only called server and jsut provides user value to UserProvider */}
         <UserProvider user={user}>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-5rem)]">
-              {children}
-            </main>
+
+            <div className="flex flex-1">
+              {user && (
+                <aside className="h-screen sticky top-0 overflow-y-auto">
+                  <PreviousChatSessions />
+                </aside>
+              )}
+              <main className="flex-1 overflow-auto">{children}</main>
+            </div>
+
             <Footer />
           </div>
         </UserProvider>
