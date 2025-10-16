@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserProvider } from "@/context/UserContext";
 import { getCurrentUser } from "@/lib/api/actions/authActions";
-import PreviousChatSessions from "@/components/chatsidebar/PreviousChatSessions";
+import PreviousChatSessions from "@/components/Sidebar/Sidebar";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",

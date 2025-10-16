@@ -16,13 +16,13 @@ export default function PreviousChatSessions() {
 
   return (
     <aside
-      className={`h-screen bg-gray-950 border-r border-gray-700 text-white flex flex-col transition-all duration-300 ${
+      className={`h-screen bg-gray-950 border-r border-gray-800 text-white flex flex-col transition-all duration-300 ${
         isMinimized ? "w-16 items-center" : "w-64"
       }`}
     >
       {/* Open close sidebar & lil animation */}
       <div
-        className={`flex items-center justify-between w-full border-gray-800 px-3 ${
+        className={`flex items-center justify-between w-full px-3 ${
           isMinimized ? "flex-col gap-3 pt-3 pb-2" : "h-16"
         }`}
       >
@@ -41,7 +41,7 @@ export default function PreviousChatSessions() {
         <button
           onClick={toggleSidebar}
           title={isMinimized ? "Open Sidebar" : "Close Sidebar"}
-          className="text-white hover:text-gray-400 focus:outline-none transition-all duration-300 p-2"
+          className="text-white hover:text-gray-400 focus:outline-none transition-all duration-300 p-2 cursor-pointer rounded-md hover:bg-gray-800"
         >
           {isMinimized ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
@@ -49,49 +49,64 @@ export default function PreviousChatSessions() {
 
       {/* Menu section, temp buttons in same file here sicne layout and flow not finalized */}
       <div
-        className={`flex flex-col gap-2  border-gray-800 ${
+        className={`flex flex-col gap-1${
           isMinimized ? "items-center py-3" : "items-start px-3 py-3"
         }`}
       >
         <Button
-          asChild
           variant="sidebar"
           size={isMinimized ? "icon" : "default"}
           className={`${
             isMinimized ? "justify-center" : "justify-start"
           } flex w-full gap-2`}
-          title={"New Chat"}
+          title={"New chat"}
         >
-          <Link href={"/testpage"} className="flex items-center gap-2 w-full">
+          <Link href={"/chat"} className="flex items-center gap-2 w-full">
             {<SquarePen size={18} />}
-            {!isMinimized && <span className="text-sm">{"New Chat"}</span>}
+            {!isMinimized && <span className="text-sm">{"New chat"}</span>}
           </Link>
         </Button>
-        <SidebarButton
-          href="/testpage"
-          icon={<Search size={18} />}
-          label="Search Chats"
-          isMinimized={isMinimized}
-        />
-        <SidebarButton
-          href="/testpage"
-          icon={<Book size={18} />}
-          label="Library"
-          isMinimized={isMinimized}
-        />
+
+        <Button
+          variant="sidebar"
+          size={isMinimized ? "icon" : "default"}
+          className={`${
+            isMinimized ? "justify-center" : "justify-start"
+          } flex w-full gap-2`}
+          title={"Search chats"}
+        >
+          <Link href={"/chat"} className="flex items-center gap-2 w-full">
+            {<Search size={18} />}
+            {!isMinimized && <span className="text-sm">{"Search chats"}</span>}
+          </Link>
+        </Button>
+
+        <Button
+          variant="sidebar"
+          size={isMinimized ? "icon" : "default"}
+          className={`${
+            isMinimized ? "justify-center" : "justify-start"
+          } flex w-full gap-2`}
+          title={"Library"}
+        >
+          <Link href={"/chat"} className="flex items-center gap-2 w-full">
+            {<Book size={18} />}
+            {!isMinimized && <span className="text-sm">{"Library"}</span>}
+          </Link>
+        </Button>
       </div>
 
       {/* Previous chats listed here, scrollable window. Getting previous chats and handling onclick setup chat logic should be handled elsewhere, 
       this here just handle the visual and onclick call  */}
       {!isMinimized && (
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
           <Section title="Projects">
             <SectionItem text="Temp1" />
             <SectionItem text="Temp2" />
             <SectionItem text="Temp3" />
           </Section>
 
-          <Section title="Previous Chats">
+          <Section title="Chats">
             <SectionItem text="Lorem ipsum dolor sit amet" />
             <SectionItem text="Lorem ipsum dolor sit amet" />
             <SectionItem text="Lorem ipsum dolor sit amet" />
@@ -123,34 +138,6 @@ export default function PreviousChatSessions() {
   );
 }
 
-{
-  /* temp buttons to get feel for the visuals, layout not finalized */
-}
-function SidebarButton({
-  href,
-  icon,
-  label,
-  isMinimized,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  isMinimized: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      title={label}
-      className={`flex items-center gap-2 px-2 py-2 rounded-md hover:bg-gray-800 transition-colors w-full ${
-        isMinimized ? "justify-center" : "justify-start"
-      }`}
-    >
-      {icon}
-      {!isMinimized && <span className="text-sm">{label}</span>}
-    </Link>
-  );
-}
-
 // helper to group sessions into sections in the sidebar e.g Projects, Previous Chats. copied gpt structure, we probably don't want this exact structure.
 function Section({
   title,
@@ -161,7 +148,7 @@ function Section({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold mb-2 text-gray-300">{title}</h3>
+      <h3 className="text-sm font-semibold mb-2 text-gray-400">{title}</h3>
       <div className="flex flex-col gap-2">{children}</div>
     </div>
   );
@@ -173,13 +160,13 @@ function SectionItem({ text }: { text: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/testpage");
+    router.push("/chat"); // Replace with actual chat session route /chat/[id] have that page handle setup too.
   };
 
   return (
     <div
       onClick={handleClick}
-      className="p-2 bg-gray-800 rounded hover:bg-gray-700 transition-colors cursor-pointer text-sm"
+      className="p-3  rounded hover:bg-gray-700 transition-colors cursor-pointer text-sm"
     >
       {text}
     </div>
