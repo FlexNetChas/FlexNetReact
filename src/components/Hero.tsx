@@ -33,7 +33,7 @@ function Hero() {
         <Link href="/register" className="block w-8/10">
           <Button
             size="lg"
-            className="glass text-primary-foreground w-full"
+            className="glass text-primary-foreground w-full mb-2"
             variant="outline"
             aria-label="Register"
           >
@@ -43,7 +43,7 @@ function Hero() {
       </div>
 
       {/* Badges */}
-      <div className="absolute bottom-10 right-10 flex flex-col gap-5 items-center">
+      <div className="absolute bottom-100 right-10 flex flex-col gap-5 items-center">
         <Badge className="hidden md:flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
           <Sparkles className="!h-5 !w-5 text-blue-500 animate-pulse" />
           <span className="">AI-Powered Conversations</span>

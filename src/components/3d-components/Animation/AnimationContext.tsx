@@ -14,7 +14,7 @@ const AnimationContext = createContext<AnimationContextType | undefined>(
 );
 
 export function AnimationProvider({ children }: { children: ReactNode }) {
-  const [animation, setAnimation] = useState<AnimationState>("idle");
+  const [animation, setAnimation] = useState<AnimationState>("talking"); //start value
 
   const toggleAnimation = () => {
     setAnimation((prev) => (prev === "idle" ? "talking" : "idle"));

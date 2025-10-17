@@ -24,9 +24,6 @@ export function Header() {
               priority
             />
           </Link>
-          <Link href="/testpage">
-            <Button variant="outline">Go to Test Page</Button>
-          </Link>
           {/* Auth Btn */}
           <div className="flex items-center gap-4">
             {!user ? (
