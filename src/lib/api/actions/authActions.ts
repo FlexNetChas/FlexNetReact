@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import {
+  createRefreshCookie,
   createSessionCookie,
   deleteSession,
   getSession,
@@ -67,6 +68,7 @@ export async function login(
   try {
     const response = await authService.login(result.data);
     await createSessionCookie(response.accessToken);
+    await createRefreshCookie(response.refreshToken);
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "";
 
@@ -115,29 +117,6 @@ export async function login(
   redirect("/dashboard");
 }
 
-// Create a demo JWT token for testing without backend API
-async function createDemoToken(data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-}) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
-  const now = Math.floor(Date.now() / 1000);
-
-  return await new SignJWT({
-    sub: "1", // Demo user ID
-    email: data.email,
-    name: `${data.firstName} ${data.lastName}`,
-    role: "User",
-    exp: now + 24 * 60 * 60, // 24 hours from now
-  })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setIssuer(process.env.JWT_ISSUER!)
-    .setAudience(process.env.JWT_AUDIENCE!)
-    .sign(secret);
-}
-
 // Validate submitted registration data to registerSchema
 export async function register(
   prevState: RegisterState | undefined,
@@ -154,23 +133,8 @@ export async function register(
   try {
     const response = await authService.register(result.data);
     await createSessionCookie(response.accessToken);
+    await createRefreshCookie(response.refreshToken);
   } catch (error: unknown) {
-    // Check if it's a connection error (API server not running)
-    if (error instanceof TypeError && error.message.includes("fetch")) {
-      try {
-        // For demo purposes, create a mock JWT token and redirect to success
-        // This allows testing the UI without the backend API
-        const mockToken = await createDemoToken(result.data);
-        await createSessionCookie(mockToken);
-
-        // Redirect to success page for demo
-        redirect("/register/success");
-      } catch (demoError) {
-        // If demo token creation fails, just redirect to success without session
-        console.log("Demo mode: Creating session without backend API");
-        redirect("/register/success");
-      }
-    }
     const errorMessage = error instanceof Error ? error.message : "";
 
     // Network error or API not available
