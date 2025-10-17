@@ -15,16 +15,13 @@ async function attemptTokenRefresh(
   attempt: number = 1
 ): Promise<boolean> {
   try {
-    console.log(`Refresh attempt ${attempt}/2`);
     const newTokens = await authService.refresh(refreshToken);
 
     await createSessionCookie(newTokens.accessToken);
     await createRefreshCookie(newTokens.refreshToken);
 
-    console.log("token refreshed successfully");
     return true;
   } catch (error) {
-    console.error(`Refresh attempt ${attempt} failed`);
     if (attempt < 2) {
       return attemptTokenRefresh(refreshToken, attempt + 1);
     }
@@ -60,7 +57,6 @@ export default async function middleware(req: NextRequest) {
   if (cookie && isValidToken) {
     const session = await getSession();
     if (session && isTokenExpiringSoon(session.expiresAt, 1)) {
-      console.log("Token expiring soon, attempting refresh...");
       const refreshToken = await getRefreshtoken();
 
       if (refreshToken) {
