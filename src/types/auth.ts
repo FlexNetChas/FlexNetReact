@@ -7,6 +7,7 @@ export type LoginRequest = {
 
 export type LoginResponse = {
   accessToken: string;
+  refreshToken: string;
   user: SessionUser;
 };
 
@@ -28,6 +29,7 @@ export type RegisterRequest = {
 
 export type RegisterResponse = {
   accessToken: string;
+  refreshToken: string;
   user: SessionUser;
 };
 
@@ -40,4 +42,13 @@ export type RegisterState = {
     confirmPassword?: string[];
     form?: string[];
   };
+};
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type RefreshRequest = {
+  refreshToken: string;
 };
