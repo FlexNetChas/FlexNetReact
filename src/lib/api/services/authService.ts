@@ -5,6 +5,7 @@ import {
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
+  RefreshResponse,
 } from "@/types/auth";
 
 const API_BASE_URL = process.env.NEXT_API_BASE_URL;
@@ -47,6 +48,25 @@ export const authService = {
       throw error;
     }
 
+    const responseBody = await response.text();
+    return JSON.parse(responseBody);
+  },
+
+  refresh: async (refreshToken: string): Promise<RefreshResponse> => {
+    const response = await fetch(`${API_BASE_URL}/Auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const error = new Error("Refresh token invalid or expired") as Error & {
+        status: number;
+      };
+      error.status = response.status;
+      throw error;
+    }
     const responseBody = await response.text();
     return JSON.parse(responseBody);
   },
