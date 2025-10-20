@@ -1,6 +1,33 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { verifyToken } from "@/lib/api/session";
+import {
+  verifyToken,
+  getSession,
+  getRefreshtoken,
+  isTokenExpiringSoon,
+  createRefreshCookie,
+  createSessionCookie,
+} from "@/lib/api/session";
+import { authService } from "./lib/api/services/authService";
+
+async function attemptTokenRefresh(
+  refreshToken: string,
+  attempt: number = 1
+): Promise<boolean> {
+  try {
+    const newTokens = await authService.refresh(refreshToken);
+
+    await createSessionCookie(newTokens.accessToken);
+    await createRefreshCookie(newTokens.refreshToken);
+
+    return true;
+  } catch (error) {
+    if (attempt < 2) {
+      return attemptTokenRefresh(refreshToken, attempt + 1);
+    }
+    return false;
+  }
+}
 
 // Middleware to protect all routes except publicRoutes
 export default async function middleware(req: NextRequest) {
@@ -21,8 +48,28 @@ export default async function middleware(req: NextRequest) {
     if (!isValidToken) {
       const response = NextResponse.redirect(new URL("/login", req.nextUrl));
       response.cookies.delete("session");
+      response.cookies.delete("refreshToken");
 
       if (isProtectedRoute) return response;
+    }
+  }
+
+  if (cookie && isValidToken) {
+    const session = await getSession();
+    if (session && isTokenExpiringSoon(session.expiresAt, 1)) {
+      const refreshToken = await getRefreshtoken();
+
+      if (refreshToken) {
+        const refreshed = await attemptTokenRefresh(refreshToken);
+        if (!refreshed) {
+          const response = NextResponse.redirect(
+            new URL("/login", req.nextUrl)
+          );
+          response.cookies.delete("session");
+          response.cookies.delete("refreshToken");
+          return response;
+        }
+      }
     }
   }
 
@@ -43,6 +90,6 @@ export default async function middleware(req: NextRequest) {
  */
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|hdr|glb|mp4)$).*)",
   ],
 };

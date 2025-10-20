@@ -12,15 +12,15 @@ const secret = new TextEncoder().encode(JWT_SECRET);
 // Convert decrypted expiration time to a Date object
 const getExpirationDate = (exp: number): Date => new Date(exp * 1000);
 
-export async function createSessionCookie(token: string) {
-  const tokenPayload = await verifyToken(token);
+export async function createSessionCookie(accessToken: string) {
+  const tokenPayload = await verifyToken(accessToken);
   if (!tokenPayload) {
     throw new Error("Invalid token");
   }
 
   const expiresAt = getExpirationDate(tokenPayload.exp);
 
-  (await cookies()).set("session", token, {
+  (await cookies()).set("session", accessToken, {
     httpOnly: true, // Cannot be accessed by JS on the client
     secure: true,
     expires: expiresAt,
@@ -32,6 +32,7 @@ export async function createSessionCookie(token: string) {
 
 export async function deleteSession() {
   (await cookies()).delete("session");
+  (await cookies()).delete("refreshToken");
 }
 
 export async function getSession(): Promise<SessionCookiePayload | null> {
@@ -58,10 +59,42 @@ export async function getSession(): Promise<SessionCookiePayload | null> {
   };
 }
 
-export async function verifyToken(token: string): Promise<JWTClaims | null> {
+export async function createRefreshCookie(refreshToken: string) {
+  const expiresAt = new Date();
+
+  // Check if we're in testing mode
+  if (process.env.NEXT_PUBLIC_TESTING_MODE === "true") {
+    const expiryMinutes = parseInt(
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_MINUTES || "2"
+    );
+    expiresAt.setMinutes(expiresAt.getMinutes() + expiryMinutes);
+  } else {
+    const expiryDays = parseInt(
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_DAYS || "7"
+    );
+    expiresAt.setDate(expiresAt.getDate() + expiryDays);
+  }
+
+  (await cookies()).set("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: "lax",
+    path: "/",
+  });
+}
+
+export async function getRefreshtoken(): Promise<string | null> {
+  const cookie = (await cookies()).get("refreshToken")?.value;
+  return cookie || null;
+}
+
+export async function verifyToken(
+  accessToken: string
+): Promise<JWTClaims | null> {
   try {
     // Verify the JWT token using the secret key with JOSE
-    const { payload } = await jwtVerify(token, secret, {
+    const { payload } = await jwtVerify(accessToken, secret, {
       issuer: process.env.JWT_ISSUER,
       audience: process.env.JWT_AUDIENCE,
     });
@@ -71,4 +104,17 @@ export async function verifyToken(token: string): Promise<JWTClaims | null> {
     console.error("Token verification failed:", error);
     return null;
   }
+}
+
+// Helper function to check expiration of token
+
+export function isTokenExpiringSoon(
+  expiresAt: Date,
+  bufferHours: number = 1
+): boolean {
+  const now = new Date();
+  const bufferHs = bufferHours * 60 * 60 * 1000;
+  const expirationWithBuffer = new Date(expiresAt.getTime() - bufferHs);
+
+  return now >= expirationWithBuffer;
 }

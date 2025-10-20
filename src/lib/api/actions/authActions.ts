@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import {
+  createRefreshCookie,
   createSessionCookie,
   deleteSession,
   getSession,
@@ -10,7 +11,8 @@ import {
 import { authService } from "@/lib/api/services/authService";
 import { cache } from "react";
 import { SessionUser } from "@/types/user";
-import { LoginState } from "@/types/auth";
+import { LoginState, RegisterState } from "@/types/auth";
+import { SignJWT } from "jose";
 
 // Zod library validate user input (email and password). Reduce API calls, injection attacks etc
 const loginSchema = z.object({
@@ -23,6 +25,32 @@ const loginSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" })
     .trim(),
 });
+
+// Zod schema for registration validation
+const registerSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters" })
+      .trim(),
+    lastName: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters" })
+      .trim(),
+    email: z
+      .string()
+      .trim()
+      .pipe(z.email({ message: "Invalid email address" })),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" })
+      .trim(),
+    confirmPassword: z.string().trim(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 // Validate submitted email and password to loginSchema
 export async function login(
@@ -39,7 +67,8 @@ export async function login(
 
   try {
     const response = await authService.login(result.data);
-    await createSessionCookie(response.token);
+    await createSessionCookie(response.accessToken);
+    await createRefreshCookie(response.refreshToken);
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "";
 
@@ -86,6 +115,80 @@ export async function login(
   }
 
   redirect("/dashboard");
+}
+
+// Validate submitted registration data to registerSchema
+export async function register(
+  prevState: RegisterState | undefined,
+  formData: FormData
+): Promise<RegisterState | undefined> {
+  const result = registerSchema.safeParse(Object.fromEntries(formData));
+
+  if (!result.success) {
+    return {
+      errors: z.flattenError(result.error).fieldErrors,
+    };
+  }
+
+  try {
+    const response = await authService.register(result.data);
+    await createSessionCookie(response.accessToken);
+    await createRefreshCookie(response.refreshToken);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "";
+
+    // Network error or API not available
+    if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+      return {
+        errors: {
+          form: [
+            "API server is not running. Please start your backend API server at https://localhost:7228",
+          ],
+        },
+      };
+    }
+
+    // API response error
+    const errorStatus = (error as { status?: number }).status;
+    switch (errorStatus) {
+      case 400:
+        return {
+          errors: {
+            form: ["Invalid registration data. Please check your information"],
+          },
+        };
+
+      case 409:
+        return {
+          errors: {
+            form: ["Email already exists. Please use a different email"],
+          },
+        };
+
+      case 429:
+        return {
+          errors: {
+            form: ["Too many registration attempts. Please try again"],
+          },
+        };
+
+      default:
+        if (errorStatus && errorStatus >= 500) {
+          return {
+            errors: {
+              form: ["Server error. Please try again"],
+            },
+          };
+        }
+        return {
+          errors: {
+            form: ["Unexpected error. Please try again"],
+          },
+        };
+    }
+  }
+
+  redirect("/register/success");
 }
 
 export async function logout() {

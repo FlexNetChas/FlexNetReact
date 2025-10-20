@@ -1,6 +1,12 @@
 "server-only";
 
-import { LoginRequest, LoginResponse } from "@/types/auth";
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+  RefreshResponse,
+} from "@/types/auth";
 
 const API_BASE_URL = process.env.NEXT_API_BASE_URL;
 
@@ -11,6 +17,7 @@ export const authService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
       cache: "no-store",
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -21,6 +28,45 @@ export const authService = {
       throw error;
     }
 
+    const responseBody = await response.text();
+    return JSON.parse(responseBody);
+  },
+
+  register: async (data: RegisterRequest): Promise<RegisterResponse> => {
+    const response = await fetch(`${API_BASE_URL}/Auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const error = new Error("Registration failed") as Error & {
+        status: number;
+      };
+      error.status = response.status;
+      throw error;
+    }
+
+    const responseBody = await response.text();
+    return JSON.parse(responseBody);
+  },
+
+  refresh: async (refreshToken: string): Promise<RefreshResponse> => {
+    const response = await fetch(`${API_BASE_URL}/Auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const error = new Error("Refresh token invalid or expired") as Error & {
+        status: number;
+      };
+      error.status = response.status;
+      throw error;
+    }
     const responseBody = await response.text();
     return JSON.parse(responseBody);
   },
