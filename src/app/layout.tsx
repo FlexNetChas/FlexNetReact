@@ -62,7 +62,9 @@ export default async function RootLayout({
                   <PreviousChatSessions />
                 </aside>
               )}
-              <main className="flex-1 overflow-auto">{children}</main>
+              <main className="flex-1 overflow-auto min-h-screen">
+                {children}
+              </main>
             </div>
 
             <Footer />
