@@ -6,17 +6,34 @@ import {
   ChevronLeft,
   ChevronRight,
   SquarePen,
+  Settings,
+  LogOut,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
+import { logout } from "@/lib/api/actions/authActions";
+import { useFormStatus } from "react-dom";
+
 export default function PreviousChatSessions() {
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const toggleSidebar = () => setIsMinimized((prev) => !prev);
+  const user = useUser();
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch (error) {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <aside
-      className={`h-screen bg-gray-950 border-r border-gray-800 text-white flex flex-col transition-all duration-300 ${
+      className={`h-screen bg-gray-950/20 backdrop-blur-2xl border-r border-gray-800 text-white flex flex-col transition-all duration-300 ${
         isMinimized ? "w-16 items-center" : "w-64"
       }`}
     >
@@ -46,6 +63,21 @@ export default function PreviousChatSessions() {
           {isMinimized ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
       </div>
+
+      {/* User Info Section */}
+      {!isMinimized && user && (
+        <div className="px-3 py-3">
+          <div className="text-sm">
+            <p className="font-semibold text-white truncate">
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="text-xs text-gray-400 truncate">{user.email}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Border after user info */}
+      {!isMinimized && <div className="border-t border-gray-800 mx-3"></div>}
 
       {/* Menu section, temp buttons in same file here sicne layout and flow not finalized */}
       <div
@@ -94,12 +126,50 @@ export default function PreviousChatSessions() {
             {!isMinimized && <span className="text-sm">{"Library"}</span>}
           </Link>
         </Button>
+
+        <Button
+          variant="sidebar"
+          size={isMinimized ? "icon" : "default"}
+          className={`${
+            isMinimized ? "justify-center" : "justify-start"
+          } flex w-full gap-2`}
+          title={"Settings"}
+        >
+          <Link href={"/settings"} className="flex items-center gap-2 w-full">
+            <Settings size={18} />
+            {!isMinimized && <span className="text-sm">Settings</span>}
+          </Link>
+        </Button>
+
+        {/* Logout Button */}
+        <Button
+          variant="sidebar"
+          size={isMinimized ? "icon" : "default"}
+          className={`${
+            isMinimized ? "justify-center" : "justify-start"
+          } flex w-full gap-2 text-primary hover:underline`}
+          title="Logout"
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+        >
+          <div className="flex items-center gap-2 w-full">
+            <LogOut size={18} />
+            {!isMinimized && (
+              <span className="text-sm">
+                {isLoggingOut ? "Logging out..." : "Logout"}
+              </span>
+            )}
+          </div>
+        </Button>
       </div>
+
+      {/* Border after settings */}
+      {!isMinimized && <div className="border-t border-gray-800 mx-3"></div>}
 
       {/* Previous chats listed here, scrollable window. Getting previous chats and handling onclick setup chat logic should be handled elsewhere, 
       this here just handle the visual and onclick call  */}
       {!isMinimized && (
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-hide">
           <Section title="Projects">
             <SectionItem text="Temp1" />
             <SectionItem text="Temp2" />
@@ -170,5 +240,32 @@ function SectionItem({ text }: { text: string }) {
     >
       {text}
     </div>
+  );
+}
+
+// Logout Button
+function LogoutButton({ isMinimized }: { isMinimized: boolean }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      variant="sidebar"
+      size={isMinimized ? "icon" : "default"}
+      className={`${
+        isMinimized ? "justify-center" : "justify-start"
+      } flex w-full gap-2`}
+      title="Logout"
+      disabled={pending}
+    >
+      <div className="flex items-center gap-2 w-full">
+        <LogOut size={18} />
+        {!isMinimized && (
+          <span className="text-sm">
+            {pending ? "Logging out..." : "Logout"}
+          </span>
+        )}
+      </div>
+    </Button>
   );
 }
