@@ -242,30 +242,3 @@ function SectionItem({ text }: { text: string }) {
     </div>
   );
 }
-
-// Logout Button
-function LogoutButton({ isMinimized }: { isMinimized: boolean }) {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button
-      type="submit"
-      variant="sidebar"
-      size={isMinimized ? "icon" : "default"}
-      className={`${
-        isMinimized ? "justify-center" : "justify-start"
-      } flex w-full gap-2`}
-      title="Logout"
-      disabled={pending}
-    >
-      <div className="flex items-center gap-2 w-full">
-        <LogOut size={18} />
-        {!isMinimized && (
-          <span className="text-sm">
-            {pending ? "Logging out..." : "Logout"}
-          </span>
-        )}
-      </div>
-    </Button>
-  );
-}
