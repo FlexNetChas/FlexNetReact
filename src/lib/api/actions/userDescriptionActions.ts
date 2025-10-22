@@ -48,21 +48,3 @@ export async function patchUserDescription(
     };
   }
 }
-
-// Stämmer denna funktion???
-export async function hasCompletedDescription(
-  userId: number
-): Promise<boolean> {
-  const description = await getUserDescription(userId);
-  if (!description) return false;
-
-  // Kolla om användaren har fyllt i sin beskrivning (inte default-värden)
-  // Default är: age=0, education="", purpose=""
-  return (
-    description.age > 0 &&
-    description.education !== null &&
-    description.education.trim().length > 0 &&
-    description.purpose !== null &&
-    description.purpose.trim().length > 0
-  );
-}
