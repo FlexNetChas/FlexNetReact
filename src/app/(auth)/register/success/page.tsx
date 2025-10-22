@@ -41,15 +41,21 @@ function RegistrationSuccessPage() {
           <div className="space-y-3">
             <div className="flex items-center">
               <Check className="w-4 h-4 text-green-500 mr-3" />
-              <span className="text-gray-300 text-sm">Account created successfully</span>
+              <span className="text-gray-300 text-sm">
+                Account created successfully
+              </span>
             </div>
             <div className="flex items-center">
               <Check className="w-4 h-4 text-green-500 mr-3" />
-              <span className="text-gray-300 text-sm">You're automatically logged in</span>
+              <span className="text-gray-300 text-sm">
+                You're automatically logged in
+              </span>
             </div>
             <div className="flex items-center">
               <Mail className="w-4 h-4 text-cyan-400 mr-3" />
-              <span className="text-gray-300 text-sm">Check your email for verification</span>
+              <span className="text-gray-300 text-sm">
+                Check your email for verification
+              </span>
             </div>
           </div>
         </div>
@@ -60,20 +66,15 @@ function RegistrationSuccessPage() {
             asChild
             className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
           >
-            <Link href="/dashboard">
-              Go to Dashboard
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
+            <Link href="/settings">Update Profile</Link>
           </Button>
-          
+
           <Button
             asChild
             variant="outline"
             className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white"
           >
-            <Link href="/">
-              Back to Home
-            </Link>
+            <Link href="/">Back to Home</Link>
           </Button>
         </div>
 
