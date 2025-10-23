@@ -31,9 +31,7 @@ export default async function RootLayout({
           {user ? (
             // Protected layout: Only sidebar, no header/footer
             <div className="flex min-h-screen">
-              <aside className="h-screen sticky top-0 overflow-y-auto">
-                <PreviousChatSessions />
-              </aside>
+              <PreviousChatSessions />
               <main className="flex-1 overflow-auto min-h-screen">
                 {children}
               </main>
