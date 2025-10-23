@@ -22,4 +22,5 @@ export type UserDescriptionState = {
     form?: string[];
   };
   success?: boolean;
+  updatedData?: UserDescription;
 };
