@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { logout } from "@/lib/api/actions/authActions";
-import { useFormStatus } from "react-dom";
 
 export default function PreviousChatSessions() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -169,7 +168,7 @@ export default function PreviousChatSessions() {
       {/* Previous chats listed here, scrollable window. Getting previous chats and handling onclick setup chat logic should be handled elsewhere, 
       this here just handle the visual and onclick call  */}
       {!isMinimized && (
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
           <Section title="Projects">
             <SectionItem text="Temp1" />
             <SectionItem text="Temp2" />
