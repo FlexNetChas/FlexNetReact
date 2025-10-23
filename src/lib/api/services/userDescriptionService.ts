@@ -16,6 +16,12 @@ export const userDescriptionService = {
       }
     );
 
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch user description: ${response.statusText}`
+      );
+    }
+
     return response.json();
   },
 
@@ -32,6 +38,12 @@ export const userDescriptionService = {
         cache: "no-store",
       }
     );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to update user description: ${response.statusText}`
+      );
+    }
 
     return response.json();
   },
