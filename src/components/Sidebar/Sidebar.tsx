@@ -47,8 +47,9 @@ export default function PreviousChatSessions() {
         className={`
           fixed md:relative
           top-0 left-0
-          h-screen bg-gray-900/60 backdrop-blur-sm border-r border-border
+          h-screen bg-gray-900/70 backdrop-blur-lg border-r border-border
           flex flex-col
+          z-50
           ${isMinimized ? "md:w-16 md:items-center w-64" : "w-64"}
           ${
             isMinimized ? "translate-x-0" : "-translate-x-full md:translate-x-0"
