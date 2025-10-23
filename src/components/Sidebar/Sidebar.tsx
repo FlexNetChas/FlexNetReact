@@ -234,7 +234,7 @@ export default function PreviousChatSessions() {
             <div className="flex items-center gap-2 w-full">
               <LogOut size={18} />
               {!isMinimized && (
-                <span className="hidden md:inline text-sm">Settings</span>
+                <span className="hidden md:inline text-sm">Logout</span>
               )}
               {isMinimized && (
                 <span className="md:hidden text-sm">
