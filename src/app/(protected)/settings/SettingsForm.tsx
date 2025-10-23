@@ -5,6 +5,13 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { patchUserDescription } from "@/lib/api/actions/userDescriptionActions";
 import type {
   UserDescriptionState,
@@ -66,7 +73,7 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
       });
 
       setSuccessMessage("Your settings have been updated successfully!");
-      // Auto-hide success message after 3 seconds
+      // Auto-hide success message after 5 seconds
       const timer = setTimeout(() => {
         setSuccessMessage(null);
       }, 5000);
@@ -76,11 +83,11 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
   }, [state]);
 
   return (
-    <div className="flex items-center justify-center mt-20 px-4">
+    <div className="flex items-center justify-center min-h-screen px-4">
       <div className="px-8 py-6 bg-form/80 rounded-2xl w-full max-w-2xl">
         <div className="text-center mb-6">
-          <h1 className="text-4xl mb-2">Settings</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl mb-2">Settings</h1>
+          <p className="text-muted-foreground text-sm">
             Help us personalize your experience by telling us a bit about
             yourself. All fields are optional
           </p>
@@ -106,21 +113,22 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
           </div>
         )}
 
-        <form action={formAction} className="max-w-xl mx-auto space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form
+          action={formAction}
+          className="flex flex-col gap-4 max-w-xl mx-auto"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Age */}
-            <div className="space-y-2 p-2">
-              <label htmlFor="age" className="text-sm font-medium">
-                Age
-              </label>
+            <div className="space-y-2">
+              <label htmlFor="age">Age</label>
               <Input
                 id="age"
                 name="age"
                 type="number"
                 min="1"
                 max="100"
+                placeholder="Enter your age"
                 value={formValues.age || ""}
-                // Get new value (string) and convert input to a integer. Default to 0 if empty
                 onChange={(e) => {
                   const value = e.target.value;
                   setFormValues((prev) => ({
@@ -128,7 +136,7 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
                     age: value ? parseInt(value, 10) : 0,
                   }));
                 }}
-                className="border border-form-foreground rounded-lg p-3"
+                className="border-form-foreground"
               />
               {state?.errors?.age && (
                 <p className="text-error text-sm">{state.errors.age[0]}</p>
@@ -136,70 +144,74 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
             </div>
 
             {/* Gender */}
-            <div className="space-y-2 p-2">
-              <label htmlFor="gender" className="text-sm font-medium">
-                Gender
-              </label>
-              <select
-                id="gender"
+            <div className="space-y-2">
+              <label htmlFor="gender">Gender</label>
+              <Select
                 name="gender"
                 value={formValues.gender}
-                onChange={(e) => {
+                onValueChange={(value) => {
                   setFormValues((prev) => ({
                     ...prev,
-                    gender: e.target.value,
+                    gender: value,
                   }));
                 }}
-                className="w-full border border-form-foreground rounded-lg p-3 bg-background text-foreground"
               >
-                <option value="">Select gender</option>
-                <option value="Man">Man</option>
-                <option value="Woman">Woman</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-              </select>
+                <SelectTrigger
+                  id="gender"
+                  className="border-form-foreground bg-background text-sm h-10"
+                >
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent className="min-w-full">
+                  <SelectItem value="Man">Man</SelectItem>
+                  <SelectItem value="Woman">Woman</SelectItem>
+                  <SelectItem value="Prefer not to say">
+                    Prefer not to say
+                  </SelectItem>
+                </SelectContent>
+              </Select>
               {state?.errors?.gender && (
                 <p className="text-error text-sm">{state.errors.gender[0]}</p>
               )}
             </div>
+          </div>
 
-            {/* Education */}
-            <div className="space-y-2 p-2 mb-4">
-              <label htmlFor="education" className="text-sm font-medium">
-                Education
-              </label>
-              <select
+          {/* Education */}
+          <div className="space-y-2">
+            <label htmlFor="education">Education</label>
+            <Select
+              name="education"
+              value={formValues.education}
+              onValueChange={(value) => {
+                setFormValues((prev) => ({
+                  ...prev,
+                  education: value,
+                }));
+              }}
+            >
+              <SelectTrigger
                 id="education"
-                name="education"
-                value={formValues.education}
-                onChange={(e) => {
-                  setFormValues((prev) => ({
-                    ...prev,
-                    education: e.target.value,
-                  }));
-                }}
-                className="w-full border border-form-foreground rounded-lg p-3 bg-background text-foreground"
+                className="border-form-foreground bg-background text-sm h-10"
               >
-                <option value="">Select level</option>
-                <option value="Primary school">Primary school</option>
-                <option value="High school">High school</option>
-                <option value="University">University</option>
-                <option value="Master's degree">Master's degree</option>
-                <option value="Doctorate">Doctorate</option>
-                <option value="Other">Other</option>
-              </select>
-              {state?.errors?.education && (
-                <p className="text-error text-sm">
-                  {state.errors.education[0]}
-                </p>
-              )}
-            </div>
+                <SelectValue placeholder="Select level" />
+              </SelectTrigger>
+              <SelectContent className="min-w-full">
+                <SelectItem value="Primary school">Primary school</SelectItem>
+                <SelectItem value="High school">High school</SelectItem>
+                <SelectItem value="University">University</SelectItem>
+                <SelectItem value="Master's degree">Master's degree</SelectItem>
+                <SelectItem value="Doctorate">Doctorate</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            {state?.errors?.education && (
+              <p className="text-error text-sm">{state.errors.education[0]}</p>
+            )}
           </div>
 
           {/* Purpose */}
-          <div className="space-y-2 p-2">
-            <label htmlFor="purpose" className="text-sm font-medium">
-              What do you hope to achieve?
-            </label>
+          <div className="space-y-2">
+            <label htmlFor="purpose">What do you hope to achieve?</label>
             <textarea
               id="purpose"
               name="purpose"
@@ -211,16 +223,14 @@ function SettingsForm({ userId, initialData }: SettingsFormProps) {
                 }));
               }}
               placeholder="E.g. I want guidance on choosing the right educational path"
-              className="w-full border border-form-foreground rounded-lg p-3 bg-background text-foreground min-h-[120px] resize-y"
+              className="w-full border border-form-foreground rounded-lg p-3 bg-background text-foreground min-h-[120px] resize-y placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
             {state?.errors?.purpose && (
               <p className="text-error text-sm">{state.errors.purpose[0]}</p>
             )}
           </div>
 
-          <div className="flex mt-4">
-            <SubmitButton />
-          </div>
+          <SubmitButton />
         </form>
       </div>
     </div>
@@ -235,7 +245,7 @@ function SubmitButton() {
       disabled={pending}
       type="submit"
       size="lg"
-      className="glass text-primary-foreground flex-1"
+      className="glass text-primary-foreground mt-2"
       variant="outline"
     >
       {pending ? "Saving..." : "Save"}
