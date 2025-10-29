@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
 import { CompactChatSessionResponseDto } from "@/types/chatSession";
-import { chatSessionSerice } from "@/lib/api/services/chatSessionService"; // Import the service
-import axiosInstance from "@/lib/api/config/axios";
 
 const SectionItem = () => {
   const [sessions, setSessions] = useState<
@@ -17,9 +13,9 @@ const SectionItem = () => {
   const router = useRouter();
 
   useEffect(() => {
-    axiosInstance
-      .get("/ChatSession")
-      .then((res) => setSessions(res.data))
+    fetch("/api/chat-sessions")
+      .then((res) => res.json())
+      .then((data) => setSessions(data))
       .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
   }, []);

@@ -22,6 +22,8 @@ axiosInstance.interceptors.request.use(
       .find((row) => row.startsWith("session="))
       ?.split("=")[1];
 
+    console.log("Token token: ", token);
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
