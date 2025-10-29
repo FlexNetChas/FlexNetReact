@@ -15,6 +15,21 @@ const axiosInstance = axios.create({
   },
 });
 
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("session="))
+      ?.split("=")[1];
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Global error handeling and logging
 axiosInstance.interceptors.response.use(
   (response) => response,
