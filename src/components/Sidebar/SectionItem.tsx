@@ -21,9 +21,14 @@ const SectionItem = () => {
   }, []);
 
   const handleClick = (sessionId: number) => {
-    router.push(`/chat/${sessionId}`);
+    if (sessionId) {
+      console.log("Navigating to chat session with id:", sessionId);
+      router.push(`/chat/${sessionId}`);
+    } else {
+      console.error("Invalid session ID:", sessionId);
+    }
   };
-
+  console.log(sessions);
   return (
     <div>
       {isLoading ? (
@@ -35,14 +40,14 @@ const SectionItem = () => {
           {sessions && sessions.length > 0 ? (
             sessions.map((session) => (
               <div
-                key={session.Id}
-                onClick={() => handleClick(session.Id)}
+                key={session.id}
+                onClick={() => handleClick(session.id)}
                 className="p-3 rounded hover:bg-gray-700 transition-colors cursor-pointer text-sm"
               >
                 <div className="flex justify-between">
-                  <span>{session.Summary || "No Summary"}</span>
+                  <span>{session.summary || "No Summary"}</span>
                   <span className="text-xs text-gray-500">
-                    {new Date(session.StartedTime).toLocaleString()}
+                    {new Date(session.startedTime).toLocaleString()}
                   </span>
                 </div>
               </div>

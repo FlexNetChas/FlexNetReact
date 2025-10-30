@@ -1,32 +1,32 @@
 import { ChatMessageResponseDto } from "./chatMessage";
 
 export type CompactChatSessionResponseDto = {
-  Id: number;
-  Summary: string | null;
-  StartedTime: Date;
-  EndedTime: Date | null;
+  id: number;
+  summary: string | null;
+  startedTime: string;
+  endedTime: string | null;
 };
 
 export type CompleteChatSessionResponseDto = {
-  Id: number;
-  UserId: number;
-  Summary: string | null;
-  StartedTime: Date;
-  EndedTime: Date | null;
-  ChatMessages: ChatMessageResponseDto[];
+  id: number;
+  userId: number;
+  summary: string | null;
+  startedTime: Date;
+  endedTime: Date | null;
+  chatMessages: ChatMessageResponseDto[];
 };
 
 export type CreateChatSessionRequestDto = {
-  Summary: string | null;
-  StartedTime: Date;
-  EndedTime: Date | null;
-  ChatMessages: ChatMessageResponseDto[];
+  summary: string | null;
+  startedTime: Date;
+  endedTime: Date | null;
+  chatMessages: ChatMessageResponseDto[];
 };
 
 export type UpdateChatSessionsRequestDto = {
-  SessionID: number;
-  Summary?: string | null;
-  StartedTime: Date;
-  EndedTime?: Date | null;
-  ChatMessages: ChatMessageResponseDto[];
+  sessionId: number;
+  summary?: string | null;
+  startedTime: Date;
+  endedTime?: Date | null;
+  chatMessages: ChatMessageResponseDto[];
 };

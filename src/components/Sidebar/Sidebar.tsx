@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import {
-  Book,
-  Search,
   ChevronLeft,
   ChevronRight,
   SquarePen,
@@ -11,7 +9,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { logout } from "@/lib/api/actions/authActions";
 import SectionItems from "./SectionItem";
@@ -75,16 +72,18 @@ export default function PreviousChatSessions() {
           }`}
         >
           {!isMinimized && (
-            <div className="w-10 h-10 overflow-hidden rounded-md">
-              <video
-                src="/3d-assets/2d-animated.webm"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="object-cover w-full h-full"
-              />
-            </div>
+            <Link href="/dashboard">
+              <div className="w-10 h-10 overflow-hidden rounded-md">
+                <video
+                  src="/3d-assets/2d-animated.webm"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </Link>
           )}
           <button
             onClick={toggleSidebar}
@@ -103,9 +102,11 @@ export default function PreviousChatSessions() {
         {!isMinimized && user && (
           <div className="px-3 py-3">
             <div className="text-sm">
-              <p className="font-semibold text-white truncate">
-                {user.firstName} {user.lastName}
-              </p>
+              <Link href="/dashboard">
+                <p className="font-semibold text-white truncate">
+                  {user.firstName} {user.lastName}
+                </p>
+              </Link>
               <p className="text-xs text-gray-400 truncate">{user.email}</p>
             </div>
           </div>
@@ -165,7 +166,7 @@ export default function PreviousChatSessions() {
             </Link>
           </Button>
 
-          <Button
+          {/* <Button
             variant="sidebar"
             size="default"
             className={`${
@@ -182,9 +183,10 @@ export default function PreviousChatSessions() {
                 <span className="md:hidden text-sm">Search chat</span>
               )}
             </Link>
-          </Button>
+          </Button> */}
 
-          <Button
+          {/* /// Library Button - currently commented out */}
+          {/* <Button
             variant="sidebar"
             size="default"
             className={`${
@@ -201,7 +203,7 @@ export default function PreviousChatSessions() {
                 <span className="md:hidden text-sm">Library</span>
               )}
             </Link>
-          </Button>
+          </Button> */}
 
           <Button
             variant="sidebar"
@@ -260,15 +262,11 @@ export default function PreviousChatSessions() {
         {!isMinimized && (
           <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
             {/* <Section title="Projects">
-              <SectionItem text="Temp1" />
-              <SectionItem text="Temp2" />
-              <SectionItem text="Temp3" />
+              <SectionItems />
             </Section> */}
 
             <Section title="Chats">
               <SectionItems />
-              {/* <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" /> */}
             </Section>
           </div>
         )}
@@ -276,15 +274,11 @@ export default function PreviousChatSessions() {
         {isMinimized && (
           <div className="md:hidden flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
             {/* <Section title="Projects">
-              <SectionItem text="Temp1" />
-              <SectionItem text="Temp2" />
-              <SectionItem text="Temp3" />
+              <SectionItems />
             </Section> */}
 
             <Section title="Chats">
               <SectionItems />
-              {/* <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" /> */}
             </Section>
           </div>
         )}
@@ -305,25 +299,6 @@ function Section({
     <div>
       <h3 className="text-sm font-semibold mb-2 text-gray-400">{title}</h3>
       <div className="flex flex-col gap-2">{children}</div>
-    </div>
-  );
-}
-
-// helper for each item in a Section, depends on how we handle it but this probalby comes from a component handling backend data fetching, and it contains an id,
-// so these can act as buttons to load a specific chat session.
-function SectionItem({ text }: { text: string }) {
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push("/chat"); // Replace with actual chat session route /chat/[id] have that page handle setup too.
-  };
-
-  return (
-    <div
-      onClick={handleClick}
-      className="p-3  rounded hover:bg-gray-700 transition-colors cursor-pointer text-sm"
-    >
-      {text}
     </div>
   );
 }
