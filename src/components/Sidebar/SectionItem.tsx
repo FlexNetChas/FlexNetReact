@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CompactChatSessionResponseDto } from "@/types/chatSession";
 
@@ -11,14 +11,6 @@ const SectionItem = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    fetch("/api/chat-sessions")
-      .then((res) => res.json())
-      .then((data) => setSessions(data))
-      .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
-  }, []);
 
   const handleClick = (sessionId: number) => {
     router.push(`/chat/${sessionId}`);
