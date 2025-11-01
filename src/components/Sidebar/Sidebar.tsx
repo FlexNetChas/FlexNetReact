@@ -13,8 +13,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { logout } from "@/lib/api/actions/authActions";
 import SectionItems from "./SectionItem";
+import { logout } from "@/lib/sharedActions";
 
 export default function PreviousChatSessions() {
   const [isMinimized, setIsMinimized] = useState(false);
