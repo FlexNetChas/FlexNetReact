@@ -12,18 +12,21 @@ export const userDescriptionService = {
       `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "GET",
-        headers: await getAuthHeaders(),
+        headers: {
+          ...(await getAuthHeaders()),
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
       }
     );
 
+    const body = await response.json();
+
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch user description: ${response.statusText}`
-      );
+      throw body;
     }
 
-    return response.json();
+    return body;
   },
 
   patch: async (
@@ -34,19 +37,21 @@ export const userDescriptionService = {
       `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "PATCH",
-        headers: await getAuthHeaders(),
+        headers: {
+          ...(await getAuthHeaders()),
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
-        credentials: "include",
         cache: "no-store",
       }
     );
 
+    const body = await response.json();
+
     if (!response.ok) {
-      throw new Error(
-        `Failed to update user description: ${response.statusText}`
-      );
+      throw body;
     }
 
-    return response.json();
+    return body;
   },
 };
