@@ -3,8 +3,9 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserProvider } from "@/context/UserContext";
-import { getCurrentUser } from "@/lib/api/actions/authActions";
 import PreviousChatSessions from "@/components/Sidebar/Sidebar";
+import { Toaster } from "react-hot-toast";
+import { getCurrentUser } from "@/lib/sharedActions";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -46,6 +47,7 @@ export default async function RootLayout({
               <Footer />
             </div>
           )}
+          <Toaster position="top-right" />
         </UserProvider>
       </body>
     </html>
