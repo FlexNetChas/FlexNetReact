@@ -25,6 +25,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-error: var(--error);
+  --color-success: var(--success);
   --color-warning: var(--warning);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -91,6 +92,8 @@
   --error-foreground: oklch(0.9672 0 0);
   --warning: oklch(0.7 0.2 90);
   --warning-foreground: oklch(0.9672 0 0);
+  --success: oklch(0.577 0.245 134.325);
+  --success-foreground: oklch(0.9672 0 0);
 
   /* Borders and Input */
   --border: oklch(0.3 0.05 250);

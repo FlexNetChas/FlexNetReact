@@ -13,7 +13,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { logout } from "@/lib/api/actions/authActions";
+import SectionItems from "./SectionItem";
+import { logout } from "@/lib/sharedActions";
 
 export default function PreviousChatSessions() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -258,32 +259,32 @@ export default function PreviousChatSessions() {
       this here just handle the visual and onclick call  */}
         {!isMinimized && (
           <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
-            <Section title="Projects">
+            {/* <Section title="Projects">
               <SectionItem text="Temp1" />
               <SectionItem text="Temp2" />
               <SectionItem text="Temp3" />
-            </Section>
+            </Section> */}
 
             <Section title="Chats">
-              <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" />
+              <SectionItems />
+              {/* <SectionItem text="Lorem ipsum dolor sit amet" />
+              <SectionItem text="Lorem ipsum dolor sit amet" /> */}
             </Section>
           </div>
         )}
 
         {isMinimized && (
           <div className="md:hidden flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
-            <Section title="Projects">
+            {/* <Section title="Projects">
               <SectionItem text="Temp1" />
               <SectionItem text="Temp2" />
               <SectionItem text="Temp3" />
-            </Section>
+            </Section> */}
 
             <Section title="Chats">
-              <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" />
-              <SectionItem text="Lorem ipsum dolor sit amet" />
+              <SectionItems />
+              {/* <SectionItem text="Lorem ipsum dolor sit amet" />
+              <SectionItem text="Lorem ipsum dolor sit amet" /> */}
             </Section>
           </div>
         )}

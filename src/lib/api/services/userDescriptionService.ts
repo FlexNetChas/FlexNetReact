@@ -4,6 +4,7 @@ import {
   UserDescription,
   PatchUserDescriptionRequest,
 } from "@/types/userDescription";
+import { getAuthHeaders } from "../getAuthHeaders";
 
 export const userDescriptionService = {
   get: async (userId: number): Promise<UserDescription> => {
@@ -11,18 +12,21 @@ export const userDescriptionService = {
       `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...(await getAuthHeaders()),
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
       }
     );
 
+    const body = await response.json();
+
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch user description: ${response.statusText}`
-      );
+      throw body;
     }
 
-    return response.json();
+    return body;
   },
 
   patch: async (
@@ -33,18 +37,21 @@ export const userDescriptionService = {
       `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...(await getAuthHeaders()),
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
         cache: "no-store",
       }
     );
 
+    const body = await response.json();
+
     if (!response.ok) {
-      throw new Error(
-        `Failed to update user description: ${response.statusText}`
-      );
+      throw body;
     }
 
-    return response.json();
+    return body;
   },
 };

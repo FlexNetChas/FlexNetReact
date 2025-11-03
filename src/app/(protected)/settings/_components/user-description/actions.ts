@@ -4,39 +4,33 @@ import { z } from "zod";
 import { userDescriptionService } from "@/lib/api/services/userDescriptionService";
 import { cache } from "react";
 import { UserDescription, UserDescriptionState } from "@/types/userDescription";
-
-// Validation schema
-// Todo: Eveything is optional for now. Match backend validation rules later
-const userDescriptionSchema = z.object({
-  // Dropdown/select fields
-  gender: z.string().optional(),
-  education: z.string().optional(),
-  // Text input fields
-  age: z.coerce.number().optional(),
-  purpose: z.string().optional(),
-});
+import { userDescriptionSchema } from "@/lib/validations/userDescriptionValidators";
+import { extractBackendErrors } from "@/lib/api/errors";
 
 export const getUserDescription = cache(
   async (userId: number): Promise<UserDescription | null> => {
     try {
       return await userDescriptionService.get(userId);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
 );
 
+// Type for field values
+type FieldValue = string | number | null | undefined;
+
 // Check if value changed (treats empty string, null, undefined as same)
 // Return newValue if changed, otherwise return oldValue
-function hasChanged(oldValue: any, newValue: any): boolean {
-  const validateInput = (inputValue: any) =>
+function hasChanged(oldValue: FieldValue, newValue: FieldValue): boolean {
+  const validateInput = (inputValue: FieldValue) =>
     inputValue === "" || inputValue === null || inputValue === undefined
       ? null
       : inputValue;
   return validateInput(oldValue) !== validateInput(newValue);
 }
 
-// ompare initial data with new data and return only changed fields
+// Compare initial data with new data and return only changed fields
 function getChangedFields(
   initialData: UserDescription | null,
   newData: Partial<UserDescription>
@@ -84,22 +78,18 @@ export async function patchUserDescription(
   const formDataObject = Object.fromEntries(formData);
   const result = userDescriptionSchema.safeParse(formDataObject);
 
+  /* Validate client input in frontend before sending a API request to backend. This will reduce API calls */
   if (!result.success) {
     return {
-      errors: result.error.flatten().fieldErrors as {
-        age?: string[];
-        gender?: string[];
-        education?: string[];
-        purpose?: string[];
-      },
-      success: false,
+      errors: z.flattenError(result.error).fieldErrors,
     };
   }
 
-  const changedFields = getChangedFields(currentData, result.data);
+  const changedFields = getChangedFields(currentData, formDataObject);
 
+  /* If client validation surpasses zod schema. Proceed to login.
+   * Backend will validate again, both i application and infrastructure layer */
   try {
-    // If nothing changed, return current data
     if (Object.keys(changedFields).length === 0) {
       return {
         success: true,
@@ -107,7 +97,6 @@ export async function patchUserDescription(
       };
     }
 
-    // Send only changed fields to backend
     const updatedFromServer = await userDescriptionService.patch(
       userId,
       changedFields
@@ -117,12 +106,9 @@ export async function patchUserDescription(
       success: true,
       updatedData: updatedFromServer,
     };
-  } catch (error: unknown) {
-    return {
-      errors: {
-        form: ["Could not save your changes. Please try again."],
-      },
-      success: false,
-    };
+  } catch (backendBody: unknown) {
+    // If backend returns an error code/message. Pass the error Title and Message to frontend
+    const errorMessages = extractBackendErrors(backendBody);
+    return { errors: { form: errorMessages } };
   }
 }
