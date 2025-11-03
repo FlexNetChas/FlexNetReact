@@ -4,9 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
-import { logout } from "@/lib/api/actions/authActions";
 import { useFormStatus } from "react-dom";
 import { Settings } from "lucide-react";
+import { logout } from "@/lib/sharedActions";
 
 export function Header() {
   const user = useUser();

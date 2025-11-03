@@ -21,7 +21,7 @@ async function attemptTokenRefresh(
     await createRefreshCookie(newTokens.refreshToken);
 
     return true;
-  } catch (error) {
+  } catch {
     if (attempt < 2) {
       return attemptTokenRefresh(refreshToken, attempt + 1);
     }
