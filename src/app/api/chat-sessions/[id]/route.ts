@@ -11,7 +11,35 @@ export async function GET(
   const response = await fetch(
     `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
     {
+      method: "GET",
       headers,
+      cache: "no-store",
+    }
+  );
+  console.log("FETCHING SESSION WITH ID:", id);
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: "Failed to fetch chat session" },
+      { status: response.status }
+    );
+  }
+
+  const data = await response.json();
+  return NextResponse.json(data);
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: number } }
+) {
+  const headers = await getAuthHeaders();
+  const { id } = params;
+  console.log("DELETE REQUEST FOR SESSION ID:", id);
+  const response = await fetch(
+    `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
+    {
+      headers,
+      method: "DELETE",
       cache: "no-store",
     }
   );

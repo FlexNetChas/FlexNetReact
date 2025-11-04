@@ -1,8 +1,12 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { useAnimation } from "./3d-components/Animation/AnimationContext";
-import { CompleteChatSessionResponseDto } from "@/types/chatSession";
+import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
+import {
+  CompleteChatSessionResponseDto,
+  CreateChatSessionRequestDto,
+} from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
+import { useRouter } from "next/navigation";
 
 interface ChatboxProps {
   savedSession?: CompleteChatSessionResponseDto | null;
@@ -15,60 +19,65 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
   const [input, setInput] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
   const { setAnimation } = useAnimation();
-
-  const fetchDadJoke = async (): Promise<ChatMessageResponseDto> => {
-    try {
-      const res = await fetch("https://icanhazdadjoke.com/", {
-        headers: { Accept: "application/json" },
-      });
-      const data = await res.json();
-      return {
-        id: Date.now(),
-        messageText: data.joke || "🤷‍♂️ Couldn't fetch a joke!",
-        timeStamp: new Date(),
-        sender: "ai",
-        lastUpdated: null,
-      };
-    } catch (err) {
-      return {
-        id: Date.now(),
-        messageText: "🤷‍♂️ Couldn't fetch a joke!",
-        sender: "ai",
-        timeStamp: new Date(),
-        lastUpdated: null,
-      };
-    }
-  };
+  const router = useRouter();
+  const [currentSessions, setCurrentSession] =
+    useState<CompleteChatSessionResponseDto | null>(savedSession || null);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
     // Add user message
     const userMessage: ChatMessageResponseDto = {
-      id: Date.now(),
+      id: 0,
       messageText: input,
       sender: "user",
       timeStamp: new Date(),
       lastUpdated: null,
     };
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput("");
     setAnimation("talking");
 
     // Simulate AI response after short delay
-    setTimeout(async () => {
-      const aiMessage = await fetchDadJoke();
-      setMessages((prev) => [...prev, aiMessage]);
-      setTimeout(() => setAnimation("idle"), 3000);
-    }, 500);
+    // setTimeout(async () => {
+    //   const aiMessage = await Gemini();
+    //   setMessages((prev) => [...prev, aiMessage]);
+    //   setTimeout(() => setAnimation("idle"), 3000);
+    // }, 500);
+
+    //if there's input but no saved session, create new session and got to the new route.
+    if (currentSessions === null || currentSessions === undefined) {
+      await CreateNewSession(updatedMessages);
+    } else {
+      console.log("Using existing session with ID:", currentSessions?.id);
+    }
   };
 
-  // Auto-scroll down when messages updates
-  useEffect(() => {
-    if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
+  const CreateNewSession = async (chatMessages: ChatMessageResponseDto[]) => {
+    const newChatSession: CreateChatSessionRequestDto = {
+      summary: null,
+      startedTime: new Date().toISOString(),
+      endedTime: null,
+      chatMessages: chatMessages ? chatMessages : [],
+    };
+
+    const response = await fetch("/api/chat-sessions/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Ensure the content-type is set
+      },
+      body: JSON.stringify(newChatSession), // Add the body to the fetch
+    });
+
+    if (!response.ok) {
+      console.log("Error creating new chat session");
+      return;
     }
-  }, [messages]);
+
+    const newSession = await response.json();
+    setMessages(newSession.chatMessages);
+  };
 
   return (
     <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
@@ -93,7 +102,6 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
         ))}
       </div>
 
-      {/* Input area pinned at bottom */}
       <div className="flex gap-2 px-6 my-1 flex-shrink-0">
         <input
           type="text"

@@ -1,7 +1,6 @@
 "use client";
 import ClientSideSceneLoader from "@/components/3d-components/ClientSideSceneLoader";
 import ChatBoxComponent from "./ChatBoxComponent";
-import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
 import { useSceneContext } from "@/components/3d-components/SceneContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 
@@ -12,7 +11,7 @@ interface ChatContentProps {
 export default function ChatContentComponent({
   savedSession,
 }: ChatContentProps) {
-  const { shouldRender, setShouldRender } = useSceneContext();
+  const { shouldRender } = useSceneContext();
 
   return (
     <div className="w-full  flex flex-col items-center justify-between py-6">
