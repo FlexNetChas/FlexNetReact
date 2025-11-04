@@ -4,6 +4,7 @@ import { useAnimation } from "@/components/3d-components/Animation/AnimationCont
 import {
   CompleteChatSessionResponseDto,
   CreateChatSessionRequestDto,
+  UpdateChatSessionsRequestDto,
 } from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
 import { useRouter } from "next/navigation";
@@ -20,8 +21,39 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
   const logRef = useRef<HTMLDivElement>(null);
   const { setAnimation } = useAnimation();
   const router = useRouter();
-  const [currentSessions, setCurrentSession] =
+  const [currentSession, setCurrentSession] =
     useState<CompleteChatSessionResponseDto | null>(savedSession || null);
+  const [chatSessionId, setChatSessionId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (savedSession) {
+      setCurrentSession(savedSession);
+      setMessages(savedSession.chatMessages);
+      setChatSessionId(savedSession.id);
+    }
+  }, [savedSession]);
+
+  const fetchAIResponse = async (message: string): Promise<string> => {
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, chatSessionId }),
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
+      const data = await res.json();
+
+      if (data.chatSessionId) {
+        setChatSessionId(data.chatSessionId);
+      }
+
+      return data.reply ?? "🤷‍♂️ No reply from backend.";
+    } catch (err) {
+      return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
+    }
+  };
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -34,23 +66,38 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
       timeStamp: new Date(),
       lastUpdated: null,
     };
+
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
     setAnimation("talking");
 
     // Simulate AI response after short delay
-    // setTimeout(async () => {
-    //   const aiMessage = await Gemini();
-    //   setMessages((prev) => [...prev, aiMessage]);
-    //   setTimeout(() => setAnimation("idle"), 3000);
-    // }, 500);
+    setTimeout(async () => {
+      setTimeout(() => {
+        setAnimation("idle");
+      }, 3000);
 
+      const reply = await fetchAIResponse(userMessage.messageText);
+      //quick temp fix
+      const newMsg: ChatMessageResponseDto = {
+        id: 0,
+        messageText: reply,
+        sender: "ai",
+        timeStamp: new Date(),
+        lastUpdated: null,
+      };
+      setMessages((prev) => [...prev, newMsg]);
+    }, 500); // small delay to simulate thinking
+
+    //FIRST VERSION: create new session every time user sends a message if null otherwise always update the sessions
     //if there's input but no saved session, create new session and got to the new route.
-    if (currentSessions === null || currentSessions === undefined) {
+    if (currentSession === null || currentSession === undefined) {
+      console.log("creating new session");
       await CreateNewSession(updatedMessages);
     } else {
-      console.log("Using existing session with ID:", currentSessions?.id);
+      console.log("updating existing session");
+      await UpdateExistingSession();
     }
   };
 
@@ -76,7 +123,33 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
     }
 
     const newSession = await response.json();
+    setCurrentSession(newSession);
     setMessages(newSession.chatMessages);
+  };
+
+  const UpdateExistingSession = async () => {
+    console.log("Updating existing session");
+    const updatedSessions: UpdateChatSessionsRequestDto = {
+      sessionId: currentSession!.id,
+      startedTime: currentSession!.startedTime,
+      summary: currentSession!.summary,
+      endedTime: new Date().toISOString(),
+      chatMessages: messages,
+    };
+    console.log("Updated session data:", updatedSessions);
+    const response = await fetch("/api/chat-sessions/", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json", // Ensure the content-type is set
+      },
+      body: JSON.stringify(updatedSessions), // Add the body to the fetch
+    });
+
+    if (!response.ok) {
+      console.log("Error updating chat session");
+      return;
+    }
+    setCurrentSession(currentSession);
   };
 
   return (

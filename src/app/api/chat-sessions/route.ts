@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAuthHeaders } from "@/lib/api/getAuthHeaders";
-import { CreateChatSessionRequestDto } from "@/types/chatSession";
+import {
+  CompleteChatSessionResponseDto,
+  CreateChatSessionRequestDto,
+  UpdateChatSessionsRequestDto,
+} from "@/types/chatSession";
 
 export async function GET() {
   console.log("API route hit");
@@ -28,6 +32,28 @@ export async function POST(request: Request) {
 
   const response = await fetch(`${process.env.NEXT_API_BASE_URL}/ChatSession`, {
     method: "POST",
+    headers,
+    cache: "no-store",
+    body: JSON.stringify(newSession),
+  });
+
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: "Failed to create chat session" },
+      { status: response.status }
+    );
+  }
+
+  const data = await response.json();
+  return NextResponse.json(data);
+}
+
+export async function PATCH(request: Request) {
+  const newSession: UpdateChatSessionsRequestDto = await request.json();
+  const headers = await getAuthHeaders();
+  console.log("PATCH request received with data:", newSession);
+  const response = await fetch(`${process.env.NEXT_API_BASE_URL}/ChatSession`, {
+    method: "PATCH",
     headers,
     cache: "no-store",
     body: JSON.stringify(newSession),
