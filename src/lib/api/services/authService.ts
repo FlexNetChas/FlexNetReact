@@ -20,16 +20,13 @@ export const authService = {
       credentials: "include",
     });
 
+    const body = await response.json();
+
     if (!response.ok) {
-      const error = new Error("Invalid email or password") as Error & {
-        status: number;
-      };
-      error.status = response.status;
-      throw error;
+      throw body;
     }
 
-    const responseBody = await response.text();
-    return JSON.parse(responseBody);
+    return body;
   },
 
   register: async (data: RegisterRequest): Promise<RegisterResponse> => {
@@ -40,16 +37,13 @@ export const authService = {
       cache: "no-store",
     });
 
+    const body = await response.json();
+
     if (!response.ok) {
-      const error = new Error("Registration failed") as Error & {
-        status: number;
-      };
-      error.status = response.status;
-      throw error;
+      throw body;
     }
 
-    const responseBody = await response.text();
-    return JSON.parse(responseBody);
+    return body;
   },
 
   refresh: async (refreshToken: string): Promise<RefreshResponse> => {

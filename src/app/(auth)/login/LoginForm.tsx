@@ -1,16 +1,50 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
-import { login } from "@/lib/api/actions/authActions";
+import { login } from "@/app/(auth)/login/actions";
+import { useToasts } from "@/hooks/useToasts";
+import { Input } from "@/components/ui/input";
 
 function LoginForm() {
   // Take a server action (login from authActions.ts) and return a action property (loginAction)
   const [state, loginAction] = useActionState(login, undefined);
+
+  // Save clients input data to preserve values after a validation error
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  /* Toast will handle all errors and success messages
+   * Thought to further improve UI/UX will we display a red border inline around invalid input fields */
+  useToasts(state, {
+    successMessage: " Account created successfully! ",
+    duration: 5000,
+  });
+
+  // Helper function to check if field has error
+  const hasError = (fieldName: keyof typeof formData) => {
+    if (state?.errors?.[fieldName] && state.errors[fieldName].length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // Handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      email: prev.email,
+      password: prev.password,
+      [name]: value,
+    }));
+  };
 
   return (
     <>
@@ -29,17 +63,20 @@ function LoginForm() {
         >
           <h1 className="text-3xl">Login</h1>
           <label htmlFor="email">Email</label>
-          <input
+          <Input
             id="email"
             name="email"
             type="email"
             placeholder="Email"
-            className="border border-form-foreground rounded-lg p-3"
+            value={formData.email}
+            onChange={handleInputChange}
+            className={`border rounded-lg p-3 ${
+              hasError("email")
+                ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                : "border-form-foreground "
+            } `}
+            required
           />
-          {/* Display form and backend http errors */}
-          {state?.errors?.form && (
-            <p className="text-red-600 text-sm">{state.errors.form[0]}</p>
-          )}
 
           <label htmlFor="password" className="text-sm font-medium">
             Password
@@ -49,12 +86,15 @@ function LoginForm() {
             name="password"
             type="password"
             placeholder="Password"
-            className="border border-form-foreground rounded-lg p-3"
+            value={formData.password}
+            onChange={handleInputChange}
+            className={`border rounded-lg p-3 ${
+              hasError("password")
+                ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                : "border-form-foreground "
+            } `}
+            required
           />
-          {/* Display form and backend http errors */}
-          {state?.errors?.password && (
-            <p className=" text-red-500">{state.errors.password}</p>
-          )}
           <SubmitButton />
         </form>
         <p className="text-xs mt-4">

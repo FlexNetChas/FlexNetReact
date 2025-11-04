@@ -1,17 +1,56 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { register } from "@/lib/api/actions/authActions";
+import { useToasts } from "@/hooks/useToasts";
+import { register } from "./actions";
 
 function RegisterForm() {
   // Take a server action (register from authActions.ts) and return a action property (registerAction)
   const [state, registerAction] = useActionState(register, undefined);
+
+  // Save clients input data to preserve values after a validation error
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  /* Toast will handle all errors and success messages
+   * Thought to further improve UI/UX will we display a red border inline around invalid input fields */
+  useToasts(state, {
+    successMessage: " Account created successfully! ",
+    duration: 5000,
+  });
+
+  // Helper function to check if field has error
+  const hasError = (fieldName: keyof typeof formData) => {
+    if (state?.errors?.[fieldName] && state.errors[fieldName].length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // Handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      firstName: prev.firstName,
+      lastName: prev.lastName,
+      email: prev.email,
+      password: prev.password,
+      confirmPassword: prev.confirmPassword,
+      [name]: value,
+    }));
+  };
 
   return (
     <>
@@ -30,7 +69,7 @@ function RegisterForm() {
           className="flex flex-col gap-4 max-w-[400px] mx-auto"
         >
           <h1 className="text-3xl text-center">Create Account</h1>
-          
+
           {/* First Name and Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -42,12 +81,15 @@ function RegisterForm() {
                 name="firstName"
                 type="text"
                 placeholder="John"
-                className="border border-form-foreground rounded-lg p-3"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className={`border rounded-lg p-3 ${
+                  hasError("firstName")
+                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                    : "border-form-foreground "
+                } `}
                 required
               />
-              {state?.errors?.firstName && (
-                <p className="text-red-600 text-sm">{state.errors.firstName[0]}</p>
-              )}
             </div>
             <div className="space-y-2">
               <label htmlFor="lastName" className="text-sm font-medium">
@@ -58,12 +100,15 @@ function RegisterForm() {
                 name="lastName"
                 type="text"
                 placeholder="Doe"
-                className="border border-form-foreground rounded-lg p-3"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className={`border rounded-lg p-3 ${
+                  hasError("lastName")
+                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                    : "border-form-foreground "
+                } `}
                 required
               />
-              {state?.errors?.lastName && (
-                <p className="text-red-600 text-sm">{state.errors.lastName[0]}</p>
-              )}
             </div>
           </div>
 
@@ -77,12 +122,15 @@ function RegisterForm() {
               name="email"
               type="email"
               placeholder="john@example.com"
-              className="border border-form-foreground rounded-lg p-3"
+              value={formData.email}
+              onChange={handleInputChange}
+              className={`border rounded-lg p-3 ${
+                hasError("email")
+                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                  : "border-form-foreground "
+              } `}
               required
             />
-            {state?.errors?.email && (
-              <p className="text-red-600 text-sm">{state.errors.email[0]}</p>
-            )}
           </div>
 
           {/* Password */}
@@ -95,12 +143,15 @@ function RegisterForm() {
               name="password"
               type="password"
               placeholder="Password"
-              className="border border-form-foreground rounded-lg p-3"
+              value={formData.password}
+              onChange={handleInputChange}
+              className={`border rounded-lg p-3 ${
+                hasError("password")
+                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                  : "border-form-foreground "
+              } `}
               required
             />
-            {state?.errors?.password && (
-              <p className="text-red-600 text-sm">{state.errors.password[0]}</p>
-            )}
           </div>
 
           {/* Confirm Password */}
@@ -113,22 +164,19 @@ function RegisterForm() {
               name="confirmPassword"
               type="password"
               placeholder="Confirm Password"
-              className="border border-form-foreground rounded-lg p-3"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              className={`border rounded-lg p-3 ${
+                hasError("confirmPassword")
+                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                  : "border-form-foreground "
+              } `}
               required
             />
-            {state?.errors?.confirmPassword && (
-              <p className="text-red-600 text-sm">{state.errors.confirmPassword[0]}</p>
-            )}
           </div>
-
-          {/* Display form and backend http errors */}
-          {state?.errors?.form && (
-            <p className="text-red-600 text-sm text-center">{state.errors.form[0]}</p>
-          )}
-
           <SubmitButton />
         </form>
-        
+
         <p className="text-xs mt-4 text-center">
           Already have an account? &nbsp;
           <Link href="/login" className="text-xs">
