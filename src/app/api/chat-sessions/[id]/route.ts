@@ -34,7 +34,7 @@ export async function DELETE(
 ) {
   const headers = await getAuthHeaders();
   const { id } = params;
-  console.log("DELETE REQUEST FOR SESSION ID:", id);
+
   const response = await fetch(
     `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
     {
@@ -50,7 +50,7 @@ export async function DELETE(
       { status: response.status }
     );
   }
-
+  return NextResponse.json({ response }, { status: response.status });
   const data = await response.json();
-  return NextResponse.json(data);
+  return data;
 }
