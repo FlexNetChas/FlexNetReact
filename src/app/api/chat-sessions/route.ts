@@ -7,7 +7,6 @@ import {
 } from "@/types/chatSession";
 
 export async function GET() {
-  console.log("API route hit");
   const headers = await getAuthHeaders();
   const response = await fetch(`${process.env.NEXT_API_BASE_URL}/ChatSession`, {
     method: "GET",
@@ -51,7 +50,6 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   const newSession: UpdateChatSessionsRequestDto = await request.json();
   const headers = await getAuthHeaders();
-  console.log("PATCH request received with data:", newSession);
   const response = await fetch(`${process.env.NEXT_API_BASE_URL}/ChatSession`, {
     method: "PATCH",
     headers,

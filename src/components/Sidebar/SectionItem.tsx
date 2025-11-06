@@ -36,12 +36,6 @@ const SectionItem = () => {
 
       if (response.status === 200) {
         refreshSessions();
-        console.log("Deleted session with ID:", sessionId);
-      } else {
-        console.error(
-          "probably got deleted correctly however did not return .ok, instead we got: ",
-          response
-        );
       }
     } catch (error) {
       console.error("Error deleting session:", error);

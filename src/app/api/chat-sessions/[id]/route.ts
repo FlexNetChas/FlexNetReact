@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const headers = await getAuthHeaders();
-  const { id } = params;
+  const { id } = await params;
 
   const response = await fetch(
     `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
@@ -16,7 +16,6 @@ export async function GET(
       cache: "no-store",
     }
   );
-  console.log("FETCHING SESSION WITH ID:", id);
   if (!response.ok) {
     return NextResponse.json(
       { error: "Failed to fetch chat session" },
@@ -33,7 +32,7 @@ export async function DELETE(
   { params }: { params: { id: number } }
 ) {
   const headers = await getAuthHeaders();
-  const { id } = params;
+  const { id } = await params;
 
   const response = await fetch(
     `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
@@ -51,6 +50,4 @@ export async function DELETE(
     );
   }
   return NextResponse.json({ response }, { status: response.status });
-  const data = await response.json();
-  return data;
 }

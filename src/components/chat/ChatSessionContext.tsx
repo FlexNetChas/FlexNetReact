@@ -35,14 +35,12 @@ export function ChatSessionsProvider({
   >(null);
 
   const refreshSessions = useCallback(() => {
-    console.log("Refreshing chat sessions... before", sessions);
     fetch("/api/chat-sessions")
       .then((res) => res.json())
       .then((data) => {
         addSession(data);
       })
       .catch((err) => console.error("Failed to fetch chat sessions", err));
-    console.log("After", sessions);
   }, []);
 
   return (
