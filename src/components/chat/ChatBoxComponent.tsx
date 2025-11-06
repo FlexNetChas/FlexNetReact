@@ -1,39 +1,39 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
-import {
-  CompleteChatSessionResponseDto,
-  CreateChatSessionRequestDto,
-  UpdateChatSessionsRequestDto,
-} from "@/types/chatSession";
+import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
 import { useRouter } from "next/navigation";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
+import { useEffect } from "react";
 
-interface ChatboxProps {
-  savedSession?: CompleteChatSessionResponseDto | null;
-}
+export default function ChatBoxComponent({
+  savedSession,
+}: {
+  savedSession: CompleteChatSessionResponseDto | null;
+}) {
+  const logRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const chatSessionIdRef = useRef<number | null>(null);
+  const { setAnimation } = useAnimation();
+  const { refreshSessions } = useChatSessions();
 
-export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
+  const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
     savedSession?.chatMessages || []
   );
-  const [input, setInput] = useState("");
-  const logRef = useRef<HTMLDivElement>(null);
-  const { setAnimation } = useAnimation();
-  const router = useRouter();
   const [currentSession, setCurrentSession] =
     useState<CompleteChatSessionResponseDto | null>(savedSession || null);
-  const [chatSessionId, setChatSessionId] = useState<number | null>(null);
-  const { sessions, refreshSessions, addSession } = useChatSessions();
+
+  const [chatSessionId, setChatSessionId] = useState<number | null>(
+    savedSession?.id || null
+  );
 
   useEffect(() => {
-    if (savedSession) {
-      setCurrentSession(savedSession);
-      setMessages(savedSession.chatMessages);
-      setChatSessionId(savedSession.id);
+    if (logRef.current) {
+      logRef.current.scrollTop = logRef.current.scrollHeight;
     }
-  }, [savedSession]);
+  }, [messages]);
 
   const fetchAIResponse = async (message: string): Promise<string> => {
     try {
@@ -45,13 +45,10 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
 
       if (!res.ok) throw new Error("Server error");
 
-      console.log("BEFORE chatSessionId", chatSessionId);
       const data = await res.json();
 
-      if (data.chatSessionId) {
-        setChatSessionId(data.chatSessionId);
-      }
-      console.log("AFTER chatSessionId", chatSessionId);
+      chatSessionIdRef.current = data.sessionId;
+      setChatSessionId(chatSessionIdRef.current);
 
       return data.reply ?? "🤷‍♂️ No reply from backend.";
     } catch (err) {
@@ -64,17 +61,17 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
 
     // Add user message
     const userMessage: ChatMessageResponseDto = {
-      id: 0,
       messageText: input,
       role: "user",
       timeStamp: new Date(),
       lastUpdated: null,
     };
 
+    const userInput = input; // Capture current input
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
-    setAnimation("talking");
+    setAnimation("talking"); // This is where we trigger the AI thinking animation, TODO: implement thinking animation.
 
     // Simulate AI response after short delay
     setTimeout(async () => {
@@ -83,9 +80,7 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
       }, 3000);
 
       const reply = await fetchAIResponse(userMessage.messageText);
-      //quick temp fix
       const newMsg: ChatMessageResponseDto = {
-        id: Math.random(),
         messageText: reply,
         role: "assistant",
         timeStamp: new Date(),
@@ -95,68 +90,7 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
       setMessages((prev) => [...prev, newMsg]);
       refreshSessions();
     }, 500); // small delay to simulate thinking
-
-    //FIRST VERSION: create new session every time user sends a message if null otherwise always update the sessions
-    //if there's input but no saved session, create new session and got to the new route.
-    // if (currentSession === null || currentSession === undefined) {
-    //   console.log("creating new session");
-    //   await CreateNewSession(updatedMessages);
-    // } else {
-    //   console.log("updating existing session");
-    //   await UpdateExistingSession();
-    // }
   };
-
-  // const CreateNewSession = async (chatMessages: ChatMessageResponseDto[]) => {
-  //   const newChatSession: CreateChatSessionRequestDto = {
-  //     summary: null,
-  //     startedTime: new Date().toISOString(),
-  //     endedTime: null,
-  //     chatMessages: chatMessages ? chatMessages : [],
-  //   };
-
-  //   const response = await fetch("/api/chat-sessions/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(newChatSession),
-  //   });
-
-  //   if (!response.ok) {
-  //     console.log("Error creating new chat session");
-  //     return;
-  //   }
-
-  //   const newSession = await response.json();
-  //   setCurrentSession(newSession);
-  //   setMessages(newSession.chatMessages);
-  // };
-
-  // const UpdateExistingSession = async () => {
-  //   console.log("Updating existing session");
-  //   const updatedSessions: UpdateChatSessionsRequestDto = {
-  //     sessionId: currentSession!.id,
-  //     startedTime: currentSession!.startedTime,
-  //     summary: currentSession!.summary,
-  //     endedTime: new Date().toISOString(),
-  //     chatMessages: messages,
-  //   };
-  //   console.log("Updated session data:", updatedSessions);
-  //   const response = await fetch("/api/chat-sessions/", {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json", // Ensure the content-type is set
-  //     },
-  //     body: JSON.stringify(updatedSessions), // Add the body to the fetch
-  //   });
-
-  //   if (!response.ok) {
-  //     console.log("Error updating chat session");
-  //     return;
-  //   }
-  //   setCurrentSession(currentSession);
-  // };
 
   return (
     <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
@@ -169,7 +103,7 @@ export default function ChatBoxComponent({ savedSession }: ChatboxProps) {
         )}
         {messages.map((msg) => (
           <div
-            key={msg.id}
+            key={msg.timeStamp + msg.role}
             className={`p-2 rounded max-w-[70%] ${
               msg.role === "assistant"
                 ? "border border-blue-600 self-end"

@@ -5,7 +5,7 @@ export type ChatMessageRequestDto = {
   lastUpdated: Date | null;
 };
 export type ChatMessageResponseDto = {
-  id: number;
+  id?: number;
   role: string;
   messageText: string;
   timeStamp: Date;

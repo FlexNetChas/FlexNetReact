@@ -4,13 +4,11 @@ import ChatBoxComponent from "./ChatBoxComponent";
 import { useSceneContext } from "@/components/3d-components/SceneContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 
-interface ChatContentProps {
-  savedSession?: CompleteChatSessionResponseDto | null;
-}
-
 export default function ChatContentComponent({
   savedSession,
-}: ChatContentProps) {
+}: {
+  savedSession: CompleteChatSessionResponseDto | null;
+}) {
   const { shouldRender } = useSceneContext();
 
   return (

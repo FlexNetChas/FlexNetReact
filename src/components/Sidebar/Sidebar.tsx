@@ -6,6 +6,8 @@ import {
   SquarePen,
   Settings,
   LogOut,
+  Book,
+  Search,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -166,7 +168,7 @@ export default function PreviousChatSessions() {
             </Link>
           </Button>
 
-          {/* <Button
+          <Button
             variant="sidebar"
             size="default"
             className={`${
@@ -183,10 +185,10 @@ export default function PreviousChatSessions() {
                 <span className="md:hidden text-sm">Search chat</span>
               )}
             </Link>
-          </Button> */}
+          </Button>
 
           {/* /// Library Button - currently commented out */}
-          {/* <Button
+          <Button
             variant="sidebar"
             size="default"
             className={`${
@@ -203,7 +205,7 @@ export default function PreviousChatSessions() {
                 <span className="md:hidden text-sm">Library</span>
               )}
             </Link>
-          </Button> */}
+          </Button>
 
           <Button
             variant="sidebar"

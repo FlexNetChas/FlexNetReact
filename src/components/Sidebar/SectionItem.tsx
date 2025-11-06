@@ -37,11 +37,6 @@ const SectionItem = () => {
       if (response.status === 200) {
         refreshSessions();
         console.log("Deleted session with ID:", sessionId);
-        const router = useRouter();
-        const currentPath = window.location.pathname;
-        if (currentPath.endsWith(`/${sessionId}`)) {
-          router.push("/dashboard");
-        }
       } else {
         console.error(
           "probably got deleted correctly however did not return .ok, instead we got: ",
