@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
-import { logout } from "@/lib/api/actions/authActions";
 import { useFormStatus } from "react-dom";
+import { Settings } from "lucide-react";
+import { logout } from "@/lib/sharedActions";
 
 export function Header() {
   const user = useUser();
@@ -32,9 +33,19 @@ export function Header() {
               </Link>
             ) : (
               <>
-                <span className="text-muted-foreground">
+                <span className="text-muted-foreground hidden sm:inline">
                   {user.firstName} {user.lastName}
                 </span>
+                <Link href="/settings">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    title="Settings"
+                    className="text-primary-foreground hover:text-primary"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                </Link>
                 <form action={logout}>
                   <LogoutButton />
                 </form>

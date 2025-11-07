@@ -1,4 +1,5 @@
 import { SessionUser } from "./user";
+import type { FluentValidationError, ProblemDetails } from "./validationError";
 
 export type LoginRequest = {
   email: string;
@@ -13,10 +14,12 @@ export type LoginResponse = {
 
 export type LoginState = {
   errors?: {
+    form?: string[];
     email?: string[];
     password?: string[];
-    form?: string[];
   };
+  backend?: FluentValidationError | ProblemDetails;
+  success?: boolean;
 };
 
 export type RegisterRequest = {
@@ -24,7 +27,8 @@ export type RegisterRequest = {
   lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  // Not needed in backend, only for frontend validation
+  // confirmPassword: string;
 };
 
 export type RegisterResponse = {
@@ -39,6 +43,8 @@ export type RegisterState = {
     lastName?: string[];
     email?: string[];
     password?: string[];
+    // Sense backend dosn't have a field for confirmPassword will confirmPassword be handle in frontend only.
+    // Filtration of confirmPassword errors is handle by register actions.ts. Needed for zod validation
     confirmPassword?: string[];
     form?: string[];
   };
