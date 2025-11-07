@@ -1,0 +1,94 @@
+## Multi-stage build DockerImage for production
+## We choose a lightweight Linux distribution to reduce image size
+## node provides official images for Node.js and alpine a lightweight Linux distribution 
+
+FROM node:25.1-alpine3.21 AS base
+
+# Stage 1: Install dependencies (Set working dir inside the img. All commands will be run in this dir)
+FROM base AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+## npm ci is similar to npm install, but intended to be used in (CI). Avoid dev-dependencies for smaller image size
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Stage 2: Build the application (Copy only node_modules from deps stage to avoid reinstalling and source code into the image)
+FROM base AS build
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build
+
+# Stage 3: Production image/Runtime
+FROM node:25.1-alpine3.21 AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+## Create a non-root user for better security practices
+RUN adduser --disabled-password --gecos '' --no-create-home appuser
+
+## The standalone output includes everything needed to run the server part of a Next.js 
+## Client-side assets are served from the .next/static 
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+COPY --from=build /app/.env.production ./
+
+## Change ownership and run as non-root user
+RUN chown -R appuser:appuser /app
+USER appuser
+
+## the EXPOSE instruction does not actually expose the port 3000. It's a documentation of the port we need to expose
+EXPOSE 3000
+
+## executes the server.js file that is located in the build directory
+CMD ["node", "server.js"]
+
+
+# Overview
+#                    │       Analyzed Image
+#────────────────────┼──────────────────────────────
+#  Target            │  local://flexnet:latest 
+#    digest          │  5069f4b1f12a 
+#    platform        │ linux/amd64
+#    vulnerabilities │    0C     0H     1M     2L     
+#    size            │ 106 MB
+#    packages        │ 243
+
+
+
+# Commands Summary
+#─────────────────────────────────────────────────────
+#  Build image - <tag:version> <file:path>
+#- docker build -t flexnet-frontend:latest -f Dockerfile.prod . 
+#─────────────────────────────────────────────────────
+#  Run container - <port:host> <name:container>
+#- docker run -p 3000:3000 --name flexnet-frontend flexnet-frontend:latest
+#─────────────────────────────────────────────────────
+#  Stop container - <name:container>
+#- docker stop flexnet-frontend
+#─────────────────────────────────────────────────────
+#  Start container - <name:container>
+#- docker start flexnet-frontend
+#─────────────────────────────────────────────────────
+#  Remove container - <name:container>
+#- docker rm flexnet-frontend
+#─────────────────────────────────────────────────────
+#  List running containers
+#- docker ps
+#─────────────────────────────────────────────────────
+#  List all containers
+#- docker ps -a
+#─────────────────────────────────────────────────────
+#  Remove image - <tag:version>
+#- docker rmi flexnet-frontend:latest
+#─────────────────────────────────────────────────────
+#  Scan image for vulnerabilities using Docker Scout - <tag:version>
+#- docker scout quickview flexnet-frontend:latest
+#─────────────────────────────────────────────────────
+#  Remove not running Docker containers, networks, images, volumes
+#- docker system prune -a --volumes -f
+#─────────────────────────────────────────────────────
+#  Remove builder cache and cache layers
+#- docker builder prune -a -f --all
