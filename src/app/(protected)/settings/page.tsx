@@ -6,26 +6,39 @@ import { getUserDescription } from "./actions";
 import UserPrivacy from "./_components/userPrivacy/UserPrivacy";
 import UserPreference from "./_components/userPreference/UserPreference";
 import UserProfileContent from "./_components/userProfile/UserProfileContent";
+import LoadingSpinner from "./_components/LoadingSpinner";
+import { UserDescription } from "@/types/userDescription";
+import { SessionUser } from "@/types/user";
 
 type Tab = "profile" | "preferences" | "privacy";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
-  const [user, setUser] = useState<any>(null);
-  const [userDescription, setUserDescription] = useState<any>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [userDescription, setUserDescription] =
+    useState<UserDescription | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const userSession = await requireAuth();
-      const userDescription = await getUserDescription(userSession.id);
+      const userSession: SessionUser = await requireAuth();
+      const description = await getUserDescription(userSession.id);
+
+      if (!description) {
+        throw new Error("User description not found");
+      }
+
       setUser(userSession);
-      setUserDescription(userDescription);
+      setUserDescription(description);
     }
     fetchData();
   }, []);
 
   if (!user || !userDescription) {
-    return <div className="p-6">Loading...</div>;
+    return (
+      <>
+        <LoadingSpinner />
+      </>
+    );
   }
 
   const renderContent = () => {
@@ -44,10 +57,10 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen mx-auto ">
+    <div className="min-h-screen mx-5 ">
       {/* Tabs */}
-      <div className="border-b border-t border-border p-5 ">
-        <nav className="flex space-x-8">
+      <div className="p-5">
+        <nav className="flex space-x-10">
           {[
             { key: "profile" as Tab, label: "Profile" },
             { key: "preferences" as Tab, label: "Preferences" },
@@ -63,6 +76,9 @@ export default function SettingsPage() {
           ))}
         </nav>
       </div>
+
+      {/* Section Divider */}
+      <div className="border-t border-border -mx-5 mb-5" />
 
       {/* Render Tab Content */}
       <div className="space-y-8">{renderContent()}</div>
