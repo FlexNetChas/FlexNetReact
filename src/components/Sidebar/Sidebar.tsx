@@ -7,7 +7,6 @@ import {
   Settings,
   LogOut,
   Book,
-  Search,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -47,7 +46,7 @@ export default function PreviousChatSessions() {
         className={`
           fixed md:relative
           top-0 left-0
-          h-screen bg-gray-900/70 backdrop-blur-lg border-r border-border
+          h-screen bg-[#0e1624] backdrop-blur-lg border-r border-border
           flex flex-col
           z-50
           ${isMinimized ? "md:w-16 md:items-center w-64" : "w-64"}
@@ -149,6 +148,25 @@ export default function PreviousChatSessions() {
             isMinimized ? "items-center py-3" : "items-start px-3 py-3"
           }`}
         >
+          {/* Home */}
+          <Button
+            variant="sidebar"
+            size="default"
+            className={`${
+              isMinimized ? "justify-center" : "justify-start"
+            } flex w-full gap-2`}
+            title={"Home"}
+          >
+            <Link href={"/"} className="flex items-center gap-2 w-full">
+              {<Book size={18} />}
+              {!isMinimized && (
+                <span className="hidden md:inline text-sm">Home</span>
+              )}
+              {isMinimized && <span className="md:hidden text-sm">Home</span>}
+            </Link>
+          </Button>
+
+          {/* New Chat */}
           <Button
             variant="sidebar"
             size="default"
@@ -168,7 +186,8 @@ export default function PreviousChatSessions() {
             </Link>
           </Button>
 
-          <Button
+          {/* Search Chats - Not in use atm */}
+          {/* <Button
             variant="sidebar"
             size="default"
             className={`${
@@ -185,28 +204,9 @@ export default function PreviousChatSessions() {
                 <span className="md:hidden text-sm">Search chat</span>
               )}
             </Link>
-          </Button>
+          </Button> */}
 
-          {/* /// Library Button - currently commented out */}
-          <Button
-            variant="sidebar"
-            size="default"
-            className={`${
-              isMinimized ? "justify-center" : "justify-start"
-            } flex w-full gap-2`}
-            title={"Library"}
-          >
-            <Link href={"/chat"} className="flex items-center gap-2 w-full">
-              {<Book size={18} />}
-              {!isMinimized && (
-                <span className="hidden md:inline text-sm">Library</span>
-              )}
-              {isMinimized && (
-                <span className="md:hidden text-sm">Library</span>
-              )}
-            </Link>
-          </Button>
-
+          {/* Settings */}
           <Button
             variant="sidebar"
             size="default"
