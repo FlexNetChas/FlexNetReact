@@ -13,16 +13,38 @@ export default function TempChatbox() {
   const [input, setInput] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
   const { setAnimation } = useAnimation();
+  const [chatSessionId, setChatSessionId] = useState<number | null>(null);
 
-  const fetchDadJoke = async (): Promise<string> => {
+  useEffect(() => {
+    const storedId = localStorage.getItem("chatSessionId");
+    if (storedId) setChatSessionId(Number(storedId));
+  }, []);
+
+  useEffect(() => {
+    if (chatSessionId !== null) {
+      localStorage.setItem("chatSessionId", String(chatSessionId));
+    }
+  }, [chatSessionId]);
+
+  const fetchAIResponse = async (message: string): Promise<string> => {
     try {
-      const res = await fetch("https://icanhazdadjoke.com/", {
-        headers: { Accept: "application/json" },
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, chatSessionId }),
       });
+
+      if (!res.ok) throw new Error("Server error");
+
       const data = await res.json();
-      return data.joke || "🤷‍♂️ Couldn't fetch a joke!";
+
+      if (data.chatSessionId) {
+        setChatSessionId(data.chatSessionId);
+      }
+
+      return data.reply ?? "🤷‍♂️ No reply from backend.";
     } catch (err) {
-      return "🤷‍♂️ Couldn't fetch a joke!";
+      return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
     }
   };
 
@@ -30,7 +52,8 @@ export default function TempChatbox() {
     if (input.trim() === "") return;
 
     // Add user message
-    setMessages((prev) => [...prev, { text: input, sender: "user" }]);
+    const userMessage = input;
+    setMessages((prev) => [...prev, { text: userMessage, sender: "user" }]);
     setInput("");
     setAnimation("talking");
 
@@ -39,8 +62,8 @@ export default function TempChatbox() {
       setTimeout(() => {
         setAnimation("idle");
       }, 3000);
-      const joke = await fetchDadJoke();
-      setMessages((prev) => [...prev, { text: joke, sender: "ai" }]);
+      const reply = await fetchAIResponse(userMessage);
+      setMessages((prev) => [...prev, { text: reply, sender: "ai" }]);
     }, 500); // small delay to simulate thinking
   };
 
@@ -67,7 +90,7 @@ export default function TempChatbox() {
             className={`p-2 rounded max-w-[70%] ${
               msg.sender === "ai"
                 ? "border border-blue-600 self-end"
-                : "border borderborder-gray-700 self-start"
+                : "border border-gray-700 self-start"
             }`}
           >
             {msg.text}

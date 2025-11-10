@@ -1,11 +1,13 @@
 export type ChatMessageRequestDto = {
-  MessageText: string;
-  TimeStamp: Date;
-  LastUpdated: Date | null;
+  messageText: string;
+  role: string;
+  timeStamp: Date;
+  lastUpdated: Date | null;
 };
 export type ChatMessageResponseDto = {
-  Id: number;
-  MessageText: string;
-  TimeStamp: Date;
-  LastUpdated: Date | null;
+  id?: number;
+  role: string;
+  messageText: string;
+  timeStamp: Date;
+  lastUpdated: Date | null;
 };
