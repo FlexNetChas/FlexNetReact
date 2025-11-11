@@ -1,5 +1,6 @@
 import { requireAuth } from "@/lib/sharedActions";
 import Link from "next/link";
+import ContinueLearningButton from "./ContinueLearningButton";
 
 export default async function DashboardPage() {
   await requireAuth();
@@ -17,15 +18,7 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         {/* Acess previously chatt sessions */}
-        <Link
-          href="/chat"
-          className="glass p-6 rounded-xl cursor-pointer no-underline hover:no-underline hover:scale-101 transition-transform"
-        >
-          <div className="text-2xl font-bold mb-2 text-white">
-            Continue Learning
-          </div>
-          <p>Pick up from your last session</p>
-        </Link>
+        <ContinueLearningButton />
 
         {/* Start a new chat session */}
         <Link

@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { AnimationProvider } from "@/components/3d-components/Animation/AnimationContext";
 import { SceneContextProvider } from "@/components/3d-components/SceneContext";
 import ChatContentComponent from "@/components/chat/ChatContentComponent";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Page() {
   const params = useParams();
@@ -30,8 +31,12 @@ export default function Page() {
       .finally(() => setIsLoading(false));
   }, [id]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  // if (isLoading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error}</p>;
+
+  if (isLoading || error) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <SceneContextProvider>

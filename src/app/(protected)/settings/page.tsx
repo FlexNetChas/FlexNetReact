@@ -6,7 +6,7 @@ import { getUserDescription } from "./actions";
 import UserPrivacy from "./_components/userPrivacy/UserPrivacy";
 import UserPreference from "./_components/userPreference/UserPreference";
 import UserProfileContent from "./_components/userProfile/UserProfileContent";
-import LoadingSpinner from "./_components/LoadingSpinner";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 import { UserDescription } from "@/types/userDescription";
 import { SessionUser } from "@/types/user";
 
