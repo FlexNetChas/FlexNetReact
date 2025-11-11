@@ -9,7 +9,7 @@ export async function GET(
   const { id } = await params;
 
   const response = await fetch(
-    `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/ChatSession/${id}`,
     {
       method: "GET",
       headers,
@@ -35,7 +35,7 @@ export async function DELETE(
   const { id } = await params;
 
   const response = await fetch(
-    `${process.env.NEXT_API_BASE_URL}/ChatSession/${id}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/ChatSession/${id}`,
     {
       headers,
       method: "DELETE",

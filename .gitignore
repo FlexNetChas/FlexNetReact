@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Keep env example file
 !.env.example
+
+# Hiding idea
+.idea
