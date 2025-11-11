@@ -6,7 +6,7 @@ services:
     container_name: frontend
     image: flexnet.frontend
     env_file:
-      - .env.docker
+      - .env.local
     ports:
       - "3000:3000"
     develop:

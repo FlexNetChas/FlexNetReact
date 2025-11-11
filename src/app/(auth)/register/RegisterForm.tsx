@@ -54,7 +54,7 @@ function RegisterForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md">
+      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md font-mono">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
@@ -68,12 +68,12 @@ function RegisterForm() {
           action={registerAction}
           className="flex flex-col gap-4 max-w-[400px] mx-auto"
         >
-          <h1 className="text-3xl text-center">Create Account</h1>
+          <h1 className="text-3xl text-center font-mono">Create Account</h1>
 
           {/* First Name and Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="firstName" className="text-sm font-medium">
+              <label htmlFor="firstName" className="text-sm font-medium font-mono">
                 First Name
               </label>
               <Input
@@ -92,7 +92,7 @@ function RegisterForm() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="lastName" className="text-sm font-medium">
+              <label htmlFor="lastName" className="text-sm font-medium font-mono">
                 Last Name
               </label>
               <Input
@@ -114,7 +114,7 @@ function RegisterForm() {
 
           {/* Email */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor="email" className="text-sm font-medium font-mono">
               Email
             </label>
             <Input
@@ -135,7 +135,7 @@ function RegisterForm() {
 
           {/* Password */}
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
+            <label htmlFor="password" className="text-sm font-medium font-mono">
               Password
             </label>
             <Input
@@ -156,7 +156,7 @@ function RegisterForm() {
 
           {/* Confirm Password */}
           <div className="space-y-2">
-            <label htmlFor="confirmPassword" className="text-sm font-medium">
+            <label htmlFor="confirmPassword" className="text-sm font-medium font-mono">
               Confirm Password
             </label>
             <Input
@@ -177,9 +177,9 @@ function RegisterForm() {
           <SubmitButton />
         </form>
 
-        <p className="text-xs mt-4 text-center">
+        <p className="text-xs mt-4 text-center font-mono">
           Already have an account? &nbsp;
-          <Link href="/login" className="text-xs">
+          <Link href="/login" className="text-xs font-mono">
             Sign in here
           </Link>
         </p>
