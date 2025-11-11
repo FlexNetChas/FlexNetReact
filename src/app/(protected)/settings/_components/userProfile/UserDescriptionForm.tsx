@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { patchUserDescription } from "@/app/(protected)/settings/_components/user-description/actions";
+import { patchUserDescription } from "@/app/(protected)/settings/actions";
 import type {
   UserDescriptionState,
   UserDescription,
@@ -61,6 +61,9 @@ export function UserDescriptionForm({
     { success: false }
   );
 
+  // Ref for textarea to adjust height dynamically
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   // Use generic toast hook instead of inline success message
   useToasts(state, {
     successMessage: "Your settings have been updated successfully!",
@@ -90,21 +93,19 @@ export function UserDescriptionForm({
     }
   }, [state]);
 
-  return (
-    <div className="px-8 py-6 bg-form/80 rounded-2xl w-full max-w-2xl">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl mb-2">Settings</h1>
-        <p className="text-muted-foreground text-sm">
-          Help us personalize your experience by telling us a bit about
-          yourself. All fields are optional
-        </p>
-      </div>
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = Math.max(textarea.scrollHeight, 40) + "px";
+    }
+  }, [formValues.purpose]);
 
-      <form
-        action={formAction}
-        className="flex flex-col gap-4 max-w-xl mx-auto"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  return (
+    <form action={formAction} className="space-y-6">
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Age */}
           <div className="space-y-2">
             <label htmlFor="age">Age</label>
@@ -123,7 +124,7 @@ export function UserDescriptionForm({
                   age: value ? parseInt(value, 10) : 0,
                 }));
               }}
-              className={`${
+              className={`mt-2 w-full bg-[#1c2433] h-10 ${
                 hasError("age")
                   ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                   : "border-form-foreground"
@@ -146,7 +147,7 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="gender"
-                className={`bg-background text-sm h-10 ${
+                className={`mt-2 w-full bg-[#1c2433] h-10 ${
                   hasError("gender")
                     ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                     : "border-form-foreground"
@@ -163,48 +164,49 @@ export function UserDescriptionForm({
               </SelectContent>
             </Select>
           </div>
-        </div>
 
-        {/* Education */}
-        <div className="space-y-2">
-          <label htmlFor="education">Education</label>
-          <Select
-            name="education"
-            value={formValues.education}
-            onValueChange={(value) => {
-              setFormValues((prev) => ({
-                ...prev,
-                education: value,
-              }));
-            }}
-          >
-            <SelectTrigger
-              id="education"
-              className={`bg-background text-sm h-10 ${
-                hasError("education")
-                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                  : "border-form-foreground"
-              }`}
+          {/* Education */}
+          <div className="space-y-2">
+            <label htmlFor="education">Education</label>
+            <Select
+              name="education"
+              value={formValues.education}
+              onValueChange={(value) => {
+                setFormValues((prev) => ({
+                  ...prev,
+                  education: value,
+                }));
+              }}
             >
-              <SelectValue placeholder="Select level" />
-            </SelectTrigger>
-            <SelectContent className="min-w-full">
-              <SelectItem value="Primary school">Primary school</SelectItem>
-              <SelectItem value="High school">High school</SelectItem>
-              <SelectItem value="University">University</SelectItem>
-              <SelectItem value="Master's degree">
-                Master&apos;s degree
-              </SelectItem>
-              <SelectItem value="Doctorate">Doctorate</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+              <SelectTrigger
+                id="education"
+                className={`mt-2 w-full bg-[#1c2433] h-10 ${
+                  hasError("education")
+                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                    : "border-form-foreground"
+                }`}
+              >
+                <SelectValue placeholder="Select level" />
+              </SelectTrigger>
+              <SelectContent className="min-w-full">
+                <SelectItem value="Primary school">Primary school</SelectItem>
+                <SelectItem value="High school">High school</SelectItem>
+                <SelectItem value="University">University</SelectItem>
+                <SelectItem value="Master's degree">
+                  Master&apos;s degree
+                </SelectItem>
+                <SelectItem value="Doctorate">Doctorate</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Purpose */}
         <div className="space-y-2">
           <label htmlFor="purpose">What do you hope to achieve?</label>
           <textarea
+            ref={textareaRef}
             id="purpose"
             name="purpose"
             value={formValues.purpose}
@@ -214,31 +216,28 @@ export function UserDescriptionForm({
                 purpose: e.target.value,
               }));
             }}
-            placeholder="E.g. I want guidance on choosing the right educational path"
-            className={`w-full border rounded-lg p-3 bg-background text-foreground min-h-[120px] resize-y placeholder:text-muted-foreground ${
+            placeholder="I want guidance on choosing the right educational path"
+            className={`mt-2 w-full border rounded-lg p-2 bg-[#1c2433] resize-y  ${
               hasError("purpose")
                 ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                : "border-form-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                : "border-form-foreground"
             }`}
           />
         </div>
-
-        <SubmitButton />
-      </form>
-    </div>
+      </div>
+      <SubmitButton />
+    </form>
   );
 }
 
-// Submit button component
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button
       disabled={pending}
       type="submit"
-      size="lg"
-      className="glass text-primary-foreground mt-2"
-      variant="outline"
+      variant="default"
+      className="w-2/10 mb-2 font-mono"
     >
       {pending ? "Saving..." : "Save"}
     </Button>

@@ -2,6 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAnimation } from "./Animation/AnimationContext";
+import {
+  PromptInput,
+  PromptInputTextarea,
+  PromptInputActions,
+  PromptInputAction,
+} from "@/components/ui/prompt-input";
+import { Send } from "lucide-react";
 
 type ChatMessage = {
   text: string;
@@ -10,7 +17,8 @@ type ChatMessage = {
 
 export default function TempChatbox() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const logRef = useRef<HTMLDivElement>(null);
   const { setAnimation } = useAnimation();
   const [chatSessionId, setChatSessionId] = useState<number | null>(null);
@@ -48,24 +56,25 @@ export default function TempChatbox() {
     }
   };
 
-  const sendMessage = () => {
-    if (input.trim() === "") return;
+  const handleSend = async () => {
+    if (inputValue.trim() === "" || isLoading) return;
 
-    // Add user message
-    const userMessage = input;
+    const userMessage = inputValue.trim();
+    setInputValue("");
+    setIsLoading(true);
     setMessages((prev) => [...prev, { text: userMessage, sender: "user" }]);
-    setInput("");
     setAnimation("talking");
 
-    // Simulate AI response after short delay
     setTimeout(async () => {
       setTimeout(() => {
         setAnimation("idle");
       }, 3000);
       const reply = await fetchAIResponse(userMessage);
       setMessages((prev) => [...prev, { text: reply, sender: "ai" }]);
-    }, 500); // small delay to simulate thinking
+      setIsLoading(false);
+    }, 500);
   };
+
 
   // Auto-scroll to bottom when new message is added
   useEffect(() => {
@@ -99,23 +108,48 @@ export default function TempChatbox() {
       </div>
 
       {/* Input area pinned at bottom */}
-      <div className="flex gap-2 px-6 my-1 flex-shrink-0">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 p-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none"
-          placeholder="Type a message..."
-          onKeyDown={(e) => {
-            if (e.key === "Enter") sendMessage();
-          }}
-        />
-        <button
-          onClick={sendMessage}
-          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
+      <div className="px-6 my-1 flex-shrink-0">
+        <PromptInput
+          value={inputValue}
+          onValueChange={setInputValue}
+          onSubmit={handleSend}
+          isLoading={isLoading}
+          disabled={isLoading}
+          maxHeight={240}
+          className="bg-white/10 dark:bg-slate-800/10 backdrop-blur-sm border-white/20"
         >
-          Send
-        </button>
+          <PromptInputTextarea
+            placeholder="Type a message..."
+            className="text-white placeholder:text-white/50"
+          />
+          <PromptInputActions>
+            <PromptInputAction tooltip="Send message">
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={!inputValue.trim() || isLoading}
+                className="group relative flex items-center justify-center size-11 rounded-xl transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 overflow-hidden"
+              >
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700" />
+                
+                {/* Animated shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12" />
+                </div>
+                
+                {/* Top highlight */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+                
+                {/* Glow effect */}
+                <div className="absolute inset-0 rounded-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] transition-shadow duration-300" />
+                
+                {/* Icon */}
+                <Send className="size-4 relative z-10 text-white transition-transform duration-200 group-hover:scale-110" />
+              </button>
+            </PromptInputAction>
+          </PromptInputActions>
+        </PromptInput>
       </div>
     </div>
   );

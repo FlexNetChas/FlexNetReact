@@ -3,10 +3,10 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserProvider } from "@/context/UserContext";
-import PreviousChatSessions from "@/components/Sidebar/Sidebar";
 import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/sharedActions";
 import { ChatSessionsProvider } from "@/components/chat/ChatSessionContext";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -32,13 +32,8 @@ export default async function RootLayout({
         <UserProvider user={user}>
           <ChatSessionsProvider>
             {user ? (
-              // Protected layout: Only sidebar, no header/footer
-              <div className="flex min-h-screen">
-                <PreviousChatSessions />
-                <main className="flex-1 overflow-auto min-h-screen">
-                  {children}
-                </main>
-              </div>
+              // Protected layout: Sidebar with chat sessions
+              children
             ) : (
               // Public layout: Header and footer
               <div className="flex flex-col min-h-screen">
@@ -52,6 +47,7 @@ export default async function RootLayout({
           </ChatSessionsProvider>
           <Toaster position="top-right" />
         </UserProvider>
+        <GoogleAnalytics gaId="G-TYVTBNZWKC" />
       </body>
     </html>
   );

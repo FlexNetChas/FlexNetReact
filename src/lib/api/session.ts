@@ -25,7 +25,7 @@ export async function createSessionCookie(accessToken: string) {
     secure: true,
     expires: expiresAt,
     // For "lax" our backend needs to be on same domain. Ex: api.flexnet.com or api.flexnet.azurewebsites.net
-    sameSite: "lax",
+    sameSite: "none",
     path: "/",
   });
 }
@@ -79,7 +79,7 @@ export async function createRefreshCookie(refreshToken: string) {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
-    sameSite: "lax",
+    sameSite: "none",
     path: "/",
   });
 }

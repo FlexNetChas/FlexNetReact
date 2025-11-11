@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { CompactChatSessionResponseDto } from "@/types/chatSession";
 import { Trash2 } from "lucide-react";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
+import LoadingSpinner from "../LoadingSpinner";
 
 const SectionItem = () => {
   const { sessions, refreshSessions, addSession } = useChatSessions();
@@ -45,7 +46,7 @@ const SectionItem = () => {
   return (
     <div>
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingSpinner />
       ) : error ? (
         <p>{error}</p>
       ) : (
