@@ -150,7 +150,8 @@
 
   /* Paragraph */
   p,
-  span {
+  span,
+  label {
     font-family: ui-monospace, monospace;
     font-size: clamp(0.8rem, 1.25vw, 1.1rem);
     @apply text-muted-foreground;

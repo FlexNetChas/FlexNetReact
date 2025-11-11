@@ -43,7 +43,9 @@ function DeleteButton({ disabled }: DeleteButtonProps) {
     <Button
       type="submit"
       disabled={disabled || pending}
-      className="!bg-error glass disabled:opacity-50"
+      // className="!bg-error glass disabled:opacity-50 "
+      className=" mb-2 font-mono disabled:opacity-50  "
+      variant="default"
     >
       {pending ? (
         <>

@@ -1,49 +1,44 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 type Props = {};
 
-export default function UserPreference({}: Props) {
+export default function UserPrivacy({}: Props) {
   return (
     <div className="space-y-8">
-      {/* Basic Preferences */}
-      <section className="grid grid-cols-1 lg:grid-cols-[30%_30%_30%]">
+      {/* Data Management */}
+      <section className="grid grid-cols-1 lg:grid-cols-[35%_65%]">
         <div className="p-5">
-          <h3 className="text-lg text-primary-foreground">
-            Interface Preferences
-          </h3>
+          <h3 className="text-lg text-primary-foreground">Data Management</h3>
           <p className="mt-2 text-sm lg:text-base">
-            Basic settings to customize your experience.
+            Download a copy of your personal data
           </p>
         </div>
-        <div className="p-5 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 max-w-md">
-            <div className="flex-1">
-              <p className="font-medium">Dark Mode</p>
-              <p className="text-sm text-muted-foreground">
-                Switch between light and dark theme
-              </p>
-            </div>
-          </div>
+        <div className="p-5">
+          <Button variant="default" className=" mb-2 font-mono">
+            Request Data Export
+          </Button>
         </div>
+      </section>
 
-        <div className="p-5 space-y-6">
-          <Select>
-            <SelectTrigger className="w-full sm:w-[180px] glass">
-              <SelectValue placeholder="System" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="system">System</SelectItem>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-            </SelectContent>
-          </Select>
+      {/* Section Divider */}
+      <div className="border-t border-border -mx-4 lg:-mx-5" />
+
+      {/* Cookie Preferences */}
+      <section className="grid grid-cols-1 lg:grid-cols-[35%_65%]">
+        <div className="p-5">
+          <h3 className="text-lg text-primary-foreground">
+            Cookie Preferences
+          </h3>
+          <p className="mt-2 text-sm lg:text-base">
+            Manage your cookie settings and privacy preferences.
+          </p>
+        </div>
+        <div className="p-5">
+          <Button variant="default" className=" mb-2 font-mono">
+            {/* TODO: Link to cookie page */}
+            Manage Cookie Settings
+          </Button>
         </div>
       </section>
     </div>
