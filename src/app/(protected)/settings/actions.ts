@@ -112,3 +112,16 @@ export async function patchUserDescription(
     return { errors: { form: errorMessages } };
   }
 }
+
+export async function deleteAccount(id: any): Promise<{
+  success?: true;
+  errors?: { form: string[] };
+}> {
+  try {
+    // Todo: Delete the user account. Then remove tokens and log out the user
+
+    return { success: true };
+  } catch {
+    return { errors: { form: ["Server error"] } };
+  }
+}
