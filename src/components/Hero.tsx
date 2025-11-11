@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, DollarSign, UserCog } from "lucide-react";
+import { AnimatedText } from "@/components/ui/animated-text";
 
 function Hero() {
   return (
@@ -23,18 +24,25 @@ function Hero() {
         muted
       />
 
-      <h1 className="gradient-text text-5xl">Welcome to Your Journey</h1>
+      <AnimatedText
+        text="Welcome to Your Journey"
+        gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)"
+        gradientAnimationDuration={3}
+        hoverEffect={true}
+        className="py-4"
+        textClassName="text-center"
+      />
 
       <div className="flex flex-col items-center">
-        <Image src="/Logo.svg" alt="FlexNet Logo" width={150} height={150} />{" "}
         <p className="text-xl text-muted-foreground mb-5">
           Find your path. Shape your future.
         </p>
         <Link href="/register" className="block w-8/10">
           <Button
             size="lg"
-            className="glass text-primary-foreground w-full mb-2"
-            variant="outline"
+            variant="default"
+            neon={true}
+            className="w-full mb-2 font-mono"
             aria-label="Register"
           >
             Get Started
@@ -43,20 +51,20 @@ function Hero() {
       </div>
 
       {/* Badges */}
-      <div className="absolute bottom-100 right-10 flex flex-col gap-5 items-center">
-        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
+      <div className="absolute top-10 left-10 flex flex-col gap-5 items-center z-10">
+        <Badge className="flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
+          <DollarSign className="!h-5 !w-5 text-green-500" />
+          <span className="">Free Registration</span>
+        </Badge>
+
+        <Badge className="flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
+          <UserCog className="!h-5 !w-5 text-pink-500" />
+          <span className="">Customizable Avatars</span>
+        </Badge>
+
+        <Badge className="flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
           <Sparkles className="!h-5 !w-5 text-blue-500 animate-pulse" />
           <span className="">AI-Powered Conversations</span>
-        </Badge>
-
-        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
-          <DollarSign className="!h-5 !w-5 text-green-500" />
-          <span className="hidden md:inline">Free Registration</span>
-        </Badge>
-
-        <Badge className="hidden md:flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
-          <UserCog className="!h-5 !w-5 text-pink-500" />
-          <span className="hidden md:inline">Customizable Avatars</span>
         </Badge>
       </div>
     </section>
