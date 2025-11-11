@@ -136,28 +136,31 @@ export default function PreviousChatSessions() {
 
         {/* Border after user info */}
         {!isMinimized && (
-          <div className="hidden md:inline border-t border border-primary/60 mx-2"></div>
+          <div className="hidden md:inline border-t border-border mx-2"></div>
         )}
         {isMinimized && (
-          <div className="md:hidden inline border-t border border-primary/60 mx-2"></div>
+          <div className="md:hidden inline border-t border-border mx-2"></div>
         )}
 
         {/* Menu section, temp buttons in same file here sicne layout and flow not finalized */}
         <div
-          className={`flex flex-col gap-1${
+          className={`flex flex-col gap-3 ${
             isMinimized ? "items-center py-3" : "items-start px-3 py-3"
           }`}
         >
           {/* Home */}
           <Button
-            variant="sidebar"
+            variant="default"
             size="default"
             className={`${
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2`}
             title={"Home"}
           >
-            <Link href={"/"} className="flex items-center gap-2 w-full">
+            <Link
+              href={"/"}
+              className="flex items-center gap-2 w-full no-underline"
+            >
               {<Book size={18} />}
               {!isMinimized && (
                 <span className="hidden md:inline text-sm">Home</span>
@@ -168,14 +171,17 @@ export default function PreviousChatSessions() {
 
           {/* New Chat */}
           <Button
-            variant="sidebar"
+            variant="default"
             size="default"
             className={`${
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2`}
             title={"New chat"}
           >
-            <Link href={"/chat"} className="flex items-center gap-2 w-full">
+            <Link
+              href={"/chat"}
+              className="flex items-center gap-2 w-full no-underline"
+            >
               <SquarePen size={18} />
               {!isMinimized && (
                 <span className="hidden md:inline text-sm">New chat</span>
@@ -208,14 +214,17 @@ export default function PreviousChatSessions() {
 
           {/* Settings */}
           <Button
-            variant="sidebar"
+            variant="default"
             size="default"
             className={`${
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2`}
             title={"Settings"}
           >
-            <Link href={"/settings"} className="flex items-center gap-2 w-full">
+            <Link
+              href={"/settings"}
+              className="flex items-center gap-2 w-full no-underline"
+            >
               <Settings size={18} />
               {!isMinimized && (
                 <span className="hidden md:inline text-sm">Settings</span>
@@ -228,22 +237,22 @@ export default function PreviousChatSessions() {
 
           {/* Logout Button */}
           <Button
-            variant="sidebar"
+            variant="default"
             size="default"
-            className={`${
+            className={`!no-underline cursor-pointer ${
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2 text-primary hover:underline`}
             title="Logout"
             onClick={handleLogout}
             disabled={isLoggingOut}
           >
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-2 w-full  ">
               <LogOut size={18} />
               {!isMinimized && (
-                <span className="hidden md:inline text-sm">Logout</span>
+                <span className="hidden md:inline text-sm ">Logout</span>
               )}
               {isMinimized && (
-                <span className="md:hidden text-sm">
+                <span className="md:hidden text-sm ">
                   {isLoggingOut ? "Logging out..." : "Logout"}
                 </span>
               )}
@@ -253,10 +262,10 @@ export default function PreviousChatSessions() {
 
         {/* Border after settings */}
         {!isMinimized && (
-          <div className="hidden md:inline border-t border border-primary/60 mx-2"></div>
+          <div className="hidden md:inline border-t border-border mx-2"></div>
         )}
         {isMinimized && (
-          <div className="md:hidden inline border-t border border-primary/60 mx-2"></div>
+          <div className="md:hidden inline border-t border-border-primary/60 mx-2"></div>
         )}
 
         {/* Previous chats listed here, scrollable window. Getting previous chats and handling onclick setup chat logic should be handled elsewhere, 

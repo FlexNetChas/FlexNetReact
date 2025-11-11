@@ -236,7 +236,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       type="submit"
-      className="p-3 hover:bg-[#006c8c] hover:scale-105 font-extrabold bg-[#006c8c] sm:w-auto w-full"
+      className="p-2 hover:bg-[#006c8c] hover:scale-105 font-extrabold bg-[#006c8c] sm:w-auto w-full"
     >
       {pending ? "Saving..." : "Save"}
     </Button>
