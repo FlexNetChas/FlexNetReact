@@ -27,4 +27,29 @@ export const chatService = {
 
     return body;
   },
+  streamMessage: async (
+    message: string,
+    chatSessionId: string | null
+  ): Promise<Response> => {
+    const headers = await getAuthHeaders();
+
+    // Build URL with query params
+    const url = new URL(`${API_BASE_URL}/Counsellor/message/stream`);
+    url.searchParams.set("message", message);
+    if (chatSessionId) {
+      url.searchParams.set("chatSessionId", chatSessionId);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: headers,
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Stream failed: ${response.statusText}`);
+    }
+
+    return response; // Return raw response with SSE stream
+  },
 };
