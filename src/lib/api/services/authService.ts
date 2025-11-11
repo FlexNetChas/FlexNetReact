@@ -8,7 +8,7 @@ import {
   RefreshResponse,
 } from "@/types/auth";
 
-const API_BASE_URL = process.env.NEXT_API_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {

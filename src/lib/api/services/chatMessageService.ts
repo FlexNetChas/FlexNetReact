@@ -1,6 +1,6 @@
 import { getAuthHeaders } from "@/lib/api/getAuthHeaders";
 
-const API_BASE_URL = process.env.NEXT_API_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const chatService = {
   sendMessage: async (

@@ -9,7 +9,7 @@ import { getAuthHeaders } from "../getAuthHeaders";
 export const userDescriptionService = {
   get: async (userId: number): Promise<UserDescription> => {
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "GET",
         headers: {
@@ -34,7 +34,7 @@ export const userDescriptionService = {
     data: PatchUserDescriptionRequest
   ): Promise<UserDescription> => {
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/UserDescription/user/${userId}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/UserDescription/user/${userId}`,
       {
         method: "PATCH",
         headers: {

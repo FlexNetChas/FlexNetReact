@@ -1,5 +1,6 @@
 "use client";
 import ClientSideSceneLoader from "@/components/3d-components/ClientSideSceneLoader";
+// Commented out old ChatBoxComponent, now using Stream instead
 // import ChatBoxComponent from "./ChatBoxComponent";
 import { useSceneContext } from "@/components/3d-components/SceneContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
