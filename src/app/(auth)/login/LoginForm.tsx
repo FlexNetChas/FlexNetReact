@@ -48,7 +48,7 @@ function LoginForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto mt-20">
+      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto mt-20 font-mono">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
@@ -61,8 +61,8 @@ function LoginForm() {
           action={loginAction}
           className="flex flex-col gap-2 max-w-[300px]"
         >
-          <h1 className="text-3xl">Login</h1>
-          <label htmlFor="email">Email</label>
+          <h1 className="text-3xl font-mono">Login</h1>
+          <label htmlFor="email" className="font-mono">Email</label>
           <Input
             id="email"
             name="email"
@@ -78,7 +78,7 @@ function LoginForm() {
             required
           />
 
-          <label htmlFor="password" className="text-sm font-medium">
+          <label htmlFor="password" className="text-sm font-medium font-mono">
             Password
           </label>
           <input
@@ -97,9 +97,9 @@ function LoginForm() {
           />
           <SubmitButton />
         </form>
-        <p className="text-xs mt-4">
+        <p className="text-xs mt-4 font-mono">
           Don&apos;t have an account yet? &nbsp;
-          <Link href="/register" className="text-xs">
+          <Link href="/register" className="text-xs font-mono">
             Register for free
           </Link>
         </p>
