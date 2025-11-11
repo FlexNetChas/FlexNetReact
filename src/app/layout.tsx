@@ -6,6 +6,7 @@ import { UserProvider } from "@/context/UserContext";
 import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/sharedActions";
 import { ChatSessionsProvider } from "@/components/chat/ChatSessionContext";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -46,6 +47,7 @@ export default async function RootLayout({
           </ChatSessionsProvider>
           <Toaster position="top-right" />
         </UserProvider>
+        <GoogleAnalytics gaId="G-TYVTBNZWKC" />
       </body>
     </html>
   );
