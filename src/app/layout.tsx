@@ -38,14 +38,14 @@ export default async function RootLayout({
         <UserProvider user={user}>
           <ChatSessionsProvider>
             {user ? (
-              // Protected layout: Sidebar with chat sessions
+              // Protected routes använder nu sin egen layout
               children
             ) : (
               // Public layout: Header and footer
-              <div className="flex flex-col min-h-screen">
+              <div className=" flex flex-col">
                 <Header />
-                <main className="flex-1 overflow-auto min-h-screen">
-                  {children}
+                <main className="flex-1 min-h-[calc(100vh-92px)] flex items-center justify-center">
+                  <div className="w-full max-w-7xl ">{children}</div>
                 </main>
                 <Footer />
               </div>

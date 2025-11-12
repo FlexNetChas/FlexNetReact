@@ -12,49 +12,49 @@ export function Header() {
   const user = useUser();
 
   return (
-    <header className="sticky top-0 w-full border-b">
-        <nav className="w-full blurred-container flex items-center justify-between px-4 pt-4 md:pt-0 md:px-10">
-          <div className="mx-auto flex w-full items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="transition-opacity hover:opacity-80">
-              <Image
-                src="/Logo.svg"
-                alt="FlexNet Logo"
-                width={90}
-                height={90}
-                priority
-              />
-            </Link>
-            {/* Auth Btn */}
-            <div className="flex items-center gap-4">
-              {!user ? (
-                <Link href="/login">
-                  <Button variant="outline">Login</Button>
+    <header className="sticky top-0 w-full border-b z-50 h-23">
+      <nav className="blurred-container flex items-center justify-between px-4 md:px-10 ">
+        <div className="mx-auto flex w-full items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="transition-opacity hover:opacity-80">
+            <Image
+              src="/Logo.svg"
+              alt="FlexNet Logo"
+              width={90}
+              height={90}
+              priority
+            />
+          </Link>
+          {/* Auth Btn */}
+          <div className="flex items-center gap-4">
+            {!user ? (
+              <Link href="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+            ) : (
+              <>
+                <span className="text-muted-foreground hidden sm:inline">
+                  {user.firstName} {user.lastName}
+                </span>
+                <Link href="/settings">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    title="Settings"
+                    className="text-primary-foreground hover:text-primary"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
                 </Link>
-              ) : (
-                <>
-                  <span className="text-muted-foreground hidden sm:inline">
-                    {user.firstName} {user.lastName}
-                  </span>
-                  <Link href="/settings">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      title="Settings"
-                      className="text-primary-foreground hover:text-primary"
-                    >
-                      <Settings className="h-5 w-5" />
-                    </Button>
-                  </Link>
-                  <form action={logout}>
-                    <LogoutButton />
-                  </form>
-                </>
-              )}
-            </div>
+                <form action={logout}>
+                  <LogoutButton />
+                </form>
+              </>
+            )}
           </div>
-        </nav>
-      </header>
+        </div>
+      </nav>
+    </header>
   );
 }
 
