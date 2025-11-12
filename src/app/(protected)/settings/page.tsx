@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { requireAuth } from "@/lib/sharedActions";
 import { getUserDescription } from "./actions";
 import UserPrivacy from "./_components/userPrivacy/UserPrivacy";
@@ -57,7 +57,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen mx-5 ">
+    <div className="min-h-screen mx-5 mt-15 md:mt-0 ">
       {/* Tabs */}
       <div className="p-5">
         <nav className="flex space-x-10">
