@@ -3,7 +3,6 @@ import { useState, useRef } from "react";
 import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
-import { useRouter } from "next/navigation";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
 import { useEffect } from "react";
 
@@ -13,7 +12,6 @@ export default function ChatBoxComponent({
   savedSession: CompleteChatSessionResponseDto | null;
 }) {
   const logRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const chatSessionIdRef = useRef<number | null>(null);
   const { setAnimation } = useAnimation();
   const { refreshSessions } = useChatSessions();

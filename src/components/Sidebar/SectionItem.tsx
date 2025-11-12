@@ -37,6 +37,8 @@ const SectionItem = () => {
 
       if (response.status === 200) {
         refreshSessions();
+        await router.push(`/chat?ts=${Date.now()}`);
+        router.refresh();
       }
     } catch (error) {
       console.error("Error deleting session:", error);
@@ -54,16 +56,16 @@ const SectionItem = () => {
           {sessions && sessions.length > 0 ? (
             sessions.map((session) => (
               <div key={session.id} className="flex flex-col">
-                <div
-                  key={`session-${session.id}`}
-                  onClick={() => handleClick(session.id)}
-                  className="p-3 rounded hover:bg-gray-700  transition-colors cursor-pointer text-sm"
-                >
-                  <div className="flex justify-between items-center">
-                    <span>{session.summary || "No Summary"}</span>
-                    {session.hasBeenDeleted ? (
-                      <LoadingSpinner />
-                    ) : (
+                {session.hasBeenDeleted ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div
+                    key={`session-${session.id}`}
+                    onClick={() => handleClick(session.id)}
+                    className="p-3 rounded hover:bg-gray-700  transition-colors cursor-pointer text-sm"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{session.summary || "No Summary"}</span>
                       <Trash2
                         size={18}
                         className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
@@ -75,9 +77,9 @@ const SectionItem = () => {
                           }
                         }}
                       />
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ))
           ) : (
