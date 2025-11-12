@@ -37,6 +37,8 @@ const SectionItem = () => {
 
       if (response.status === 200) {
         refreshSessions();
+        await router.push(`/chat?ts=${Date.now()}`);
+        router.refresh();
       }
     } catch (error) {
       console.error("Error deleting session:", error);
@@ -54,24 +56,30 @@ const SectionItem = () => {
           {sessions && sessions.length > 0 ? (
             sessions.map((session) => (
               <div key={session.id} className="flex flex-col">
-                <div
-                  key={`session-${session.id}`}
-                  onClick={() => handleClick(session.id)}
-                  className="p-3 rounded hover:bg-gray-700  transition-colors cursor-pointer text-sm"
-                >
-                  <div className="flex justify-between items-center">
-                    <span>{session.summary || "No Summary"}</span>
-                    {/* <span className="text-xs text-gray-500">
-                      {new Date(session.startedTime).toLocaleString()}
-                    </span> */}
-                    <Trash2
-                      size={18}
-                      className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
-                      key={`delete-${session.id}`}
-                      onClick={(event) => handleClickDelete(session.id, event)}
-                    />
+                {session.hasBeenDeleted ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div
+                    key={`session-${session.id}`}
+                    onClick={() => handleClick(session.id)}
+                    className="p-3 rounded hover:bg-gray-700  transition-colors cursor-pointer text-sm"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{session.summary || "No Summary"}</span>
+                      <Trash2
+                        size={18}
+                        className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
+                        key={`delete-${session.id}`}
+                        onClick={(event) => {
+                          if (!session.hasBeenDeleted) {
+                            session.hasBeenDeleted = true;
+                            handleClickDelete(session.id, event);
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ))
           ) : (
