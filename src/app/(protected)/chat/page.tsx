@@ -7,7 +7,7 @@ export default function page() {
   return (
     <SceneContextProvider>
       <AnimationProvider>
-        <ChatContentComponent />
+        <ChatContentComponent savedSession={null} />
       </AnimationProvider>
     </SceneContextProvider>
   );

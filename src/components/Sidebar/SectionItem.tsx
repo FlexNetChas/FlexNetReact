@@ -61,15 +61,21 @@ const SectionItem = () => {
                 >
                   <div className="flex justify-between items-center">
                     <span>{session.summary || "No Summary"}</span>
-                    {/* <span className="text-xs text-gray-500">
-                      {new Date(session.startedTime).toLocaleString()}
-                    </span> */}
-                    <Trash2
-                      size={18}
-                      className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
-                      key={`delete-${session.id}`}
-                      onClick={(event) => handleClickDelete(session.id, event)}
-                    />
+                    {session.hasBeenDeleted ? (
+                      <LoadingSpinner />
+                    ) : (
+                      <Trash2
+                        size={18}
+                        className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
+                        key={`delete-${session.id}`}
+                        onClick={(event) => {
+                          if (!session.hasBeenDeleted) {
+                            session.hasBeenDeleted = true;
+                            handleClickDelete(session.id, event);
+                          }
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
