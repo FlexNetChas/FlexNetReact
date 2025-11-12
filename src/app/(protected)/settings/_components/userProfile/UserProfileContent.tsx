@@ -1,8 +1,9 @@
-import React from "react";
 import { UserDescriptionForm } from "./UserDescriptionForm";
 import { RemoveAccount } from "./RemoveAccount";
 import { UserDescription } from "@/types/userDescription";
 import { SessionUser } from "@/types/user";
+import { deleteAccount } from "../../actions";
+import { useState } from "react";
 
 export default function UserProfileContent({
   user,
@@ -11,17 +12,33 @@ export default function UserProfileContent({
   user: SessionUser;
   userDescription: UserDescription;
 }) {
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   async function formAction(formData: FormData) {
-    // Todo: Implement account deletion logic when backend is ready
+    setIsDeleting(true);
+    setDeleteError(null);
+
     try {
-      alert("Account deleted");
-    } catch {}
+      const result = await deleteAccount(user.id);
+
+      if (result.errors) {
+        setDeleteError(result.errors.form.join(", "));
+      } else if (result.success) {
+        // Redirect hanteras nu i deleteAccount funktionen
+        return;
+      }
+    } catch (error) {
+      setDeleteError("An unexpected error occurred");
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
     <div className="space-y-8">
       {/* Personal Information Section */}
-      <section className="grid grid-cols-[35%_65%]  ">
+      <section className="flex flex-col md:grid md:grid-cols-[35%_65%]">
         <div className="p-6">
           <h3 className="text-lg text-primary-foreground">
             Personalize your experience{" "}
@@ -40,7 +57,7 @@ export default function UserProfileContent({
       <div className="border-t border-border -mx-5" />
 
       {/* Danger Zone */}
-      <section className="grid grid-cols-[35%_65%] ">
+      <section className="flex flex-col md:grid md:grid-cols-[35%_65%]">
         <div className="p-6">
           <h3 className="text-lg text-primary-foreground">Danger Zone</h3>
           <p className="mt-2">
@@ -55,7 +72,13 @@ export default function UserProfileContent({
           </div>
         </div>
         <div className="p-6">
-          <RemoveAccount formAction={formAction} />
+          {/* Visa felmeddelande om det finns */}
+          {deleteError && (
+            <div className="mb-4 p-3 bg-error/20 border border-error rounded-md">
+              <p className="text-error text-sm">{deleteError}</p>
+            </div>
+          )}
+          <RemoveAccount formAction={formAction} isPending={isDeleting} />{" "}
         </div>
       </section>
     </div>
