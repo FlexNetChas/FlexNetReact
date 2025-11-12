@@ -5,6 +5,7 @@ export type CompactChatSessionResponseDto = {
   summary: string | null;
   startedTime: string;
   endedTime: string | null;
+  hasBeenDeleted?: boolean;
 };
 
 export type CompleteChatSessionResponseDto = {

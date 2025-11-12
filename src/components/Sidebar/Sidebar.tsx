@@ -13,12 +13,14 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import SectionItems from "./SectionItem";
 import { logout } from "@/lib/sharedActions";
+import { useRouter } from "next/navigation";
 
 export default function PreviousChatSessions() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const toggleSidebar = () => setIsMinimized((prev) => !prev);
   const user = useUser();
+  const router = useRouter();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -173,15 +175,16 @@ export default function PreviousChatSessions() {
           <Button
             variant="default"
             size="default"
-            className={`${
+            className={`!no-underline cursor-pointer ${
               isMinimized ? "justify-center" : "justify-start"
-            } flex w-full gap-2`}
-            title={"New chat"}
+            } flex w-full gap-2 text-primary hover:underline`}
+            title="New chat"
+            onClick={async () => {
+              await router.push(`/chat?ts=${Date.now()}`);
+              router.refresh();
+            }}
           >
-            <Link
-              href={"/chat"}
-              className="flex items-center gap-2 w-full no-underline"
-            >
+            <div className="flex items-center gap-2 w-full no-underline">
               <SquarePen size={18} />
               {!isMinimized && (
                 <span className="hidden md:inline text-sm">New chat</span>
@@ -189,28 +192,8 @@ export default function PreviousChatSessions() {
               {isMinimized && (
                 <span className="md:hidden text-sm">New chat</span>
               )}
-            </Link>
+            </div>
           </Button>
-
-          {/* Search Chats - Not in use atm */}
-          {/* <Button
-            variant="sidebar"
-            size="default"
-            className={`${
-              isMinimized ? "justify-center" : "justify-start"
-            } flex w-full gap-2`}
-            title={"Search chats"}
-          >
-            <Link href={"/chat"} className="flex items-center gap-2 w-full">
-              {<Search size={18} />}
-              {!isMinimized && (
-                <span className="hidden md:inline text-sm">Search chat</span>
-              )}
-              {isMinimized && (
-                <span className="md:hidden text-sm">Search chat</span>
-              )}
-            </Link>
-          </Button> */}
 
           {/* Settings */}
           <Button
