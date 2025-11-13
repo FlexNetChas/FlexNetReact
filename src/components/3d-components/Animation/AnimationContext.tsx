@@ -50,7 +50,7 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
     ThumbsUp: false,
     WalkJump: false,
     Walking: false,
-    Wave: true,
+    Wave: false,
     Yes: false,
   });
 
@@ -62,6 +62,7 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
     state: boolean,
     options?: AnimationOptions
   ) => {
+    console.log(animation, state, options);
     // clear previous timeout if any
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -87,8 +88,6 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
         }
       }, options.timeout);
     }
-
-    // If no loop specified, we'll handle single-play in the animation component
   };
 
   return (

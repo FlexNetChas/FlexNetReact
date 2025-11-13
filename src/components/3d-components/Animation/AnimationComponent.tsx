@@ -26,12 +26,21 @@ export default function useAnimationComponent({
     mixerRef.current = new AnimationMixer(model);
 
     const defaultIdx = animationIndexMap[defaultAnimation] ?? 0;
-    const defaultAction = mixerRef.current.clipAction(animations[defaultIdx]);
-    defaultAction.play();
-    actionRef.current = defaultAction;
+    const waveIdx = animationIndexMap["Wave"] ?? 12;
+
+    // Start with default animation
+    setTimeout(() => {
+      if (!mixerRef.current) return;
+      const defaultClip = animations[12];
+      const defaultAction = mixerRef.current.clipAction(defaultClip) ?? null;
+      defaultAction.clampWhenFinished = true;
+      defaultAction.setLoop(LoopOnce, 1);
+      defaultAction.reset().play();
+      actionRef.current = defaultAction;
+    }, 100);
 
     const onFinish = () => {
-      setAnimationState(defaultAnimation, true);
+      setAnimationState("Idle", true, { loop: true });
     };
 
     mixerRef.current.addEventListener("finished", onFinish);
@@ -62,7 +71,6 @@ export default function useAnimationComponent({
     mixerRef.current.stopAllAction();
 
     // Use loop mode depending on name or future context options
-    newAction.setLoop(LoopOnce, 0);
     newAction.clampWhenFinished = true;
 
     newAction.reset().play();

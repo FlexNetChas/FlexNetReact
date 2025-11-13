@@ -76,7 +76,7 @@ export default function ChatBoxComponent({
       onComplete: () =>
         setAnimationState("Yes", true, {
           loop: true,
-          timeout: 40000,
+          timeout: 4000,
           onComplete: () => setAnimationState("Idle", true),
         }),
     }); // thinking animation
