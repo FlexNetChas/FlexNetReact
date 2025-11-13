@@ -1,7 +1,7 @@
 import { AnimationMixer, Group, AnimationClip, AnimationAction } from "three";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useEffect, useState } from "react";
-import { useAnimation } from "./AnimationContext";
+import { AnimationState, useAnimation } from "./AnimationContext";
 import { LoopOnce } from "three";
 
 interface AnimationComponentProps {
@@ -9,6 +9,24 @@ interface AnimationComponentProps {
   animations: AnimationClip[];
   animationIndexMap: Record<string, number>;
 }
+
+type AnimationSpeedMap = Record<AnimationState, number>;
+const animationSpeedMap: AnimationSpeedMap = {
+  Dance: 1.3,
+  Death: 1.0,
+  Idle: 0.8,
+  Jump: 1.0,
+  No: 1.0,
+  Punch: 1.5,
+  Running: 1.3,
+  Sitting: 1.0,
+  Standing: 1.0,
+  ThumbsUp: 1.0,
+  WalkJump: 1.0,
+  Walking: 1.0,
+  Wave: 1.0,
+  Yes: 0.8,
+};
 
 // Component to manage and update the active animation based on the state from AnimationContext
 export default function useAnimationComponent({
@@ -24,11 +42,7 @@ export default function useAnimationComponent({
   useEffect(() => {
     if (!model || !animations?.length) return;
     mixerRef.current = new AnimationMixer(model);
-
-    const defaultIdx = animationIndexMap[defaultAnimation] ?? 0;
-    const waveIdx = animationIndexMap["Wave"] ?? 12;
-
-    // Start with default animation
+    // Start with wave animation
     setTimeout(() => {
       if (!mixerRef.current) return;
       const defaultClip = animations[12];
@@ -39,7 +53,11 @@ export default function useAnimationComponent({
       actionRef.current = defaultAction;
     }, 100);
 
-    const onFinish = () => {
+    const onFinish = (event: { type: string; action: AnimationAction }) => {
+      const clipName = event.action?.getClip()?.name ?? "";
+      if (clipName === "RobotArmature|Robot_Death") {
+        return;
+      }
       setAnimationState("Idle", true, { loop: true });
     };
 
@@ -72,6 +90,14 @@ export default function useAnimationComponent({
 
     // Use loop mode depending on name or future context options
     newAction.clampWhenFinished = true;
+
+    if (activeName === "Death") {
+      newAction.setLoop(LoopOnce, 0); // Set loop to once for death animation
+      newAction.clampWhenFinished = true;
+    }
+
+    const speed = animationSpeedMap[activeName as AnimationState] ?? 1.0;
+    newAction.timeScale = speed;
 
     newAction.reset().play();
     actionRef.current = newAction;

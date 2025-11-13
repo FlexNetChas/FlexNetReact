@@ -62,7 +62,6 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
     state: boolean,
     options?: AnimationOptions
   ) => {
-    console.log(animation, state, options);
     // clear previous timeout if any
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -79,12 +78,15 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
     );
 
     // Handle timeout
+    // if no callback, revert to default unless its death
     if (options?.timeout && state) {
       timeoutRef.current = setTimeout(() => {
         options?.onComplete?.();
-        // if no callback, revert to default
+
         if (!options?.onComplete) {
-          setAnimationState(defaultAnimation, true, { loop: true });
+          if (animation !== "Death") {
+            setAnimationState(defaultAnimation, true, { loop: true });
+          }
         }
       }, options.timeout);
     }

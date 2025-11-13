@@ -9,7 +9,7 @@ import LightSetup from "./Lighting/LightSetup";
 import EnvironmentSetup from "./Lighting/EnvironmentSetup";
 import Model from "./Models/Model";
 import FPSWatcher from "./Performance/FPSWatcher";
-import PerformancePanel from "./Performance/PerformancePanel";
+import { useSceneContext } from "@/components/3d-components/SceneContext";
 
 // Main 3D Scene component, this is where the 3D "lives"
 export default function Scene() {
@@ -17,7 +17,7 @@ export default function Scene() {
   // Dpr is "device pixel ratio" (higher = sharper look, but more performance heavy).
   const [degraded, setDegraded] = useState(false);
   const [dpr, setDpr] = useState(2);
-
+  const { setShouldRender } = useSceneContext();
   const minimumFPS = 30; // less than this and we consider performance to be poor.
   const duration = 3; // the duration (in seconds) that the performance can be poor before we switch to 2D.
 
@@ -44,6 +44,32 @@ export default function Scene() {
         gl.setClearColor(new THREE.Color("#000000"), 0);
         gl.shadowMap.enabled = true;
         gl.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        // Should render handling for WebGL context lost/restored
+        const canvas = gl.domElement;
+        const handleContextLost = (event: Event) => {
+          event.preventDefault();
+          setShouldRender(false); // switch to 2D fallback
+        };
+
+        const handleContextRestored = () => {
+          setShouldRender(true);
+        };
+
+        canvas.addEventListener("webglcontextlost", handleContextLost, false);
+        canvas.addEventListener(
+          "webglcontextrestored",
+          handleContextRestored,
+          false
+        );
+
+        return () => {
+          canvas.removeEventListener("webglcontextlost", handleContextLost);
+          canvas.removeEventListener(
+            "webglcontextrestored",
+            handleContextRestored
+          );
+        };
       }}
     >
       {/* Environment and Lighting Setup */}
