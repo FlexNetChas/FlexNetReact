@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/sharedActions";
 import { ChatSessionsProvider } from "@/components/chat/ChatSessionContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -29,17 +30,22 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <Script
+          id="cookieyes"
+          src="https://cdn-cookieyes.com/client_data/ce717a8065509bba92ea7b32/script.js"
+          strategy="beforeInteractive"
+        />
         <UserProvider user={user}>
           <ChatSessionsProvider>
             {user ? (
-              // Protected layout: Sidebar with chat sessions
+              // Protected routes använder nu sin egen layout
               children
             ) : (
               // Public layout: Header and footer
-              <div className="flex flex-col min-h-screen">
+              <div className=" flex flex-col">
                 <Header />
-                <main className="flex-1 overflow-auto min-h-screen">
-                  {children}
+                <main className="flex-1 min-h-[calc(100vh-92px)] flex items-center justify-center">
+                  <div className="w-full max-w-7xl ">{children}</div>
                 </main>
                 <Footer />
               </div>

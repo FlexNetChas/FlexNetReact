@@ -7,8 +7,13 @@ import {
   RegisterResponse,
   RefreshResponse,
 } from "@/types/auth";
+import { getAuthHeaders } from "../getAuthHeaders";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+export type DeleteUserResponse = {
+  message: string;
+};
 
 export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
@@ -63,5 +68,26 @@ export const authService = {
     }
     const responseBody = await response.text();
     return JSON.parse(responseBody);
+  },
+
+  deleteUser: async (userId: number): Promise<DeleteUserResponse> => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/Auth/user/${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          ...(await getAuthHeaders()),
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw error;
+    }
+
+    return response.json();
   },
 };

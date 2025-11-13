@@ -48,7 +48,7 @@ function LoginForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto mt-20 font-mono">
+      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto font-mono">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
@@ -62,7 +62,9 @@ function LoginForm() {
           className="flex flex-col gap-2 max-w-[300px]"
         >
           <h1 className="text-3xl font-mono">Login</h1>
-          <label htmlFor="email" className="font-mono">Email</label>
+          <label htmlFor="email" className="font-mono">
+            Email
+          </label>
           <Input
             id="email"
             name="email"

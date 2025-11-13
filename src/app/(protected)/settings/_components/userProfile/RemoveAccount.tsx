@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 
 interface DeleteAccountDialogProps {
   formAction: (formData: FormData) => void;
+  isPending?: boolean;
 }
 
 export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
@@ -34,20 +35,21 @@ export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
 
 interface DeleteButtonProps {
   disabled: boolean;
+  isPending?: boolean;
 }
 
-function DeleteButton({ disabled }: DeleteButtonProps) {
+function DeleteButton({ disabled, isPending }: DeleteButtonProps) {
   const { pending } = useFormStatus();
+  const isLoading = pending || isPending;
 
   return (
     <Button
       type="submit"
-      disabled={disabled || pending}
-      // className="!bg-error glass disabled:opacity-50 "
-      className=" mb-2 font-mono disabled:opacity-50  "
+      disabled={disabled || isLoading}
+      className="mb-2 font-mono disabled:opacity-50"
       variant="default"
     >
-      {pending ? (
+      {isLoading ? (
         <>
           <Loader2 className="mr-2 size-4 animate-spin" />
           Deleting...

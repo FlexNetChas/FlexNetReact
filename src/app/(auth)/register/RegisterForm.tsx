@@ -54,7 +54,7 @@ function RegisterForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md font-mono">
+      <div className="px-10 py-10 bg-form/80 rounded-2xl shadow-lg w-full max-w-md font-mono">
         <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
@@ -64,16 +64,16 @@ function RegisterForm() {
           priority
         />
 
-        <form
-          action={registerAction}
-          className="flex flex-col gap-4 max-w-[400px] mx-auto"
-        >
+        <form action={registerAction} className="space-y-4 mx-auto">
           <h1 className="text-3xl text-center font-mono">Create Account</h1>
 
           {/* First Name and Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="firstName" className="text-sm font-medium font-mono">
+              <label
+                htmlFor="firstName"
+                className="text-sm font-medium font-mono"
+              >
                 First Name
               </label>
               <Input
@@ -92,7 +92,10 @@ function RegisterForm() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="lastName" className="text-sm font-medium font-mono">
+              <label
+                htmlFor="lastName"
+                className="text-sm font-medium font-mono"
+              >
                 Last Name
               </label>
               <Input
@@ -156,7 +159,10 @@ function RegisterForm() {
 
           {/* Confirm Password */}
           <div className="space-y-2">
-            <label htmlFor="confirmPassword" className="text-sm font-medium font-mono">
+            <label
+              htmlFor="confirmPassword"
+              className="text-sm font-medium font-mono"
+            >
               Confirm Password
             </label>
             <Input
