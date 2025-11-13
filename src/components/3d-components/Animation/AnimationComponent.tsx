@@ -1,54 +1,76 @@
 import { AnimationMixer, Group, AnimationClip, AnimationAction } from "three";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useAnimation } from "./AnimationContext";
+import { LoopOnce } from "three";
 
 interface AnimationComponentProps {
   model: Group;
   animations: AnimationClip[];
-  activeClipIndex?: number;
+  animationIndexMap: Record<string, number>;
 }
 
-//Gets a model (Group) and animations (AnimationClip[]) as props, sets up an AnimationMixer and plays the specified animation clip based on the activeClipIndex prop.
-//Also listens to changes in the animation state from the AnimationContext to start/stop the animation accordingly.
+// Component to manage and update the active animation based on the state from AnimationContext
 export default function useAnimationComponent({
   model,
   animations,
-  activeClipIndex = 0,
+  animationIndexMap,
 }: AnimationComponentProps) {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const actionRef = useRef<AnimationAction | null>(null);
-  const { animation } = useAnimation();
+  const { activeAnimations, setAnimationState, defaultAnimation } =
+    useAnimation();
 
   useEffect(() => {
     if (!model || !animations?.length) return;
-
     mixerRef.current = new AnimationMixer(model);
 
-    actionRef.current = mixerRef.current.clipAction(
-      animations[activeClipIndex]
-    );
+    const defaultIdx = animationIndexMap[defaultAnimation] ?? 0;
+    const defaultAction = mixerRef.current.clipAction(animations[defaultIdx]);
+    defaultAction.play();
+    actionRef.current = defaultAction;
 
-    if (actionRef.current) actionRef.current.play();
+    const onFinish = () => {
+      setAnimationState(defaultAnimation, true);
+    };
+
+    mixerRef.current.addEventListener("finished", onFinish);
 
     return () => {
+      mixerRef.current?.removeEventListener("finished", onFinish);
       mixerRef.current?.stopAllAction();
       mixerRef.current = null;
     };
-  }, [model, animations, activeClipIndex]);
+  }, [model, animations, animationIndexMap]);
 
-  //Temporary idle is just stopping the animation, not swapping to another animation.
-  //TODO: update activeClipIndex when Idle animation actually exists, this useEffect should then be removed/merged with the above useEffect.
+  // Effect to update animation based on active state from the context
   useEffect(() => {
-    if (animation === "talking") {
-      actionRef.current?.play();
-    } else if (animation === "idle") {
-      actionRef.current?.stop();
-    }
-  }, [animation]);
+    if (!mixerRef.current || !activeAnimations) return;
+
+    const activeName = Object.keys(activeAnimations).find(
+      (key) => activeAnimations[key]
+    );
+    if (!activeName) return;
+
+    const clipIdx = animationIndexMap[activeName];
+    if (clipIdx === undefined) return;
+
+    const clip = animations[clipIdx];
+    const newAction = mixerRef.current.clipAction(clip);
+
+    // Stop any old actions
+    mixerRef.current.stopAllAction();
+
+    // Use loop mode depending on name or future context options
+    newAction.setLoop(LoopOnce, 0);
+    newAction.clampWhenFinished = true;
+
+    newAction.reset().play();
+    actionRef.current = newAction;
+  }, [activeAnimations]);
 
   useFrame((_, delta) => {
-    mixerRef.current?.update(delta);
+    mixerRef.current?.update(delta); // Apply the animation updates every frame
   });
 
   return mixerRef;

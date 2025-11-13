@@ -13,9 +13,8 @@ export default function ChatBoxComponent({
 }) {
   const logRef = useRef<HTMLDivElement>(null);
   const chatSessionIdRef = useRef<number | null>(null);
-  const { setAnimation } = useAnimation();
+  const { setAnimationState } = useAnimation();
   const { refreshSessions } = useChatSessions();
-
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
     savedSession?.chatMessages || []
@@ -69,14 +68,20 @@ export default function ChatBoxComponent({
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
-    setAnimation("talking"); // This is where we trigger the AI thinking animation, TODO: implement thinking animation.
 
     // Simulate AI response after short delay
-    setTimeout(async () => {
-      setTimeout(() => {
-        setAnimation("idle");
-      }, 3000);
+    setAnimationState("Dance", true, {
+      loop: true,
+      timeout: 2000,
+      onComplete: () =>
+        setAnimationState("Yes", true, {
+          loop: true,
+          timeout: 40000,
+          onComplete: () => setAnimationState("Idle", true),
+        }),
+    }); // thinking animation
 
+    setTimeout(async () => {
       const reply = await fetchAIResponse(userMessage.messageText);
       const newMsg: ChatMessageResponseDto = {
         messageText: reply,
@@ -84,10 +89,9 @@ export default function ChatBoxComponent({
         timeStamp: new Date(),
         lastUpdated: null,
       };
-
       setMessages((prev) => [...prev, newMsg]);
       refreshSessions();
-    }, 500); // small delay to simulate thinking
+    }, 1000); // small delay to simulate thinking
   };
 
   return (

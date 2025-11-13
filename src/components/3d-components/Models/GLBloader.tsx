@@ -3,6 +3,7 @@ import { Mesh } from "three";
 import { useEffect } from "react";
 import useAnimationComponent from "../Animation/AnimationComponent";
 import { fixModelTextures } from "../Utility/FixTextureUtility";
+import { useMemo } from "react";
 
 interface ModelGLBProps {
   path: string;
@@ -12,7 +13,26 @@ interface ModelGLBProps {
 export default function GLBloader({ path }: ModelGLBProps) {
   // We load the model and animations using useGLTF, then pass them to the animation component
   const { scene: model, animations } = useGLTF(path);
-  useAnimationComponent({ model, animations });
+
+  //Clean up the animation names and pass it to animationContext.
+  const normalizeAnimationName = (name: string) => {
+    return name.split("_").pop() || name;
+  };
+
+  const animationIndexMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    animations.forEach((clip, index) => {
+      const normalizedAnimationName = normalizeAnimationName(clip.name);
+      map[normalizedAnimationName] = index;
+    });
+    return map;
+  }, [animations]);
+
+  useAnimationComponent({
+    model,
+    animations,
+    animationIndexMap,
+  });
 
   // Model is basically an array of objects (react-three-fiber: group), we need to traverse it to enable shadows and check if textures color space needs fixing.
   useEffect(() => {
