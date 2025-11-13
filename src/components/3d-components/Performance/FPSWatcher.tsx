@@ -21,6 +21,13 @@ export default function FPSWatcher({
 
   // Runs every frame (using @react-three/fiber's useFrame)
   useFrame(() => {
+    // Reset timers when out of focus to avoid false triggering
+    if (!document.hasFocus()) {
+      timeBelowThreshold.current = 0;
+      lastTime.current = performance.now();
+      return;
+    }
+
     const currentTime = performance.now(); // grab current time, note we're working in milliseconds.
     const delta = currentTime - lastTime.current; // time passed between the previous nd current frame.
     lastTime.current = currentTime; // update lastTime for next loop

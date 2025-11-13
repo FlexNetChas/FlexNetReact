@@ -15,9 +15,9 @@ export default function ChatBoxComponent({
   const router = useRouter();
   const chatSessionIdRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
-  const { setAnimation } = useAnimation();
+  const { setAnimationState } = useAnimation();
   const { refreshSessions } = useChatSessions();
-
+  const [firstChunk, setFirstChunk] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
     savedSession?.chatMessages || []
@@ -110,7 +110,7 @@ export default function ChatBoxComponent({
 
     return eventSource;
   };
-
+  const firstChunkRef = useRef(false);
   const sendMessage = async () => {
     if (input.trim() === "" || isStreaming) return;
 
@@ -126,7 +126,7 @@ export default function ChatBoxComponent({
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsStreaming(true);
-    setAnimation("talking");
+    setAnimationState("Dance", true, { loop: true }); // thinking animation
 
     // 2. Add empty AI message that will be populated by streaming
     const aiMessageIndex = messages.length + 1;
@@ -145,6 +145,10 @@ export default function ChatBoxComponent({
       userInput,
       // onChunk: Append chunk to AI message
       (chunk) => {
+        if (!firstChunkRef.current) {
+          firstChunkRef.current = true;
+          setAnimationState("Yes", true, { loop: true });
+        }
         setMessages((prev) => {
           const newMessages = [...prev];
           newMessages[aiMessageIndex].messageText += chunk;
@@ -154,7 +158,8 @@ export default function ChatBoxComponent({
       // onComplete: Streaming finished successfully
       () => {
         setIsStreaming(false);
-        setAnimation("idle");
+        firstChunkRef.current = false;
+        setAnimationState("Idle", true, { loop: true });
         refreshSessions();
       },
       // onError: Something went wrong
@@ -164,8 +169,8 @@ export default function ChatBoxComponent({
           newMessages[aiMessageIndex].messageText = `⚠️ Error: ${error}`;
           return newMessages;
         });
+        setAnimationState("Death", true, { loop: false });
         setIsStreaming(false);
-        setAnimation("idle");
       }
     );
   };
