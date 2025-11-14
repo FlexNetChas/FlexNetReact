@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToasts } from "@/hooks/useToasts";
 import { register } from "./actions";
+import { Label } from "@radix-ui/react-label";
+import { Loader2 } from "lucide-react";
 
 function RegisterForm() {
   // Take a server action (register from authActions.ts) and return a action property (registerAction)
@@ -53,161 +55,144 @@ function RegisterForm() {
   };
 
   return (
-    <>
-      <div className="px-10 py-10 bg-form/80 rounded-2xl shadow-lg w-full max-w-md font-mono">
-        <Image
+    /* <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
           width={120}
           height={120}
           className="mx-auto"
           priority
-        />
+        /> */
 
-        <form action={registerAction} className="space-y-4 mx-auto">
-          <h1 className="text-3xl text-center font-mono">Create Account</h1>
+    <form action={registerAction} className="space-y-4  ">
+      {/* First Name and Last Name */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="firstName">First Name</Label>
+          <Input
+            id="firstName"
+            name="firstName"
+            type="text"
+            placeholder="John"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            className={`bg-input rounded-lg border p-3 ${
+              hasError("firstName")
+                ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                : "border-border"
+            } `}
+            required
+          />
+        </div>
 
-          {/* First Name and Last Name */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label
-                htmlFor="firstName"
-                className="text-sm font-medium font-mono"
-              >
-                First Name
-              </label>
-              <Input
-                id="firstName"
-                name="firstName"
-                type="text"
-                placeholder="John"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                className={`border rounded-lg p-3 ${
-                  hasError("firstName")
-                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                    : "border-form-foreground "
-                } `}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="lastName"
-                className="text-sm font-medium font-mono"
-              >
-                Last Name
-              </label>
-              <Input
-                id="lastName"
-                name="lastName"
-                type="text"
-                placeholder="Doe"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className={`border rounded-lg p-3 ${
-                  hasError("lastName")
-                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                    : "border-form-foreground "
-                } `}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Email */}
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium font-mono">
-              Email
-            </label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="john@example.com"
-              value={formData.email}
-              onChange={handleInputChange}
-              className={`border rounded-lg p-3 ${
-                hasError("email")
-                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                  : "border-form-foreground "
-              } `}
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium font-mono">
-              Password
-            </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className={`border rounded-lg p-3 ${
-                hasError("password")
-                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                  : "border-form-foreground "
-              } `}
-              required
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="space-y-2">
-            <label
-              htmlFor="confirmPassword"
-              className="text-sm font-medium font-mono"
-            >
-              Confirm Password
-            </label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              className={`border rounded-lg p-3 ${
-                hasError("confirmPassword")
-                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                  : "border-form-foreground "
-              } `}
-              required
-            />
-          </div>
-          <SubmitButton />
-        </form>
-
-        <p className="text-xs mt-4 text-center font-mono">
-          Already have an account? &nbsp;
-          <Link href="/login" className="text-xs font-mono">
-            Sign in here
-          </Link>
-        </p>
+        <div className="space-y-2">
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input
+            id="lastName"
+            name="lastName"
+            type="text"
+            placeholder="Doe"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            className={`bg-input rounded-lg border p-3 ${
+              hasError("lastName")
+                ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                : "border-border"
+            } `}
+            required
+          />
+        </div>
       </div>
-    </>
+      {/* Email */}
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="john@example.com"
+          value={formData.email}
+          onChange={handleInputChange}
+          className={`bg-input rounded-lg border p-3 ${
+            hasError("email")
+              ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+              : "border-border"
+          } `}
+          required
+        />
+      </div>
+      {/* Password */}
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleInputChange}
+          className={`bg-input rounded-lg border p-3 ${
+            hasError("password")
+              ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+              : "border-border"
+          } `}
+          required
+        />
+      </div>
+      {/* Confirm Password */}
+      <div className="space-y-2">
+        <Label htmlFor="confirmPassword">Confirm Password</Label>
+        <Input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleInputChange}
+          className={`bg-input rounded-lg border p-3 ${
+            hasError("confirmPassword")
+              ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+              : "border-border"
+          } `}
+          required
+        />
+      </div>
+
+      <div className="mt-10 flex justify-center">
+        <SubmitButton />
+      </div>
+      <p className="text-center text-sm">
+        Already have an account? &nbsp;
+        <Link href="/login" className="text-sm">
+          Sign in here
+        </Link>
+      </p>
+    </form>
   );
 }
 
-// Separate function so we can use useFormStatus hook for accessing pending state
-// useFormStatus access the state of form action={registerAction}
+{
+  /* Separate function so we can use useFormStatus hook for accessing pending state
+ useFormStatus access the state of form action={registerAction} */
+}
 function SubmitButton() {
   const { pending } = useFormStatus();
+
   return (
     <Button
-      disabled={pending}
       type="submit"
-      size="lg"
-      className="glass text-primary-foreground mt-2"
-      variant="outline"
-      aria-label="Register"
+      variant="default"
+      className="w-9/10"
+      disabled={pending}
     >
-      {pending ? "Creating account..." : "Create Account"}
+      {pending ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Creating account...
+        </>
+      ) : (
+        "Create Account"
+      )}
     </Button>
   );
 }
