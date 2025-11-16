@@ -5,22 +5,12 @@ import { Button } from "@/components/ui/button";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { Section } from "./layout/Section";
 import { PageContainer } from "./layout/PageContainer";
-import { lazy, Suspense } from "react";
-
-// Lazy load AuroraEffect
-const AuroraEffect = lazy(() => import("./AuroraEffect"));
+import { Meteors } from "./ui/shadcn-io/meteors";
 
 function Hero() {
   return (
-    <Section className="min-h-[calc(100vh-50px)] relative ">
-      {/* Lazy load med Suspense */}
-      <Suspense
-        fallback={
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-950/20 to-purple-950/20" />
-        }
-      >
-        <AuroraEffect />
-      </Suspense>
+    <Section className="min-h-[calc(100vh-50px)] relative overflow-hidden">
+      <Meteors number={200} />
 
       <PageContainer className="flex items-center relative z-10">
         <div className="grid w-full grid-cols-1 items-center gap-16 lg:grid-cols-2">

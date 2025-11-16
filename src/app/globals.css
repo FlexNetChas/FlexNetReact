@@ -37,6 +37,29 @@
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
+  --animate-meteor-effect: meteor 5s linear infinite;
+}
+/* Lägg till keyframes och animationer utanför @theme */
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-150vw);
+    opacity: 0;
+  }
+}
+
+.animate-meteor {
+  animation: meteor 5s linear infinite;
+}
+
+.aurora-tail-pulse {
+  animation: aurora-tail-pulse 2s ease-in-out infinite;
 }
 
 @layer base {
