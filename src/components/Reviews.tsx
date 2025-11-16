@@ -127,10 +127,8 @@ export default function Reviews() {
           transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
         >
           <Carousel
-            opts={{
-              align: "start",
-            }}
-            className="w-full py-6"
+            className="relative w-full py-6 px-6"
+            opts={{ align: "start" }}
           >
             <CarouselContent>
               {reviews.map((r, i) => (
@@ -146,8 +144,9 @@ export default function Reviews() {
               ))}
             </CarouselContent>
 
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="absolute left-1 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full " />
+
+            <CarouselNext className="absolute right-1 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full " />
           </Carousel>
         </motion.div>
       </PageContainer>

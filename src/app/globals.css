@@ -166,9 +166,7 @@
   }
 
   .review-card {
-    @apply max-w-[300px] p-4 rounded-xl shadow-sm flex-shrink-0;
-
-    @apply sm:max-w-sm sm:p-4;
+    @apply p-4 rounded-xl shadow-sm flex-shrink-0;
   }
 
   .glass-no-hover {
