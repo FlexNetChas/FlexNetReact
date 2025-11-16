@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Reviews from "@/components/Reviews";
 import About from "@/components/About";
+// import { InteractiveGlobe } from "@/components/Test";
 
 export default function LandingPage() {
   return (
@@ -10,6 +11,9 @@ export default function LandingPage() {
       <About />
       <div className="border-b border-border"></div>
       <Reviews />
+      <div className="border-b border-border"></div>
+      {/* <InteractiveGlobe />
+      <div className="border-b border-border"></div> */}
     </>
   );
 }

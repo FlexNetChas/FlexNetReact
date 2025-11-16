@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PageContainer } from "@/components/layout/PageContainer";
+import { InteractiveGlobe } from "./InteractiveGlobe";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -53,14 +54,8 @@ export default function Footer() {
             ))}
           </div>
           {/* Description */}
-          <div className="max-w-2xl">
-            <p className="text-foreground text-xl md:text-left md:max-w-full text-center max-w-[550px] sm:text-2xl lg:text-3xl leading-relaxed">
-              Take control of your future with{" "}
-              <span className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold">
-                Flexnet
-              </span>
-              . Created to help you navigate your academic journey.
-            </p>
+          <div className="flex items-center justify-center">
+            <InteractiveGlobe className="h-full w-full" />
           </div>
         </div>
 
