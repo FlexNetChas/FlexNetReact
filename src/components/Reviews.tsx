@@ -54,13 +54,13 @@ export default function Reviews() {
   const articleInView = useInView(articleRef, {
     margin: "-200px",
     amount: 0.2,
-    once: false,
+    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
   });
 
   const imageInView = useInView(imageRef, {
     margin: "-200px",
     amount: 0.2,
-    once: false,
+    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
   });
 
   const carouselInView = useInView(carouselRef, {
@@ -147,9 +147,15 @@ export default function Reviews() {
               ))}
             </CarouselContent>
 
-            <CarouselPrevious className="absolute left-1 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full " />
+            <CarouselPrevious
+              variant="default"
+              className="absolute left-1 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full "
+            />
 
-            <CarouselNext className="absolute right-1 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full " />
+            <CarouselNext
+              variant="default"
+              className="absolute right-1 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full "
+            />
           </Carousel>
         </motion.div>
       </PageContainer>

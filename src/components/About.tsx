@@ -12,17 +12,16 @@ export default function About() {
   const articleRef = useRef(null);
   const imageRef = useRef(null);
 
-  // Framer Motion. Change margin to trigger an erlier effect
   const articleInView = useInView(articleRef, {
-    margin: "-200px",
+    margin: "-170px",
     amount: 0.2,
-    once: false,
+    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
   });
 
   const imageInView = useInView(imageRef, {
     margin: "-200px",
     amount: 0.2,
-    once: false,
+    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
   });
 
   return (
