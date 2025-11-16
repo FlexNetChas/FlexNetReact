@@ -160,7 +160,11 @@
   }
 
   .linear-card-gradient {
-    background: linear-gradient(90deg, #222f4a 0%, #1c2741 100%);
+    background: linear-gradient(90deg, #222f4a 0%, #19243e 100%);
+    opacity: 0.85;
+    box-shadow: #70779333 0px 4px 6px -1px, #7077931a 0px 2px 4px -1px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .review-card {
