@@ -60,7 +60,7 @@ export default function SettingsPage() {
   return (
     <>
       {/* Tabs */}
-      <nav className="ml-6 flex space-x-10">
+      <nav className="ml-6 flex space-x-10 mt-12">
         {[
           { key: "profile" as Tab, label: "Profile" },
           { key: "preferences" as Tab, label: "Preferences" },

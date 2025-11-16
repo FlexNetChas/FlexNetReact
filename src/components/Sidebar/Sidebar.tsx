@@ -48,10 +48,10 @@ export default function PreviousChatSessions() {
         className={`
           fixed md:relative
           top-0 left-0
-          h-screen bg-[#0e1624] backdrop-blur-lg border-r border-border
+          h-screen bg-background backdrop-blur-lg border-r border-border
           flex flex-col
           z-50
-          ${isMinimized ? "md:w-16 md:items-center w-64" : "w-64"}
+          ${isMinimized ? "md:w-20 md:items-center w-64" : "w-64"}
           ${
             isMinimized ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }
@@ -76,7 +76,7 @@ export default function PreviousChatSessions() {
         >
           {!isMinimized && (
             <Link href="/dashboard">
-              <div className="w-10 h-10 overflow-hidden rounded-md">
+              <div className="size-10 overflow-hidden rounded-md">
                 <video
                   src="/3d-assets/2d-animated.webm"
                   autoPlay
@@ -91,7 +91,7 @@ export default function PreviousChatSessions() {
           <button
             onClick={toggleSidebar}
             title={isMinimized ? "Open Sidebar" : "Close Sidebar"}
-            className="hidden md:block text-white hover:text-gray-400 focus:outline-none transition-all duration-300 p-2 cursor-pointer rounded-md hover:bg-gray-800"
+            className="hidden md:block hover:text-muted-foreground focus:outline-none transition-all duration-300 p-2 cursor-pointer rounded-md hover:bg-gray-800"
           >
             {isMinimized ? (
               <ChevronRight size={20} />
@@ -106,11 +106,13 @@ export default function PreviousChatSessions() {
           <div className="px-3 py-3">
             <div className="text-sm">
               <Link href="/dashboard">
-                <p className="font-semibold text-white truncate">
+                <p className="font-semibold truncate">
                   {user.firstName} {user.lastName}
                 </p>
               </Link>
-              <p className="text-xs text-gray-400 truncate">{user.email}</p>
+              <p className="text-xs text-muted-foreground truncate">
+                {user.email}
+              </p>
             </div>
           </div>
         )}
@@ -124,13 +126,15 @@ export default function PreviousChatSessions() {
                 loop
                 muted
                 playsInline
-                className="object-cover w-15 h-15"
+                className="object-cover size-15"
               />
               <div className="text-sm">
-                <p className="font-semibold text-white truncate">
+                <p className="font-semibold  truncate">
                   {user.firstName} {user.lastName}
                 </p>
-                <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user.email}
+                </p>
               </div>
             </div>
           </div>
@@ -146,7 +150,7 @@ export default function PreviousChatSessions() {
 
         {/* Menu section, temp buttons in same file here sicne layout and flow not finalized */}
         <div
-          className={`flex flex-col gap-3 ${
+          className={`flex flex-col gap-3 p-2 ${
             isMinimized ? "items-center py-3" : "items-start px-3 py-3"
           }`}
         >
@@ -291,8 +295,10 @@ function Section({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold mb-2 text-gray-400">{title}</h3>
-      <div className="flex flex-col gap-2">{children}</div>
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <div className="flex flex-col gap-2 text-muted-foreground text-sm">
+        {children}
+      </div>
     </div>
   );
 }
