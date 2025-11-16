@@ -13,8 +13,17 @@ export default function About() {
   const imageRef = useRef(null);
 
   // Framer Motion. Change margin to trigger an erlier effect
-  const articleInView = useInView(articleRef, { once: true, margin: "-100px" });
-  const imageInView = useInView(imageRef, { once: true, margin: "-100px" });
+  const articleInView = useInView(articleRef, {
+    margin: "-200px",
+    amount: 0.2,
+    once: false,
+  });
+
+  const imageInView = useInView(imageRef, {
+    margin: "-200px",
+    amount: 0.2,
+    once: false,
+  });
 
   return (
     <Section

@@ -51,8 +51,18 @@ export default function Reviews() {
   const carouselRef = useRef(null);
 
   // Framer Motion. Change margin to trigger an erlier effect
-  const articleInView = useInView(articleRef, { once: true, margin: "-100px" });
-  const imageInView = useInView(imageRef, { once: true, margin: "-100px" });
+  const articleInView = useInView(articleRef, {
+    margin: "-200px",
+    amount: 0.2,
+    once: false,
+  });
+
+  const imageInView = useInView(imageRef, {
+    margin: "-200px",
+    amount: 0.2,
+    once: false,
+  });
+
   const carouselInView = useInView(carouselRef, {
     once: true,
     margin: "-100px",
@@ -70,11 +80,8 @@ export default function Reviews() {
           <motion.article
             ref={articleRef}
             initial={{ opacity: 0, x: -100 }}
-            animate={
-              articleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -100 }
-            }
+            animate={articleInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1.1, ease: "easeOut" }}
-            className="mb-4"
           >
             <h2 className="mb-8 text-center font-bold md:text-left">
               Our
@@ -100,10 +107,8 @@ export default function Reviews() {
           <motion.div
             ref={imageRef}
             initial={{ opacity: 0, x: 100 }}
-            animate={
-              imageInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }
-            }
-            transition={{ duration: 1.1, ease: "easeOut" }}
+            animate={imageInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
             className="relative aspect-square w-1/2 max-w-[150px] mx-auto overflow-hidden rounded-2xl md:aspect-video md:w-full md:max-w-xs"
           >
             <Image
@@ -121,9 +126,7 @@ export default function Reviews() {
         <motion.div
           ref={carouselRef}
           initial={{ opacity: 0, y: 50 }}
-          animate={
-            carouselInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
-          }
+          animate={carouselInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
         >
           <Carousel
