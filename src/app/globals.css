@@ -39,7 +39,7 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --animate-meteor-effect: meteor 5s linear infinite;
 }
-/* Lägg till keyframes och animationer utanför @theme */
+/* Keyframes for hero star sections */
 @keyframes meteor {
   0% {
     transform: rotate(215deg) translateX(0);
@@ -66,44 +66,44 @@
   :root {
     --radius: 0.625rem;
 
-    /* Core colors - Professionellt färgschema */
+    /* Core colors */
     --background: #0e1624;
     --foreground: #ffffff;
 
-    /* Primary - Accent färg */
-    --primary: #99e2f7; /* normal färg */
+    /* Primary */
+    --primary: #99e2f7;
     --primary-rgb: 153, 226, 247;
     --primary-foreground: #ffffff;
 
-    /* Secondary - Mellanfärg för sektioner */
+    /* Secondary */
     --secondary: #141e31;
     --secondary-foreground: #ffffff;
 
-    /* Card - För kort och komponenter */
+    /* Card & components */
     --card: #222f4a;
     --card-foreground: #ffffff;
 
-    /* Muted - Mindre viktig text */
+    /* Muted */
     --muted: #707793;
     --muted-foreground: #e5e7eb;
 
-    /* Accent - Hover states */
+    /* Accent */
     --accent: #bd51c5;
     --accent-foreground: #ffffff;
 
-    /* Border och input */
+    /* Border and inputs */
     --border: rgba(var(--primary-rgb), 0.1);
     --input: #3c3f58;
     --ring: var(--primary);
 
-    /* State colors */
+    /* State  */
     --destructive: #ef4444;
     --error: #ef4444;
     --warning: #f59e0b;
   }
 
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     background: var(--background);
     color: var(--foreground);
   }
@@ -115,8 +115,7 @@
   h4,
   h5,
   h6 {
-    font-family: ui-monospace, monospace;
-
+    font-family: var(--font-sans);
     color: var(--foreground);
     font-weight: 600;
     line-height: 1.2;
@@ -137,7 +136,6 @@
   span {
     font-size: clamp(0.875rem, 1.25vw, 1rem);
     color: var(--foreground);
-    font-family: "Playfair Display", serif;
   }
 
   a {
