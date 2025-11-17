@@ -7,15 +7,39 @@ import { ChatSessionsProvider } from "@/components/chat/ChatSessionContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import { RootLayoutWrapper } from "./RootLayoutWrapper";
+import { siteConfig } from "@/lib/config/site";
 
 export const metadata: Metadata = {
-  title: "FlexNet! Your AI Study Guidance Companion",
-  description:
-    "FlexNet is a personalized AI avatar. Created to help you navigate your academic journey. From choosing the right path to achieving study goals, FlexNet is here to assist you every step of the way",
-  authors: [{ name: "FlexNet Team" }],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_DOMAIN_PAGE!),
+  metadataBase: new URL(siteConfig.url || ""),
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [siteConfig.author],
+  creator: siteConfig.author.name,
+  robots: { index: true, follow: true },
+  icons: {
+    icon: "/favicon/favicon.ico",
+    shortcut: "/favicon/favicon-16x16.png",
+    apple: "/favicon/apple-touch-icon.png",
+  },
 
-  // Todo:  Metadata Open Graph / Twitter Cards
+  openGraph: {
+    url: siteConfig.url,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.title,
+    images: "/opengraph-image.jpg",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: "/opengraph-image.jpg",
+  },
 };
 
 export default async function RootLayout({

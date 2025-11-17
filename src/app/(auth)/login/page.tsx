@@ -5,7 +5,9 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { AuthLayout } from "../AuthLayout";
 
 export const metadata: Metadata = {
-  title: "Login - FlexNet",
+  title: "Login",
+  description:
+    "Sign in to your FlexNet account to continue your academic journey.",
 };
 
 export default function LoginPage() {
