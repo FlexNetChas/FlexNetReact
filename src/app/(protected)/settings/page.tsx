@@ -10,12 +10,6 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { UserDescription } from "@/types/userDescription";
 import { SessionUser } from "@/types/user";
 import { Section } from "@/components/layout/Section";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Settings",
-  description: "Manage your FlexNet account settings and preferences.",
-};
 
 type Tab = "profile" | "preferences" | "privacy";
 
