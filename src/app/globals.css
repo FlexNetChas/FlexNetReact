@@ -178,6 +178,11 @@
   .setting-section-layout {
     @apply flex flex-col sm:grid sm:grid-cols-[50%_50%] md:grid md:grid-cols-[45%_55%];
   }
+
+  /* Hide Cookie revisit btn */
+  .cky-btn-revisit {
+    display: none !important;
+  }
 }
 
 @layer base {

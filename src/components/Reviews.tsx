@@ -13,8 +13,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 
 const reviews = [
   {
@@ -46,41 +44,18 @@ type Review = {
 };
 
 export default function Reviews() {
-  const articleRef = useRef(null);
-  const imageRef = useRef(null);
-  const carouselRef = useRef(null);
-
-  // Framer Motion. Change margin to trigger an erlier effect
-  const articleInView = useInView(articleRef, {
-    margin: "-200px",
-    amount: 0.2,
-    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
-  });
-
-  const imageInView = useInView(imageRef, {
-    margin: "-200px",
-    amount: 0.2,
-    once: typeof window !== "undefined" ? window.innerWidth < 768 : false,
-  });
-
-  const carouselInView = useInView(carouselRef, {
-    once: true,
-    margin: "-100px",
-  });
-
   return (
     <Section
       spacing="lg"
       className="bg-secondary relative py-10 md:py-15 lg:py-20"
     >
       <PageContainer>
-        {/* Article  */}
+        {/* Article - Framer Motion Animation */}
         <div className="flex-col flex md:grid md:grid-cols-[40%_1fr] justify-between items-center lg:gap-16 xl:gap-20">
-          {/* Framer Motion. Change duration to change animation speed */}
           <motion.article
-            ref={articleRef}
-            initial={{ opacity: 0, x: -100 }}
-            animate={articleInView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 80, x: -40 }}
+            whileInView={{ opacity: 100, x: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           >
             <h2 className="mb-8 text-center font-bold md:text-left">
@@ -102,14 +77,13 @@ export default function Reviews() {
             </article>
           </motion.article>
 
-          {/* Image */}
-          {/* Framer Motion. Change duration to change animation speed */}
+          {/* Image - Framer Motion Animation */}
           <motion.div
-            ref={imageRef}
-            initial={{ opacity: 0, x: 100 }}
-            animate={imageInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
-            className="relative aspect-square w-1/2 max-w-[150px] mx-auto overflow-hidden rounded-2xl md:aspect-video md:w-full md:max-w-xs"
+            initial={{ opacity: 80, x: 40 }}
+            whileInView={{ opacity: 100, x: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 1.1, ease: "easeOut" }}
+            className="relative hidden md:block overflow-hidden rounded-2xl h-75 w-2/3 mx-auto"
           >
             <Image
               src="/feedback.png"
@@ -121,13 +95,12 @@ export default function Reviews() {
           </motion.div>
         </div>
 
-        {/* Review Cards */}
-        {/* Framer Motion. Change duration to change animation speed */}
+        {/* Review Cards - Framer Motion Animation */}
         <motion.div
-          ref={carouselRef}
           initial={{ opacity: 0, y: 50 }}
-          animate={carouselInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
+          whileInView={{ opacity: 100, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: "easeOut" }}
         >
           <Carousel
             className="relative w-full py-6 px-6"

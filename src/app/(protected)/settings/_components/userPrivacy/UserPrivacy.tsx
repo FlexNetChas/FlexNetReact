@@ -11,20 +11,29 @@ export default function UserPrivacy({}: Props) {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   const handleCookieSettings = () => {
     if (!isMounted) return;
 
-    // Find the CookieYes manage button in the DOM
-    const cookieYesManageBtn = document.querySelector(
-      '#cookieyes-manage-btn, .cky-btn-preferences, button[data-cky-btn="preferences"]'
-    ) as HTMLButtonElement | null;
+    const cookieYesButtons = [
+      ".cky-btn-revisit",
+      'button[data-cky-tag="settings-button"]',
+      ".cky-btn-customize",
+      "#ckyPreferenceCenter",
+    ];
 
-    if (cookieYesManageBtn) {
-      cookieYesManageBtn.click();
-      return;
+    for (const selector of cookieYesButtons) {
+      const element = document.querySelector(selector) as HTMLElement | null;
+      if (element) {
+        element.click();
+        return;
+      }
     }
 
-    console.warn("Coudln't find CookieYes manage button in the DOM");
+    if (typeof window !== "undefined" && (window as any).CookieYes) {
+      (window as any).CookieYes.show();
+      return;
+    }
   };
 
   return (

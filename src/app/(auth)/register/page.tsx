@@ -5,7 +5,7 @@ import RegisterForm from "./RegisterForm";
 import { PageContainer } from "@/components/layout/PageContainer";
 
 export const metadata: Metadata = {
-  title: "Sign Up - FlexNet",
+  title: "Sign Up",
   description: "Create your Flexnet account",
 };
 
