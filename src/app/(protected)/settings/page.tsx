@@ -9,6 +9,7 @@ import UserProfileContent from "./_components/userProfile/UserProfileContent";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { UserDescription } from "@/types/userDescription";
 import { SessionUser } from "@/types/user";
+import { Section } from "@/components/layout/Section";
 
 type Tab = "profile" | "preferences" | "privacy";
 
@@ -57,31 +58,30 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen mx-5 mt-15 md:mt-0 ">
+    <>
       {/* Tabs */}
-      <div className="p-5">
-        <nav className="flex space-x-10">
-          {[
-            { key: "profile" as Tab, label: "Profile" },
-            { key: "preferences" as Tab, label: "Preferences" },
-            { key: "privacy" as Tab, label: "Privacy" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              className={` ${activeTab === tab.key ? "text-primary " : ""}`}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-      </div>
+      <nav className="ml-6 flex space-x-10 mt-12">
+        {[
+          { key: "profile" as Tab, label: "Profile" },
+          { key: "preferences" as Tab, label: "Preferences" },
+          { key: "privacy" as Tab, label: "Privacy" },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            className={` ${activeTab === tab.key ? "text-primary " : ""}`}
+            onClick={() => setActiveTab(tab.key)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
 
-      {/* Section Divider */}
-      <div className="border-t border-border -mx-5 mb-5" />
-
-      {/* Render Tab Content */}
-      <div className="space-y-8">{renderContent()}</div>
-    </div>
+      <Section spacing="none" className="mt-6 overflow-hidden">
+        {/* Section Divider */}
+        <div className="border-border -mx-6 border-t" />
+        {/* Render Tab Content */}
+        <div>{renderContent()}</div>
+      </Section>
+    </>
   );
 }

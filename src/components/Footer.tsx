@@ -1,154 +1,87 @@
-import {
-  FacebookIcon,
-  GithubIcon,
-  Grid2X2Plus,
-  InstagramIcon,
-  LinkedinIcon,
-  TwitterIcon,
-  YoutubeIcon,
-} from "lucide-react";
+import Link from "next/link";
 
-export function Footer() {
-  const year = new Date().getFullYear();
+import { PageContainer } from "@/components/layout/PageContainer";
+import { InteractiveGlobe } from "./InteractiveGlobe";
 
-  const company = [
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  const linkGroupsRow1 = [
     {
-      title: "About Us",
-      href: "#",
-    },
-    {
-      title: "Careers",
-      href: "#",
-    },
-    {
-      title: "Brand assets",
-      href: "#",
-    },
-    {
-      title: "Privacy Policy",
-      href: "#",
-    },
-    {
-      title: "Terms of Service",
-      href: "#",
+      title: "FlexNet",
+      links: [
+        { label: "Features", href: "/" },
+        { label: "Security", href: "/" },
+        { label: "About", href: "/" },
+        { label: "Help Center", href: "/" },
+        { label: "Contact", href: "/" },
+      ],
     },
   ];
-
-  const resources = [
+  const linkGroupsRow2 = [
     {
-      title: "Blog",
-      href: "#",
-    },
-    {
-      title: "Help Center",
-      href: "#",
-    },
-    {
-      title: "Contact Support",
-      href: "#",
-    },
-    {
-      title: "Community",
-      href: "#",
-    },
-    {
-      title: "Security",
-      href: "#",
+      title: "Legal",
+      links: [
+        { label: "Privacy policy", href: "/privacy" },
+        { label: "Terms of service", href: "/terms" },
+      ],
     },
   ];
-
-  const socialLinks = [
-    {
-      icon: <FacebookIcon className="size-4" />,
-      link: "#",
-    },
-    {
-      icon: <GithubIcon className="size-4" />,
-      link: "#",
-    },
-    {
-      icon: <InstagramIcon className="size-4" />,
-      link: "#",
-    },
-    {
-      icon: <LinkedinIcon className="size-4" />,
-      link: "#",
-    },
-    {
-      icon: <TwitterIcon className="size-4" />,
-      link: "#",
-    },
-    {
-      icon: <YoutubeIcon className="size-4" />,
-      link: "#",
-    },
-  ];
-
   return (
-    <footer className="relative blurred-container">
-      <div className="mx-auto max-w-4xl ">
-        <div className="bg-border absolute inset-x-0 h-px w-full" />
-        <div className="grid max-w-4xl grid-cols-6 gap-6 p-4">
-          <div className="col-span-6 flex flex-col gap-5 md:col-span-4">
-            <a href="#" className="w-max opacity-25">
-              <Grid2X2Plus className="size-8" />
-            </a>
-            <p className="text-muted-foreground max-w-sm font-mono text-sm text-balance">
-              FlexNet is a personalized AI avatar. Created to help you navigate
-              your academic journey.
-            </p>
-            <div className="flex gap-2">
-              {socialLinks.map((item, i) => (
-                <a
-                  key={i}
-                  className="hover:bg-accent rounded-md border p-1.5"
-                  target="_blank"
-                  href={item.link}
-                  rel="noopener noreferrer"
-                >
-                  {item.icon}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="col-span-3 w-full md:col-span-1">
-            <span className="text-muted-foreground mb-1 text-xs">
-              Resources
-            </span>
-            <div className="flex flex-col gap-1">
-              {resources.map(({ href, title }, i) => (
-                <a
-                  key={i}
-                  className={`w-max py-1 text-sm duration-200 hover:underline`}
-                  href={href}
-                >
+    <footer className="border-border blurred-container border-t text-sm">
+      <PageContainer className="py-14">
+        {/* Row 1 */}
+        <div className="grid grid-cols-1 items-start justify-between gap-10 md:grid-cols-[30%_60%]">
+          {/* Link groups */}
+          <div className="flex flex-col gap-8">
+            {linkGroupsRow1.map(({ title, links }) => (
+              <nav key={title} aria-label={`${title.toLowerCase()} links`}>
+                <h3 className="text-primary mb-5 font-bold tracking-wide">
                   {title}
-                </a>
-              ))}
-            </div>
+                </h3>
+                <ul className="space-y-2">
+                  {links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-muted-foreground hover:text-primary text-lg transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
           </div>
-          <div className="col-span-3 w-full md:col-span-1">
-            <span className="text-muted-foreground mb-1 text-xs">Company</span>
-            <div className="flex flex-col gap-1">
-              {company.map(({ href, title }, i) => (
-                <a
-                  key={i}
-                  className={`w-max py-1 text-sm duration-200 hover:underline`}
-                  href={href}
-                >
-                  {title}
-                </a>
-              ))}
-            </div>
+          {/* Description */}
+          <div className="flex items-center justify-center">
+            <InteractiveGlobe className="h-full w-full" />
           </div>
         </div>
-        <div className="bg-border absolute inset-x-0 h-px w-full" />
-        <div className="flex max-w-4xl flex-col justify-between gap-2 pt-2 pb-5">
-          <p className="text-muted-foreground text-center font-thin">
-            © FlexNet. All rights reserved {year}
+
+        {/* Row 2 */}
+        <div className="flex flex-col-reverse items-center justify-between gap-4 pt-10 sm:flex-row">
+          <p className="text-muted-foreground mt-5 text-center text-sm sm:mt-0 sm:text-left">
+            © FlexNet. All rights reserved {currentYear}
           </p>
+          {linkGroupsRow2.map(({ title, links }) => (
+            <nav key={title} aria-label={`${title.toLowerCase()} links`}>
+              <ul className="flex flex-row gap-10">
+                {links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
-      </div>
+      </PageContainer>
     </footer>
   );
 }

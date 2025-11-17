@@ -1,11 +1,19 @@
-import LoginForm from "@/app/(auth)/login/LoginForm";
+import { Metadata } from "next";
 
-function LoginPage() {
+import LoginForm from "./LoginForm";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { AuthLayout } from "../AuthLayout";
+
+export const metadata: Metadata = {
+  title: "Login - FlexNet",
+};
+
+export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center">
-      <LoginForm />
-    </div>
+    <AuthLayout title="Welcome Back" description="Sign in to continue">
+      <PageContainer padding="sm">
+        <LoginForm />
+      </PageContainer>
+    </AuthLayout>
   );
 }
-
-export default LoginPage;

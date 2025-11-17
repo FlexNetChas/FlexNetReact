@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { UserProvider } from "@/context/UserContext";
 import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/sharedActions";
 import { ChatSessionsProvider } from "@/components/chat/ChatSessionContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
+import { RootLayoutWrapper } from "./RootLayoutWrapper";
 
 export const metadata: Metadata = {
   title: "FlexNet! Your AI Study Guidance Companion",
@@ -28,8 +27,8 @@ export default async function RootLayout({
   const user = await getCurrentUser();
 
   return (
-    <html lang="en">
-      <body className="antialiased">
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex h-full min-h-screen flex-col antialiased">
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/ce717a8065509bba92ea7b32/script.js"
@@ -38,17 +37,13 @@ export default async function RootLayout({
         <UserProvider user={user}>
           <ChatSessionsProvider>
             {user ? (
-              // Protected routes använder nu sin egen layout
               children
             ) : (
-              // Public layout: Header and footer
-              <div className=" flex flex-col">
-                <Header />
-                <main className="flex-1 min-h-[calc(100vh-92px)] flex items-center justify-center">
-                  <div className="w-full max-w-7xl ">{children}</div>
-                </main>
-                <Footer />
-              </div>
+              /* Sense we had to check if root layout is auth or protected route do we had
+               * to create a wrapper component to handle the conditional rendering of Header/Footer
+               * We dont need to show footer on auth routes like login/register
+               */
+              <RootLayoutWrapper>{children}</RootLayoutWrapper>
             )}
           </ChatSessionsProvider>
           <Toaster position="top-right" />

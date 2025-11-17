@@ -1,14 +1,20 @@
-"use client";
+import { Metadata } from "next";
 
-import React from "react";
-import RegisterForm from "@/app/(auth)/register/RegisterForm";
+import { AuthLayout } from "../AuthLayout";
+import RegisterForm from "./RegisterForm";
+import { PageContainer } from "@/components/layout/PageContainer";
 
-function RegisterPage() {
+export const metadata: Metadata = {
+  title: "Sign Up - FlexNet",
+  description: "Create your Flexnet account",
+};
+
+export default function RegisterPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <RegisterForm />
-    </div>
+    <AuthLayout title="Create Account">
+      <PageContainer padding="sm">
+        <RegisterForm />
+      </PageContainer>
+    </AuthLayout>
   );
 }
-
-export default RegisterPage;
