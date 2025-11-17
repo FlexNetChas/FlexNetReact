@@ -3,6 +3,13 @@ import Link from "next/link";
 import ContinueLearningButton from "./ContinueLearningButton";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { Section } from "@/components/layout/Section";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description:
+    "Your personalized dashboard to continue your learning journey with FlexNet.",
+};
 
 export default async function DashboardPage() {
   await requireAuth();
