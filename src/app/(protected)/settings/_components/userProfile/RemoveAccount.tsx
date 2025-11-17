@@ -5,9 +5,11 @@ import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@radix-ui/react-label";
 
 interface DeleteAccountDialogProps {
   formAction: (formData: FormData) => void;
+  isPending?: boolean;
 }
 
 export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
@@ -15,16 +17,16 @@ export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
   const isConfirmValid = confirmText.toLowerCase() === "delete";
 
   return (
-    <form action={formAction} className=" space-y-8">
-      <label>
-        To confirm, type <span className="font-bold text-red-500">DELETE</span>{" "}
-        below:
-      </label>
+    <form action={formAction} className="space-y-5">
+      <Label>
+        To confirm, type <span className="text-error font-bold">DELETE</span>
+        &nbsp;below:
+      </Label>
       <Input
         type="text"
         value={confirmText}
         onChange={(e) => setConfirmText(e.target.value)}
-        className="w-full border rounded-lg p-2 bg-[#1c2433] border-form-foreground mt-2"
+        className="bg-input border-border rounded-lg border p-3"
         autoComplete="off"
       />
       <DeleteButton disabled={!isConfirmValid} />
@@ -34,18 +36,19 @@ export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
 
 interface DeleteButtonProps {
   disabled: boolean;
+  isPending?: boolean;
 }
 
-function DeleteButton({ disabled }: DeleteButtonProps) {
+function DeleteButton({ disabled, isPending }: DeleteButtonProps) {
   const { pending } = useFormStatus();
+  const isLoading = pending || isPending;
 
   return (
     <Button
       type="submit"
-      disabled={disabled || pending}
-      // className="!bg-error glass disabled:opacity-50 "
-      className=" mb-2 font-mono disabled:opacity-50  "
-      variant="default"
+      variant="destructive"
+      className="w-2/6 disabled:opacity-20"
+      disabled={isLoading || disabled}
     >
       {pending ? (
         <>

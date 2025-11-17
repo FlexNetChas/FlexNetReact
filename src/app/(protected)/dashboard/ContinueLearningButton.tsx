@@ -18,12 +18,12 @@ export default function ContinueLearningButton() {
   return (
     <Link
       href={latestSession ? `/chat/${latestSession.id}` : "/chat"}
-      className="glass p-6 rounded-xl cursor-pointer no-underline hover:no-underline hover:scale-101 transition-transform"
+      className="linear-card-gradient p-6 rounded-xl cursor-pointer no-underline hover:no-underline hover:scale-101 transition-transform"
     >
-      <div className="text-2xl font-bold mb-2 text-white">
-        Continue Learning
+      <div className=" space-y-2 ">
+        <p className="text-2xl font-bold"> Continue Learning</p>
+        <p>Pick up from your last session</p>
       </div>
-      <p>Pick up from your last session</p>
     </Link>
   );
 }

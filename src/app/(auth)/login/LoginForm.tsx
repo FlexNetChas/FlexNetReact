@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { login } from "@/app/(auth)/login/actions";
 import { useToasts } from "@/hooks/useToasts";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 
 function LoginForm() {
   // Take a server action (login from authActions.ts) and return a action property (loginAction)
@@ -48,62 +49,62 @@ function LoginForm() {
 
   return (
     <>
-      <div className="px-15 py-5 bg-form/80 rounded-2xl shadow-lg w-full max-w-md mx-auto mt-20 font-mono">
-        <Image
+      {/* <Image
           src="/Logo.svg"
           alt="FlexNet Logo"
           width={120}
           height={120}
           className="mx-auto"
           priority
-        />
-        <form
-          action={loginAction}
-          className="flex flex-col gap-2 max-w-[300px]"
-        >
-          <h1 className="text-3xl font-mono">Login</h1>
-          <label htmlFor="email" className="font-mono">Email</label>
+        /> */}
+
+      <form action={loginAction} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="email"
             value={formData.email}
             onChange={handleInputChange}
-            className={`border rounded-lg p-3 ${
+            className={`bg-input rounded-lg border p-3 ${
               hasError("email")
-                ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                : "border-form-foreground "
+                ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                : "border-border"
             } `}
             required
           />
-
-          <label htmlFor="password" className="text-sm font-medium font-mono">
-            Password
-          </label>
-          <input
+        </div>
+        {/* Row 2. Password */}
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
             id="password"
             name="password"
             type="password"
             placeholder="Password"
             value={formData.password}
             onChange={handleInputChange}
-            className={`border rounded-lg p-3 ${
+            className={`bg-input rounded-lg border p-3 ${
               hasError("password")
-                ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                : "border-form-foreground "
+                ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                : "border-border"
             } `}
             required
           />
+        </div>
+        <div className="flex justify-center">
           <SubmitButton />
-        </form>
-        <p className="text-xs mt-4 font-mono">
-          Don&apos;t have an account yet? &nbsp;
-          <Link href="/register" className="text-xs font-mono">
-            Register for free
-          </Link>
-        </p>
-      </div>
+        </div>
+      </form>
+      <p className="mt-4 text-center text-sm ">
+        Don&apos;t have an account yet?
+        <br />
+        <Link href="/register" className="text-sm">
+          Register for free
+        </Link>
+      </p>
     </>
   );
 }
@@ -114,14 +115,20 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button
-      disabled={pending}
       type="submit"
-      size="lg"
-      className="glass text-primary-foreground mt-2"
-      variant="outline"
+      variant="default"
+      className="w-9/10"
+      disabled={pending}
       aria-label="Login"
     >
-      {pending ? "Signing in..." : "Sign in"}
+      {pending ? (
+        <>
+          <Loader2 className="mr-2 size-4 animate-spin" />
+          Signing in...
+        </>
+      ) : (
+        "Sign In"
+      )}
     </Button>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { CompactChatSessionResponseDto } from "@/types/chatSession";
 import { Trash2 } from "lucide-react";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
@@ -11,6 +11,7 @@ const SectionItem = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const params = useParams();
 
   useEffect(() => {
     refreshSessions();
@@ -37,8 +38,13 @@ const SectionItem = () => {
 
       if (response.status === 200) {
         refreshSessions();
-        await router.push(`/chat?ts=${Date.now()}`);
-        router.refresh();
+
+        const id = params?.Id as string;
+
+        if (id === sessionId.toString()) {
+          await router.push(`/chat?ts=${Date.now()}`);
+          router.refresh();
+        }
       }
     } catch (error) {
       console.error("Error deleting session:", error);

@@ -14,16 +14,20 @@ export default function AuroraBackground() {
         iTime: { value: 0 },
         iResolution: { value: new THREE.Vector2(1, 1) },
       },
+      transparent: true,
       vertexShader: `
+        precision mediump float;
         void main() {
           gl_Position = vec4(position, 1.0);
         }
       `,
       fragmentShader: `
+        precision mediump float;
+
         uniform float iTime;
         uniform vec2 iResolution;
 
-        #define NUM_OCTAVES 3
+        #define NUM_OCTAVES 1  // sänkt oktaver för enklare fbm
 
         float rand(vec2 n) {
           return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
@@ -32,47 +36,77 @@ export default function AuroraBackground() {
         float noise(vec2 p) {
           vec2 ip = floor(p);
           vec2 u = fract(p);
-          u = u*u*(3.0-2.0*u);
+          u = u * u * (3.0 - 2.0 * u);
+
+          float a = rand(ip);
+          float b = rand(ip + vec2(1.0, 0.0));
+          float c = rand(ip + vec2(0.0, 1.0));
+          float d = rand(ip + vec2(1.0, 1.0));
+
           float res = mix(
-            mix(rand(ip), rand(ip + vec2(1.0, 0.0)), u.x),
-            mix(rand(ip + vec2(0.0, 1.0)), rand(ip + vec2(1.0, 1.0)), u.x), u.y);
+            mix(a, b, u.x),
+            mix(c, d, u.x),
+            u.y
+          );
           return res * res;
         }
 
         float fbm(vec2 x) {
           float v = 0.0;
-          float a = 0.3;
-          vec2 shift = vec2(100);
-          mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-          for (int i = 0; i < NUM_OCTAVES; ++i) {
+          float a = 0.4;
+          vec2 shift = vec2(100.0);
+          float cosRot = cos(0.5);
+          float sinRot = sin(0.5);
+          mat2 rot = mat2(cosRot, sinRot, -sinRot, cosRot);
+
+          for (int i = 0; i < NUM_OCTAVES; i++) {
             v += a * noise(x);
             x = rot * x * 2.0 + shift;
-            a *= 0.4;
+            a *= 0.5;
           }
           return v;
         }
 
         void main() {
-          vec2 shake = vec2(sin(iTime * 1.2) * 0.005, cos(iTime * 2.1) * 0.005);
-          vec2 p = ((gl_FragCoord.xy + shake * iResolution.xy) - iResolution.xy * 0.5) / iResolution.y * mat2(6.0, -4.0, 4.0, 6.0);
-          vec2 v;
+          vec2 shake = vec2(
+            sin(iTime * 1.2) * 0.001,
+            cos(iTime * 2.1) * 0.001
+          );
+
+          vec2 p = ((gl_FragCoord.xy + shake * iResolution) - iResolution * 0.5)
+                   / iResolution.y
+                   * mat2(6.0, -4.0, 4.0, 6.0);
+
           vec4 o = vec4(0.0);
-          float f = 2.0 + fbm(p + vec2(iTime * 5.0, 0.0)) * 0.5;
-          
-          for (float i = 0.0; i < 35.0; i++) {
-            v = p + cos(i * i + (iTime + p.x * 0.08) * 0.025 + i * vec2(13.0, 11.0)) * 3.5 + vec2(sin(iTime * 3.0 + i) * 0.003, cos(iTime * 3.5 - i) * 0.003);
-            float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 35.0));
+
+          float f = 2.0 + fbm(p + vec2(iTime * 4.0, 0.0)) * 0.5;
+
+          float iTimeFactor = iTime * 0.4;
+
+          for (float i = 0.0; i < 20.0; i++) {
+            vec2 v = p + cos(
+              i * i + iTime * 0.025 + i * vec2(13.0, 11.0)
+            ) * 3.5;
+
+            float tailNoise = noise(
+              v + vec2(iTime * 0.5, i)
+            ) * 0.25 * (1.0 - (i / 20.0));
+
             vec4 auroraColors = vec4(
-              0.1 + 0.3 * sin(i * 0.2 + iTime * 0.4),
-              0.3 + 0.5 * cos(i * 0.3 + iTime * 0.5),
-              0.7 + 0.3 * sin(i * 0.4 + iTime * 0.3),
+              0.1 + 0.3 * sin(i * 0.2 + iTimeFactor),
+              0.3 + 0.5 * cos(i * 0.3 + iTimeFactor * 1.25),
+              0.7 + 0.3 * sin(i * 0.4 + iTimeFactor * 0.75),
               1.0
             );
-            vec4 currentContribution = auroraColors * exp(sin(i * i + iTime * 0.8)) / length(max(v, vec2(v.x * f * 0.015, v.y * 1.5)));
-            float thinnessFactor = smoothstep(0.0, 1.0, i / 35.0) * 0.6;
+
+            vec4 currentContribution = auroraColors
+              * exp(sin(i * i + iTime * 0.8))
+              / length(max(v, vec2(v.x * f * 0.015, v.y * 1.5)));
+
+            float thinnessFactor = smoothstep(0.0, 1.0, i / 20.0) * 0.6;
             o += currentContribution * (1.0 + tailNoise * 0.8) * thinnessFactor;
           }
-          
+
           o = tanh(pow(o / 100.0, vec4(1.6)));
           gl_FragColor = o * 1.5;
         }
@@ -83,7 +117,13 @@ export default function AuroraBackground() {
   useFrame((state, delta) => {
     if (material.uniforms) {
       material.uniforms.iTime.value += delta;
-      material.uniforms.iResolution.value.set(size.width * viewport.dpr, size.height * viewport.dpr);
+
+      const res = material.uniforms.iResolution.value;
+      const newX = size.width * viewport.dpr;
+      const newY = size.height * viewport.dpr;
+      if (res.x !== newX || res.y !== newY) {
+        res.set(newX, newY);
+      }
     }
   });
 
@@ -96,4 +136,3 @@ export default function AuroraBackground() {
     </mesh>
   );
 }
-

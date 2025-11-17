@@ -18,6 +18,7 @@ import type {
   UserDescription,
 } from "@/types/userDescription";
 import { useToasts } from "@/hooks/useToasts";
+import { Label } from "@radix-ui/react-label";
 
 interface UserDescriptionFormProps {
   userId: number;
@@ -103,12 +104,12 @@ export function UserDescriptionForm({
   }, [formValues.purpose]);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-5">
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Age */}
           <div className="space-y-2">
-            <label htmlFor="age">Age</label>
+            <Label htmlFor="age">Age</Label>
             <Input
               id="age"
               name="age"
@@ -124,17 +125,17 @@ export function UserDescriptionForm({
                   age: value ? parseInt(value, 10) : 0,
                 }));
               }}
-              className={`mt-2 w-full bg-[#1c2433] h-10 ${
+              className={`bg-input rounded-lg w-full h-10 mt-2  ${
                 hasError("age")
-                  ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                  : "border-form-foreground"
+                  ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                  : "border-border"
               }`}
             />
           </div>
 
           {/* Gender */}
           <div className="space-y-2">
-            <label htmlFor="gender">Gender</label>
+            <Label htmlFor="gender">Gender</Label>
             <Select
               name="gender"
               value={formValues.gender}
@@ -147,15 +148,15 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="gender"
-                className={`mt-2 w-full bg-[#1c2433] h-10 ${
+                className={`bg-input rounded-lg w-full h-10 mt-2  ${
                   hasError("gender")
-                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                    : "border-form-foreground"
+                    ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                    : "border-border"
                 }`}
               >
                 <SelectValue placeholder="Select gender" />
               </SelectTrigger>
-              <SelectContent className="min-w-full">
+              <SelectContent className="min-w-full bg-secondary">
                 <SelectItem value="Man">Man</SelectItem>
                 <SelectItem value="Woman">Woman</SelectItem>
                 <SelectItem value="Prefer not to say">
@@ -167,7 +168,7 @@ export function UserDescriptionForm({
 
           {/* Education */}
           <div className="space-y-2">
-            <label htmlFor="education">Education</label>
+            <Label htmlFor="education">Education</Label>
             <Select
               name="education"
               value={formValues.education}
@@ -180,15 +181,15 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="education"
-                className={`mt-2 w-full bg-[#1c2433] h-10 ${
+                className={`bg-input rounded-lg w-full h-10 mt-2  ${
                   hasError("education")
-                    ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                    : "border-form-foreground"
+                    ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                    : "border-border"
                 }`}
               >
                 <SelectValue placeholder="Select level" />
               </SelectTrigger>
-              <SelectContent className="min-w-full">
+              <SelectContent className="min-w-full bg-secondary">
                 <SelectItem value="Primary school">Primary school</SelectItem>
                 <SelectItem value="High school">High school</SelectItem>
                 <SelectItem value="University">University</SelectItem>
@@ -204,7 +205,7 @@ export function UserDescriptionForm({
 
         {/* Purpose */}
         <div className="space-y-2">
-          <label htmlFor="purpose">What do you hope to achieve?</label>
+          <Label htmlFor="purpose">What do you hope to achieve?</Label>
           <textarea
             ref={textareaRef}
             id="purpose"
@@ -217,10 +218,10 @@ export function UserDescriptionForm({
               }));
             }}
             placeholder="I want guidance on choosing the right educational path"
-            className={`mt-2 w-full border rounded-lg p-2 bg-[#1c2433] resize-y  ${
+            className={`bg-input rounded-lg w-full h-10 mt-2 resize-y p-2 ${
               hasError("purpose")
-                ? "border-error focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                : "border-form-foreground"
+                ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                : "border-border"
             }`}
           />
         </div>
@@ -237,7 +238,7 @@ function SubmitButton() {
       disabled={pending}
       type="submit"
       variant="default"
-      className="w-2/10 mb-2 font-mono"
+      className="w-2/10 "
     >
       {pending ? "Saving..." : "Save"}
     </Button>

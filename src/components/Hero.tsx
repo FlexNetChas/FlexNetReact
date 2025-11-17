@@ -1,73 +1,57 @@
+"use client";
+
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, DollarSign, UserCog } from "lucide-react";
 import { AnimatedText } from "@/components/ui/animated-text";
+import { Section } from "./layout/Section";
+import { PageContainer } from "./layout/PageContainer";
+import { Meteors } from "./ui/shadcn-io/meteors";
 
 function Hero() {
   return (
-    <section className="flex flex-col justify-center items-center text-center mt-0 md:mt-10">
-      {/* <Image
-        src="/Hero.png"
-        alt="Group of people looking at the camera"
-        width={200}
-        height={200}
-        className="mb-8 rounded-lg shadow-lg"
-        priority
-      /> */}
-      <video
-        src="/3d-assets/2d-animated.webm"
-        className="mb-8 max-w-[25%] max-h-[50%] w-auto h-auto"
-        autoPlay
-        loop
-        muted
-      />
+    <Section className="min-h-[calc(100vh-50px)] relative overflow-hidden">
+      <Meteors number={200} />
 
-      <AnimatedText
-        text="Welcome to Your Journey"
-        gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)"
-        gradientAnimationDuration={3}
-        hoverEffect={true}
-        className="py-4"
-        textClassName="text-center"
-      />
+      <PageContainer className="flex items-center relative z-10">
+        <div className="grid w-full grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <div className="space-y-8">
+            <AnimatedText
+              text="Welcome to Your Journey"
+              gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)"
+              gradientAnimationDuration={3}
+              hoverEffect={true}
+              textClassName="!text-5xl md:!text-6xl !p-0 !m-0"
+            />
 
-      <div className="flex flex-col items-center">
-        <p className="text-xl text-muted-foreground mb-5">
-          Find your path. Shape your future.
-        </p>
-        <Link href="/register" className="block w-8/10">
-          <Button
-            size="lg"
-            variant="default"
-            neon={true}
-            className="w-full mb-2 font-mono"
-            aria-label="Register"
-          >
-            Get Started
-          </Button>
-        </Link>
-      </div>
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl">
+              Find your path. Shape your your future
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/register">
+                <Button
+                  variant="default"
+                  className="sm:px-6 sm:py-6 px-7 py-5 font-semibold "
+                >
+                  Get Started Free
+                </Button>
+              </Link>
+            </div>
+          </div>
 
-      {/* Badges */}
-      <div className="absolute top-10 left-10 flex flex-col gap-5 items-center z-10">
-        <Badge className="flex items-center gap-2 rounded-full border border-green-500 bg-background/10 p-2 animate-fade-in animate-delay-1">
-          <DollarSign className="!h-5 !w-5 text-green-500" />
-          <span className="">Free Registration</span>
-        </Badge>
-
-        <Badge className="flex items-center gap-2 rounded-full border border-pink-500 bg-background/10 p-2 animate-fade-in animate-delay-2">
-          <UserCog className="!h-5 !w-5 text-pink-500" />
-          <span className="">Customizable Avatars</span>
-        </Badge>
-
-        <Badge className="flex items-center gap-2 rounded-full border border-blue-500 bg-background/10 p-2 animate-fade-in animate-delay-3">
-          <Sparkles className="!h-5 !w-5 text-blue-500 animate-pulse" />
-          <span className="">AI-Powered Conversations</span>
-        </Badge>
-      </div>
-    </section>
+          <div className="relative w-full max-w-md mx-auto aspect-square flex items-center justify-center">
+            <video
+              src="/3d-assets/2d-animated.webm"
+              className="w-auto h-auto max-w-full max-h-full"
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-label="Animated illustration of a person exploring different paths and options"
+            />
+          </div>
+        </div>
+      </PageContainer>
+    </Section>
   );
 }
 

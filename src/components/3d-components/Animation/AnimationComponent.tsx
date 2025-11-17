@@ -1,54 +1,110 @@
 import { AnimationMixer, Group, AnimationClip, AnimationAction } from "three";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useEffect } from "react";
-import { useAnimation } from "./AnimationContext";
+import { useRef, useEffect, useState } from "react";
+import { AnimationState, useAnimation } from "./AnimationContext";
+import { LoopOnce } from "three";
 
 interface AnimationComponentProps {
   model: Group;
   animations: AnimationClip[];
-  activeClipIndex?: number;
+  animationIndexMap: Record<string, number>;
 }
 
-//Gets a model (Group) and animations (AnimationClip[]) as props, sets up an AnimationMixer and plays the specified animation clip based on the activeClipIndex prop.
-//Also listens to changes in the animation state from the AnimationContext to start/stop the animation accordingly.
+type AnimationSpeedMap = Record<AnimationState, number>;
+const animationSpeedMap: AnimationSpeedMap = {
+  Dance: 1.3,
+  Death: 1.0,
+  Idle: 0.8,
+  Jump: 1.0,
+  No: 1.0,
+  Punch: 1.5,
+  Running: 1.3,
+  Sitting: 1.0,
+  Standing: 1.0,
+  ThumbsUp: 1.0,
+  WalkJump: 1.0,
+  Walking: 1.0,
+  Wave: 1.0,
+  Yes: 0.8,
+};
+
+// Component to manage and update the active animation based on the state from AnimationContext
 export default function useAnimationComponent({
   model,
   animations,
-  activeClipIndex = 0,
+  animationIndexMap,
 }: AnimationComponentProps) {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const actionRef = useRef<AnimationAction | null>(null);
-  const { animation } = useAnimation();
+  const { activeAnimations, setAnimationState, defaultAnimation } =
+    useAnimation();
 
   useEffect(() => {
     if (!model || !animations?.length) return;
-
     mixerRef.current = new AnimationMixer(model);
+    // Start with wave animation
+    setTimeout(() => {
+      if (!mixerRef.current) return;
+      const defaultClip = animations[12];
+      const defaultAction = mixerRef.current.clipAction(defaultClip) ?? null;
+      defaultAction.clampWhenFinished = true;
+      defaultAction.setLoop(LoopOnce, 1);
+      defaultAction.reset().play();
+      actionRef.current = defaultAction;
+    }, 100);
 
-    actionRef.current = mixerRef.current.clipAction(
-      animations[activeClipIndex]
-    );
+    const onFinish = (event: { type: string; action: AnimationAction }) => {
+      const clipName = event.action?.getClip()?.name ?? "";
+      if (clipName === "RobotArmature|Robot_Death") {
+        return;
+      }
+      setAnimationState("Idle", true, { loop: true });
+    };
 
-    if (actionRef.current) actionRef.current.play();
+    mixerRef.current.addEventListener("finished", onFinish);
 
     return () => {
+      mixerRef.current?.removeEventListener("finished", onFinish);
       mixerRef.current?.stopAllAction();
       mixerRef.current = null;
     };
-  }, [model, animations, activeClipIndex]);
+  }, [model, animations, animationIndexMap]);
 
-  //Temporary idle is just stopping the animation, not swapping to another animation.
-  //TODO: update activeClipIndex when Idle animation actually exists, this useEffect should then be removed/merged with the above useEffect.
+  // Effect to update animation based on active state from the context
   useEffect(() => {
-    if (animation === "talking") {
-      actionRef.current?.play();
-    } else if (animation === "idle") {
-      actionRef.current?.stop();
+    if (!mixerRef.current || !activeAnimations) return;
+
+    const activeName = Object.keys(activeAnimations).find(
+      (key) => activeAnimations[key]
+    );
+    if (!activeName) return;
+
+    const clipIdx = animationIndexMap[activeName];
+    if (clipIdx === undefined) return;
+
+    const clip = animations[clipIdx];
+    const newAction = mixerRef.current.clipAction(clip);
+
+    // Stop any old actions
+    mixerRef.current.stopAllAction();
+
+    // Use loop mode depending on name or future context options
+    newAction.clampWhenFinished = true;
+
+    if (activeName === "Death") {
+      newAction.setLoop(LoopOnce, 0); // Set loop to once for death animation
+      newAction.clampWhenFinished = true;
     }
-  }, [animation]);
+
+    const speed = animationSpeedMap[activeName as AnimationState] ?? 1.0;
+    newAction.timeScale = speed;
+
+    newAction.reset().play();
+    actionRef.current = newAction;
+  }, [activeAnimations]);
 
   useFrame((_, delta) => {
-    mixerRef.current?.update(delta);
+    mixerRef.current?.update(delta); // Apply the animation updates every frame
   });
 
   return mixerRef;

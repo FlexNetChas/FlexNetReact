@@ -1,8 +1,11 @@
-import React from "react";
 import { UserDescriptionForm } from "./UserDescriptionForm";
 import { RemoveAccount } from "./RemoveAccount";
 import { UserDescription } from "@/types/userDescription";
 import { SessionUser } from "@/types/user";
+import { deleteAccount } from "../../actions";
+import { useState } from "react";
+import { Section } from "@/components/layout/Section";
+import { Circle } from "lucide-react";
 
 export default function UserProfileContent({
   user,
@@ -11,53 +14,62 @@ export default function UserProfileContent({
   user: SessionUser;
   userDescription: UserDescription;
 }) {
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   async function formAction(formData: FormData) {
-    // Todo: Implement account deletion logic when backend is ready
+    setIsDeleting(true);
+    setDeleteError(null);
+
     try {
-      alert("Account deleted");
-    } catch {}
+      const result = await deleteAccount(user.id);
+
+      if (result.errors) {
+        setDeleteError(result.errors.form.join(", "));
+      } else if (result.success) {
+        return;
+      }
+    } catch (error) {
+      setDeleteError("An unexpected error occurred");
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
-    <div className="space-y-8">
-      {/* Personal Information Section */}
-      <section className="grid grid-cols-[35%_65%]  ">
+    <>
+      {/* Account Overview Section */}
+      <Section spacing="xs" className="setting-section-layout">
         <div className="p-6">
-          <h3 className="text-lg text-primary-foreground">
-            Personalize your experience{" "}
-          </h3>
+          <h3>Personalize your experience </h3>
           <p className="mt-2">
             Share optional info to get more relevant and personalized
             suggestions.
           </p>
         </div>
-        <div className="p-6">
-          <UserDescriptionForm userId={user.id} initialData={userDescription} />
-        </div>
-      </section>
+        <UserDescriptionForm userId={user.id} initialData={userDescription} />
+      </Section>
 
       {/* Section Divider */}
-      <div className="border-t border-border -mx-5" />
+      <div className="border-border -mx-6 border-t" />
 
       {/* Danger Zone */}
-      <section className="grid grid-cols-[35%_65%] ">
+      <Section spacing="xs" className="setting-section-layout">
         <div className="p-6">
-          <h3 className="text-lg text-primary-foreground">Danger Zone</h3>
-          <p className="mt-2">
+          <h3>Danger Zone</h3>
+          <p className="text-muted-foreground mt-2">
             Permanently delete your account and all associated data. This action
             cannot be undone.
           </p>
-          <div className="flex items-start gap-3 mt-2 ">
-            <div className="size-1.5 bg-error rounded-full mt-2" />
+          <div className="mt-2 flex items-start gap-3">
+            <Circle size={8} className="text-error mt-2" />
             <p>
               If you have any questions, please contact our support team first
             </p>
           </div>
         </div>
-        <div className="p-6">
-          <RemoveAccount formAction={formAction} />
-        </div>
-      </section>
-    </div>
+        <RemoveAccount formAction={formAction} isPending={isDeleting} />
+      </Section>
+    </>
   );
 }

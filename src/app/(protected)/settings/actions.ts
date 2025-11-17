@@ -6,6 +6,8 @@ import { cache } from "react";
 import { UserDescription, UserDescriptionState } from "@/types/userDescription";
 import { userDescriptionSchema } from "@/lib/validations/userDescriptionValidators";
 import { extractBackendErrors } from "@/lib/api/errors";
+import { authService } from "@/lib/api/services/authService";
+import { logout } from "@/lib/api/actions/authActions";
 
 export const getUserDescription = cache(
   async (userId: number): Promise<UserDescription | null> => {
@@ -113,15 +115,22 @@ export async function patchUserDescription(
   }
 }
 
-export async function deleteAccount(id: any): Promise<{
+export async function deleteAccount(id: number): Promise<{
   success?: true;
   errors?: { form: string[] };
 }> {
   try {
-    // Todo: Delete the user account. Then remove tokens and log out the user
+    await authService.deleteUser(id);
 
+    // Force redirect immediately after successful deletion
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+
+    await logout();
     return { success: true };
-  } catch {
-    return { errors: { form: ["Server error"] } };
+  } catch (error: unknown) {
+    const errorMessages = extractBackendErrors(error);
+    return { errors: { form: errorMessages } };
   }
 }
