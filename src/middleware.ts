@@ -34,7 +34,7 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const cookie = (await cookies()).get("session")?.value;
 
-  const publicRoutes = ["/", "/login", "/register"];
+  const publicRoutes = ["/", "/login", "/register", "/contact", "/about"];
   const isPublicRoute = publicRoutes.includes(path);
   const isProtectedRoute = !isPublicRoute;
 
@@ -77,7 +77,9 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  if (isPublicRoute && cookie && isValidToken) {
+
+  const allowedPublicRoutesForLoggedIn = ["/contact", "/about"];
+  if (isPublicRoute && cookie && isValidToken && !allowedPublicRoutesForLoggedIn.includes(path)) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 

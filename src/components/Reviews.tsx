@@ -145,7 +145,7 @@ function ReviewCard({ rating, text, author }: Review) {
           <Star className="size-4 text-yellow-600" />
         </div>
 
-        <p className="mt-3">{text}</p>
+        <p className="mt-3 font-sans text-sm">{text}</p>
 
         <p className="text-muted-foreground font-semibold text-sm mt-1 text-right">
           - {author}

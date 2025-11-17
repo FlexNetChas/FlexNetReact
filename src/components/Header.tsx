@@ -15,16 +15,33 @@ export function Header() {
     <header className="sticky top-0 w-full border-b z-50 h-23">
       <nav className="blurred-container flex items-center justify-between px-4 md:px-10 ">
         <div className="mx-auto flex w-full items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="transition-opacity hover:opacity-80">
-            <Image
-              src="/Logo.svg"
-              alt="FlexNet Logo"
-              width={90}
-              height={90}
-              priority
-            />
-          </Link>
+          {/* Logo and Navigation Links */}
+          <div className="flex items-center gap-6">
+            <Link href="/" className="transition-opacity hover:opacity-80">
+              <Image
+                src="/Logo.svg"
+                alt="FlexNet Logo"
+                width={90}
+                height={90}
+                priority
+              />
+            </Link>
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6">
+              <Link
+                href="/#our-story"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                Our Story
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                Contact
+              </Link>
+            </nav>
+          </div>
           {/* Auth Btn */}
           <div className="flex items-center gap-4">
             {!user ? (

@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 export default function About() {
   return (
     <Section
+      id="our-story"
       spacing="lg"
       className="bg-secondary relative py-10 md:py-15 lg:py-20"
     >
