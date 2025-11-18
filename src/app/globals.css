@@ -180,7 +180,7 @@
   }
 
   /* Hide Cookie revisit btn */
-  .cky-btn-revisit {
+  .cky-btn-revisit .cky-btn-revisit-wrapper .cky-revisit-bottom-left {
     display: none !important;
   }
 }
