@@ -5,10 +5,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTheme } from "next-themes";
 
 type Props = {};
 
 export default function UserPreference({}: Props) {
+  const { setTheme } = useTheme();
+
   return (
     <div className="space-y-5">
       {/* Basic Preferences */}
@@ -21,14 +24,20 @@ export default function UserPreference({}: Props) {
         </div>
 
         <div className="space-y-5 p-5">
-          <Select>
+          <Select onValueChange={(value) => setTheme(value)}>
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="System" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="system">System</SelectItem>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system" onClick={() => setTheme("system")}>
+                System
+              </SelectItem>
+              <SelectItem value="light" onClick={() => setTheme("light")}>
+                Light
+              </SelectItem>
+              <SelectItem value="dark" onClick={() => setTheme("dark")}>
+                Dark
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

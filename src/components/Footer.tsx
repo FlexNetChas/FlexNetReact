@@ -54,9 +54,7 @@ export default function Footer() {
             ))}
           </div>
           {/* Description */}
-          <div className="flex items-center justify-center">
-            <InteractiveGlobe className="h-full w-full" />
-          </div>
+          <InteractiveGlobe className="h-full w-full" />
         </div>
 
         {/* Row 2 */}

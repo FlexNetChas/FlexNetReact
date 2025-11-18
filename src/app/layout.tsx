@@ -8,6 +8,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import { RootLayoutWrapper } from "./RootLayoutWrapper";
 import { siteConfig } from "@/lib/config/site";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url || ""),
@@ -58,20 +59,23 @@ export default async function RootLayout({
           src="https://cdn-cookieyes.com/client_data/ce717a8065509bba92ea7b32/script.js"
           strategy="beforeInteractive"
         />
-        <UserProvider user={user}>
-          <ChatSessionsProvider>
-            {user ? (
-              children
-            ) : (
-              /* Sense we had to check if root layout is auth or protected route do we had
-               * to create a wrapper component to handle the conditional rendering of Header/Footer
-               * We dont need to show footer on auth routes like login/register
-               */
-              <RootLayoutWrapper>{children}</RootLayoutWrapper>
-            )}
-          </ChatSessionsProvider>
-          <Toaster position="top-right" />
-        </UserProvider>
+        <ThemeProvider>
+          <UserProvider user={user}>
+            <ChatSessionsProvider>
+              {user ? (
+                children
+              ) : (
+                /* Sense we had to check if root layout is auth or protected route do we had
+                 * to create a wrapper component to handle the conditional rendering of Header/Footer
+                 * We dont need to show footer on auth routes like login/register
+                 */
+                <RootLayoutWrapper>{children}</RootLayoutWrapper>
+              )}
+            </ChatSessionsProvider>
+            <Toaster position="top-right" />
+          </UserProvider>
+        </ThemeProvider>
+
         <GoogleAnalytics gaId="G-TYVTBNZWKC" />
       </body>
     </html>

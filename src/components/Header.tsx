@@ -46,7 +46,7 @@ export function Header() {
           <div className="flex items-center gap-4">
             {!user ? (
               <Link href="/login">
-                <Button variant="outline">Login</Button>
+                <Button variant="default">Login</Button>
               </Link>
             ) : (
               <>
@@ -60,7 +60,7 @@ export function Header() {
                     title="Settings"
                     className="text-primary-foreground hover:text-primary"
                   >
-                    <Settings className="h-5 w-5" />
+                    <Settings className="size-5" />
                   </Button>
                 </Link>
                 <form action={logout}>
