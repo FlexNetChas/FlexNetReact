@@ -14,7 +14,7 @@ type AnimationSpeedMap = Record<AnimationState, number>;
 const animationSpeedMap: AnimationSpeedMap = {
   Dance: 1.3,
   Death: 1.0,
-  Idle: 0.8,
+  Idle: 0.2,
   Jump: 1.0,
   No: 1.0,
   Punch: 1.5,

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { PageContainer } from "@/components/layout/PageContainer";
-import { InteractiveGlobe } from "./InteractiveGlobe";
+// import { InteractiveGlobe } from "./InteractiveGlobe";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -55,7 +55,7 @@ export default function Footer() {
           </div>
           {/* Description */}
           <div className="flex items-center justify-center">
-            <InteractiveGlobe className="h-full w-full" />
+            {/* <InteractiveGlobe className="h-full w-full" /> */}
           </div>
         </div>
 
