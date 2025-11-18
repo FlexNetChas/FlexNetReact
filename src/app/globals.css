@@ -38,6 +38,9 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --animate-meteor-effect: meteor 5s linear infinite;
+  --card-color-2: var(--card-color-2);
+  --btn-bg: var(--btn-bg);
+  --btn-border: var(--btn-border);
 }
 /* Keyframes for hero star sections */
 @keyframes meteor {
@@ -67,6 +70,48 @@
     --radius: 0.625rem;
 
     /* Core colors */
+    --background: #9dac9c;
+    --foreground: #0e1624;
+
+    /* Primary */
+    --primary: #30694a;
+    --primary-rgb: 153, 226, 247;
+    --primary-foreground: #0e1624;
+
+    /* Secondary */
+    --secondary: rgb(202, 219, 200);
+    --secondary-foreground: #0e1624;
+
+    /* Card & components */
+    --card: #90a18f;
+    --card-color-2: #889c87;
+    --card-foreground: #0e1624;
+
+    /* Muted */
+    --muted: #172337;
+    --muted-foreground: #172337;
+
+    /* Accent */
+    --accent: #515bc5;
+    --accent-foreground: #ffffff;
+
+    /* Border and inputs btn */
+    --btn-bg: #222f4a;
+    --btn-border: #19243e;
+    --border: rgba(var(--primary-rgb), 0.1);
+    --input: rgb(217, 231, 215);
+    --ring: var(--primary);
+
+    /* State  */
+    --destructive: #ef4444;
+    --error: #ef4444;
+    --warning: #f59e0b;
+  }
+
+  .dark {
+    --radius: 0.625rem;
+
+    /* Core colors */
     --background: #0e1624;
     --foreground: #ffffff;
 
@@ -80,7 +125,10 @@
     --secondary-foreground: #ffffff;
 
     /* Card & components */
+    --btn-bg: #15cf9a;
+    --btn-border: #18c143;
     --card: #222f4a;
+    --card-color-2: #19243e;
     --card-foreground: #ffffff;
 
     /* Muted */
@@ -160,7 +208,12 @@
   }
 
   .linear-card-gradient {
-    background: linear-gradient(90deg, #222f4a 0%, #19243e 100%);
+    /* background: linear-gradient(90deg, #222f4a 0%, #19243e 100%); */
+    background: linear-gradient(
+      90deg,
+      var(--card) 0%,
+      var(--card-color-2) 100%
+    );
     opacity: 0.85;
     box-shadow: #70779333 0px 4px 6px -1px, #7077931a 0px 2px 4px -1px;
     backdrop-filter: blur(10px);
