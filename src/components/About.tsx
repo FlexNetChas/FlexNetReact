@@ -21,7 +21,7 @@ export default function About() {
           <motion.div
             initial={{ opacity: 80, x: -40 }}
             whileInView={{ opacity: 100, x: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 1.1, ease: "easeOut" }}
             className="relative hidden md:block overflow-hidden rounded-2xl shadow-xl h-96 w-2/3 mx-auto"
           >
@@ -38,7 +38,7 @@ export default function About() {
           <motion.article
             initial={{ opacity: 80, x: 40 }}
             whileInView={{ opacity: 100, x: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           >
             <h2 className="mb-8 text-center font-bold md:text-right">
