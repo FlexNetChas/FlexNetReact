@@ -44,7 +44,7 @@ function Hero() {
           <div className="relative h-40 lg:h-50 w-full mt-10 md:mb-15 max-w-md mx-auto aspect-square flex items-center justify-center">
             <video
               src="/3d-assets/2d-animateda.webm"
-              className="w-full h-full object-contain rounded-2xl"
+              className="w-full h-full object-contain rounded-2xl bg-transparent"
               autoPlay
               loop
               muted

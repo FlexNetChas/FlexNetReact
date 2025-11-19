@@ -83,7 +83,7 @@ export default function PreviousChatSessions() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full"
+                  className="object-cover w-full h-full bg-transparent"
                 />
               </div>
             </Link>
