@@ -43,7 +43,7 @@ function Hero() {
 
           <div className="relative w-full max-w-md mx-auto aspect-square flex items-center justify-center">
             <video
-              src="/3d-assets/2d-animated.webm"
+              src="/3d-assets/2d-animateda.webm"
               className="w-auto h-auto max-w-full max-h-full"
               autoPlay
               loop

@@ -78,7 +78,7 @@ export default function PreviousChatSessions() {
             <Link href="/dashboard">
               <div className="size-10 overflow-hidden rounded-md">
                 <video
-                  src="/3d-assets/2d-animated.webm"
+                  src="/3d-assets/2d-animateda.webm"
                   autoPlay
                   loop
                   muted
