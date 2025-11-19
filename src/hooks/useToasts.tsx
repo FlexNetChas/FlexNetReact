@@ -36,15 +36,15 @@ export const useToasts = (
     if (state.errors) {
       // Handle form errors and input field errors from server
       Object.keys(state.errors).forEach((key) => {
-        state.errors![key]?.forEach((errorMessage) =>
-          toast(
+        state.errors![key]?.forEach((errorMessage) => {
+          const id = toast(
             <div className="flex items-center justify-between gap-2 p-2">
               <div className="flex items-center gap-2">
                 <span className="text-error">{errorMessage}</span>
               </div>
               <div
                 className="rounded-full border border-error p-1 cursor-pointer bg-red-50 text-error transition transform hover:scale-105 hover:bg-red-100 flex-shrink-0"
-                onClick={() => toast.dismiss()}
+                onClick={() => toast.dismiss(id)}
               >
                 <X size={13} />
               </div>
@@ -54,8 +54,8 @@ export const useToasts = (
               className: "bg-white text-black shadow-md",
               icon: null,
             }
-          )
-        );
+          );
+        });
       });
     }
 
@@ -66,7 +66,7 @@ export const useToasts = (
       toast(
         <div className="flex items-center justify-between gap-2 p-2">
           <div className="flex items-center gap-2">
-            <span className="text-success">{successMessage}</span>
+            <span className="text-green-500">{successMessage}</span>
           </div>
         </div>,
         {

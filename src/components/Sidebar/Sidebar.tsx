@@ -78,7 +78,7 @@ export default function PreviousChatSessions() {
             <Link href="/dashboard">
               <div className="size-10 overflow-hidden rounded-md">
                 <video
-                  src="/3d-assets/2d-animated.webm"
+                  src="/3d-assets/2d-animateda.webm"
                   autoPlay
                   loop
                   muted
@@ -299,9 +299,7 @@ function Section({
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <div className="flex flex-col gap-2 text-muted-foreground text-sm truncate">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }

@@ -68,21 +68,26 @@ const SectionItem = () => {
                   <div
                     key={`session-${session.id}`}
                     onClick={() => handleClick(session.id)}
-                    className="p-3 rounded hover:bg-gray-700  transition-colors cursor-pointer text-sm"
+                    className="p-3 rounded hover:bg-primary/50 transition-colors cursor-pointer text-sm"
                   >
-                    <div className="flex justify-between items-center">
-                      <span>{session.summary || "No Summary"}</span>
-                      <Trash2
-                        size={18}
-                        className=" hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer"
-                        key={`delete-${session.id}`}
-                        onClick={(event) => {
-                          if (!session.hasBeenDeleted) {
-                            session.hasBeenDeleted = true;
-                            handleClickDelete(session.id, event);
-                          }
-                        }}
-                      />
+                    <div className="flex flex-row gap-2 justify-between items-center">
+                      <div className="flex flex-row gap-2 justify-between items-center">
+                        <Trash2
+                          size={18}
+                          className="hover:text-error transition-colors cursor-pointer"
+                          key={`delete-${session.id}`}
+                          onClick={(event) => {
+                            if (!session.hasBeenDeleted) {
+                              session.hasBeenDeleted = true;
+                              handleClickDelete(session.id, event);
+                            }
+                          }}
+                        />
+
+                        <span className="text-xs max-w-[160px] truncate block">
+                          {session.summary || "No Summary"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}
