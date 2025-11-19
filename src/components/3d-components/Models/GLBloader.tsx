@@ -90,12 +90,14 @@ export default function GLBloader({ path }: ModelGLBProps) {
     const eyebrows = 1;
     const eyes = 2;
     const distance = Math.sqrt(mousePos.x ** 2 + mousePos.y ** 2);
-    console.log("Distance from center:", mousePos.x, mousePos.y);
-    const anger = Math.max(0, 1 - distance);
+    let anger = Math.max(0, 1.5 - distance);
+
+    if (anger > 0.7) anger = 0.7;
     if (headRef.current?.morphTargetInfluences) {
-      headRef.current.morphTargetInfluences[eyebrows] = anger;
+      headRef.current.morphTargetInfluences[eyebrows] = -anger;
     }
 
+    console.log("Anger level set to:", anger);
     // Adjust head rotation based on mouse position
     if (headRef.current) {
       const head = headRef.current as Mesh;
