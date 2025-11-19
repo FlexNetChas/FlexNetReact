@@ -14,10 +14,10 @@ export default function ChatContentComponent({
   const { shouldRender } = useSceneContext();
 
   return (
-    <div className="w-full  flex flex-col items-center justify-between py-6">
+    <div className="w-full flex flex-col items-center justify-between">
       <div
-        className="overflow-hidden relative flex items-center justify-center"
-        style={{ width: 400, height: 400 }}
+        className="overflow-hidden h-[30vh] relative flex items-center justify-center"
+        style={{ width: 200, height: 200 }}
       >
         {shouldRender === false ? (
           <img
@@ -34,7 +34,7 @@ export default function ChatContentComponent({
           <ClientSideSceneLoader />
         )}
       </div>
-      <div className="w-2/5 mt-auto mb-6">
+      <div className="w-full flex-1 mt-auto mb-6">
         <ChatBoxComponent savedSession={savedSession} />
       </div>
     </div>
