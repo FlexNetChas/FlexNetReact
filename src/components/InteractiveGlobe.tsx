@@ -3,14 +3,24 @@
 import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
-// Uppdaterad färgpalett för att matcha footern
+// Helper function to get CSS variables
+function getCSSVariable(variable: string): string {
+  if (typeof window === "undefined") return "#0e1624";
+
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim();
+
+  return value || "#0e1624";
+}
+
+// Color palette
 const colors = {
-  background: 0x0e1624, // Matchar footer bakgrund
-  primary: 0x99e2f7,
-  secondary: 0x141e31,
-  accent: 0xbd51c5,
-  success: 0x4ade80,
-  warning: 0xfbbf24,
+  background: new THREE.Color(getCSSVariable("--background")),
+  primary: new THREE.Color(getCSSVariable("--primary")),
+  secondary: new THREE.Color(getCSSVariable("--secondary")),
+  accent: new THREE.Color(getCSSVariable("--accent")),
+  warning: new THREE.Color(getCSSVariable("--warning")),
 };
 
 interface InteractiveGlobeProps {
@@ -51,7 +61,7 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
         30,
         mountElement.clientWidth / mountElement.clientHeight,
         0.1,
-        1000
+        5
       );
       camera.position.z = 3.2;
       cameraRef.current = camera;
@@ -62,7 +72,7 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
         alpha: false,
       });
       renderer.setSize(mountElement.clientWidth, mountElement.clientHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
       rendererRef.current = renderer;
 
       // Clear erlier canvas elements to prevent duplicates
@@ -172,7 +182,7 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
 
       // Configure particle material size and opacity
       const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.05,
+        size: 0.08,
         transparent: true,
         opacity: 0.4,
         vertexColors: true,
@@ -323,14 +333,14 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
   return (
     <div
       ref={mountRef}
-      className={`w-full h-32 md:h-48 rounded-lg relative overflow-hidden ${
+      className={`md:w-full w-2/3 h-30 md:h-48 rounded-lg relative overflow-hidden ${
         className || ""
       }`}
     >
       {!isMounted && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-cyan-400/20 animate-pulse" />
+            <div className="size-8 rounded-full bg-cyan-400/20 animate-pulse" />
             <p className="text-cyan-400/60 text-xs">Loading globe...</p>
           </div>
         </div>

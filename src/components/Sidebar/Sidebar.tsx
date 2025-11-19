@@ -78,7 +78,7 @@ export default function PreviousChatSessions() {
             <Link href="/dashboard">
               <div className="size-10 overflow-hidden rounded-md">
                 <video
-                  src="/3d-assets/2d-animated.webm"
+                  src="/3d-assets/2d-animateda.webm"
                   autoPlay
                   loop
                   muted
@@ -162,6 +162,7 @@ export default function PreviousChatSessions() {
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2`}
             title={"Home"}
+            onClick={() => setIsMinimized(false)}
           >
             <Link
               href={"/"}
@@ -184,6 +185,7 @@ export default function PreviousChatSessions() {
             } flex w-full gap-2 text-primary hover:underline`}
             title="New chat"
             onClick={async () => {
+              setIsMinimized(false);
               await router.push(`/chat?ts=${Date.now()}`);
               router.refresh();
             }}
@@ -207,6 +209,7 @@ export default function PreviousChatSessions() {
               isMinimized ? "justify-center" : "justify-start"
             } flex w-full gap-2`}
             title={"Settings"}
+            onClick={() => setIsMinimized(false)}
           >
             <Link
               href={"/settings"}
@@ -296,9 +299,7 @@ function Section({
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <div className="flex flex-col gap-2 text-muted-foreground text-sm">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }

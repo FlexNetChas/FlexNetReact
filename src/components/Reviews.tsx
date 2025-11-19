@@ -55,7 +55,7 @@ export default function Reviews() {
           <motion.article
             initial={{ opacity: 80, x: -40 }}
             whileInView={{ opacity: 100, x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           >
             <h2 className="mb-8 text-center font-bold md:text-left">
@@ -81,7 +81,7 @@ export default function Reviews() {
           <motion.div
             initial={{ opacity: 80, x: 40 }}
             whileInView={{ opacity: 100, x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1.1, ease: "easeOut" }}
             className="relative hidden md:block overflow-hidden rounded-2xl h-75 w-2/3 mx-auto"
           >
@@ -145,7 +145,7 @@ function ReviewCard({ rating, text, author }: Review) {
           <Star className="size-4 text-yellow-600" />
         </div>
 
-        <p className="mt-3">{text}</p>
+        <p className="mt-3 font-sans text-sm">{text}</p>
 
         <p className="text-muted-foreground font-semibold text-sm mt-1 text-right">
           - {author}

@@ -5,6 +5,8 @@ import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
 import { useRouter } from "next/navigation";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
+import { Loader2 } from "lucide-react";
+import { messageSchema } from "@/lib/validations/messageValidator";
 
 export default function ChatBoxComponent({
   savedSession,
@@ -46,6 +48,25 @@ export default function ChatBoxComponent({
       }
     };
   }, []);
+
+  // Ref for textarea to adjust height dynamically
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const MAX_HEIGHT = 100;
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+
+    if (textarea.scrollHeight > MAX_HEIGHT) {
+      textarea.style.height = `${MAX_HEIGHT}px`;
+      textarea.style.overflowY = "auto";
+    } else {
+      textarea.style.overflowY = "hidden";
+    }
+  }, [input]);
 
   // OLD: Non-streaming fallback (keep for error cases)
   const fetchAIResponse = async (message: string): Promise<string> => {
@@ -112,8 +133,18 @@ export default function ChatBoxComponent({
   };
   const firstChunkRef = useRef(false);
   const sendMessage = async () => {
-    if (input.trim() === "" || isStreaming) return;
+    if (isStreaming) return;
+    const trimmed = input.trim();
+    const result = messageSchema.safeParse({ message: trimmed });
 
+    if (!result.success) {
+      console.error("Validation failed:", result.error.flatten().fieldErrors);
+      return;
+    }
+    if (trimmed === "") return;
+    if (input.length > 1000) {
+      return;
+    }
     // 1. Add user message
     const userMessage: ChatMessageResponseDto = {
       messageText: input,
@@ -176,21 +207,21 @@ export default function ChatBoxComponent({
   };
 
   return (
-    <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
+    <div className="w-full h-[60vh] flex flex-col text-white rounded-xl overflow-hidden">
       <div
         ref={logRef}
         className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1 scrollbar"
       >
-        {messages.length === 0 && (
+        {/* {messages.length === 0 && (
           <p className="text-gray-400">No messages yet...</p>
-        )}
+        )} */}
         {messages.map((msg, idx) => (
           <div
             key={`${msg.timeStamp}-${msg.role}-${idx}`}
-            className={`p-2 rounded max-w-[70%] ${
+            className={`p-2 rounded max-w-[90%] ${
               msg.role === "assistant"
                 ? "border border-blue-600 self-end"
-                : "border border-gray-700 self-start"
+                : "border border-gray-700 self-start bg-muted"
             }`}
           >
             {msg.messageText}
@@ -199,24 +230,53 @@ export default function ChatBoxComponent({
       </div>
 
       <div className="flex gap-2 px-6 my-1 flex-shrink-0">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 p-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none"
-          placeholder="Type a message..."
-          disabled={isStreaming}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !isStreaming) sendMessage();
-          }}
-        />
-        <button
-          onClick={sendMessage}
-          disabled={isStreaming}
-          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isStreaming ? "..." : "Send"}
-        </button>
+        <div className="relative flex-1">
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className={`w-full p-2 pr-12 rounded bg-border border ${
+              input.length > 1000 ? "border-error" : "border-border"
+            } text-white focus:outline-none resize-none`}
+            placeholder="Type a message..."
+            disabled={isStreaming}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (!isStreaming && input.length <= 50) sendMessage();
+              }
+            }}
+          />
+          <span
+            className={`absolute bottom-2 right-3 text-xs ${
+              input.length > 1000
+                ? "text-error font-semibold"
+                : "text-muted-foreground"
+            }`}
+          >
+            {input.length}/1000
+          </span>
+          {input.length > 1000 && (
+            <p className="text-red-500 absolute bottom right-3 text-xs mt-1">
+              Max characters reached
+            </p>
+          )}
+          <button
+            onClick={sendMessage}
+            disabled={isStreaming || input.length > 1000}
+            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isStreaming ? (
+              <Loader2 className="mr2 size-4 animate-spin" />
+            ) : (
+              "Send"
+            )}
+          </button>
+        </div>
+        {/* 
+        <div className="text-sm mt-1 text-right">
+
+        </div> */}
       </div>
     </div>
   );

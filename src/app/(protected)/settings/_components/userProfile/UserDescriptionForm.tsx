@@ -204,7 +204,7 @@ export function UserDescriptionForm({
         </div>
 
         {/* Purpose */}
-        <div className="space-y-2">
+        <div className="space-y-2 relative">
           <Label htmlFor="purpose">What do you hope to achieve?</Label>
           <textarea
             ref={textareaRef}
@@ -223,7 +223,31 @@ export function UserDescriptionForm({
                 ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                 : "border-border"
             }`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+
+                const form = e.currentTarget.form;
+                if (form && form.reportValidity()) {
+                  form.requestSubmit();
+                }
+              }
+            }}
           />
+          {/* Character counter */}
+          <span
+            className={`absolute bottom-0 right-3 text-xs ${
+              formValues.purpose.length > 50
+                ? "text-error font-semibold"
+                : "text-muted-foreground"
+            }`}
+          >
+            {formValues.purpose.length}/50
+          </span>
+
+          {formValues.purpose.length > 50 && (
+            <p className="text-error text-xs mt-1">Max characters reached</p>
+          )}
         </div>
       </div>
       <SubmitButton />

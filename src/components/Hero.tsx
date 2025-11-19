@@ -33,7 +33,7 @@ function Hero() {
               <Link href="/register">
                 <Button
                   variant="default"
-                  className="sm:px-6 sm:py-6 px-4 py-4 font-semibold "
+                  className="sm:px-6 sm:py-6 px-4 py-4 font-semibold border-4 border-blue-600/60 dark:border-blue-500/40 bg-blue-500/10 dark:bg-blue-500/5 text-blue-700 dark:text-foreground"
                 >
                   Get Started Free
                 </Button>
@@ -41,10 +41,10 @@ function Hero() {
             </div>
           </div>
 
-          <div className="relative w-full max-w-md mx-auto aspect-square flex items-center justify-center">
+          <div className="relative h-40 lg:h-50 w-full mt-10 md:mb-15 max-w-md mx-auto aspect-square flex items-center justify-center">
             <video
-              src="/3d-assets/2d-animated.webm"
-              className="w-auto h-auto max-w-full max-h-full"
+              src="/3d-assets/2d-animateda.webm"
+              className="w-full h-full object-contain rounded-2xl"
               autoPlay
               loop
               muted
