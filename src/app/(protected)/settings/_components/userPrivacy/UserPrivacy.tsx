@@ -2,11 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { exportUserData } from "@/lib/api/actions/userDataExportActions";
+import { Download, Loader2 } from "lucide-react";
 
 type Props = {};
 
 export default function UserPrivacy({}: Props) {
   const [isMounted, setIsMounted] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -35,7 +39,41 @@ export default function UserPrivacy({}: Props) {
       return;
     }
   };
+  const handleDataExport = async () => {
+    try {
+      setIsExporting(true);
+      setExportError(null);
 
+      const result = await exportUserData();
+
+      if (!result.success || !result.data) {
+        setExportError(result.error ?? "Failed to export data");
+        return;
+      }
+
+      // Convert blob to download
+      const url = window.URL.createObjectURL(result.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `flexnet-userdata-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      // Optional: Show success message for a few seconds
+      // You could add a success state here if you want
+    } catch (err) {
+      setExportError("Failed to export data. Please try again.");
+      console.error("Export error:", err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
   return (
     <div className="space-y-5">
       {/* Data Management */}
@@ -47,9 +85,27 @@ export default function UserPrivacy({}: Props) {
           </p>
         </div>
         <div className="p-5">
-          <Button variant="default" className="mb-2">
-            Request Data Export
+          <Button
+            variant="default"
+            className="mb-2"
+            onClick={handleDataExport}
+            disabled={isExporting}
+          >
+            {isExporting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Exporting...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-4 w-4" />
+                Request Data Export
+              </>
+            )}
           </Button>
+          <p className="text-xs text-muted-foreground mt-3">
+            GDPR Article 20 - Right to Data Portability
+          </p>
         </div>
       </div>
 
