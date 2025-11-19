@@ -235,23 +235,23 @@ export default function ChatBoxComponent({
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className={`w-full p-2 pr-12 rounded bg-gray-800 border ${
-              input.length > 1000 ? "border-red-500" : "border-gray-700"
+            className={`w-full p-2 pr-12 rounded bg-border border ${
+              input.length > 1000 ? "border-error" : "border-border"
             } text-white focus:outline-none resize-none`}
             placeholder="Type a message..."
             disabled={isStreaming}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                if (!isStreaming && input.length <= 1000) sendMessage();
+                if (!isStreaming && input.length <= 50) sendMessage();
               }
             }}
           />
           <span
             className={`absolute bottom-2 right-3 text-xs ${
               input.length > 1000
-                ? "text-red-500 font-semibold"
-                : "text-gray-400"
+                ? "text-error font-semibold"
+                : "text-muted-foreground"
             }`}
           >
             {input.length}/1000
