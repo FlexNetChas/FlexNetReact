@@ -181,7 +181,7 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="education"
-                className={`bg-input rounded-lg w-full h-10 mt-2  ${
+                className={` rounded-lg w-full h-10 mt-2  ${
                   hasError("education")
                     ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                     : "border-border"
@@ -189,7 +189,7 @@ export function UserDescriptionForm({
               >
                 <SelectValue placeholder="Select level" />
               </SelectTrigger>
-              <SelectContent className="min-w-full bg-secondary">
+              <SelectContent className="min-w-full ">
                 <SelectItem value="Primary school">Primary school</SelectItem>
                 <SelectItem value="High school">High school</SelectItem>
                 <SelectItem value="University">University</SelectItem>
