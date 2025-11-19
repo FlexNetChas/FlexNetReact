@@ -4,23 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import useAnimationComponent from "../Animation/AnimationComponent";
 import { fixModelTextures } from "../Utility/FixTextureUtility";
 import { useMemo } from "react";
-import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
 import { useFrame } from "@react-three/fiber";
+
 interface ModelGLBProps {
   path: string;
 }
 
 export default function GLBloader({ path }: ModelGLBProps) {
   const { scene: model, animations } = useGLTF(path);
-  const { setAnimationState } = useAnimation();
   const headRef = useRef<Mesh | null>(null);
-  const [angry, setAngry] = useState(0); // Angry parameter
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0, z: 0 });
-  const [originalHeadRotation, setOriginalHeadRotation] = useState<{
-    x: number;
-    y: number;
-    z: number;
-  } | null>(null);
+  let [mousePos, setMousePos] = useState({ x: 1, y: 1, z: 1 });
 
   // Animation name normalization function
   const normalizeAnimationName = (name: string) => {
@@ -41,8 +34,7 @@ export default function GLBloader({ path }: ModelGLBProps) {
     animations,
     animationIndexMap,
   });
-
-  // Track mouse movement to adjust facial expressions and head rotation
+  // Track mouse movement
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       const canvas = document.querySelector("canvas");
@@ -65,6 +57,7 @@ export default function GLBloader({ path }: ModelGLBProps) {
     };
   }, []);
 
+  //Enable shadows, find head mesh and fix texture colors
   useEffect(() => {
     model.traverse((child) => {
       if ((child as Mesh).isMesh) {
@@ -72,13 +65,6 @@ export default function GLBloader({ path }: ModelGLBProps) {
         (child as Mesh).receiveShadow = true;
         if ((child as Mesh).name === "Head_4") {
           headRef.current = child as Mesh;
-          setOriginalHeadRotation(
-            headRef.current.rotation.clone() as {
-              x: number;
-              y: number;
-              z: number;
-            }
-          );
         }
       }
     });
@@ -88,48 +74,36 @@ export default function GLBloader({ path }: ModelGLBProps) {
   useFrame(() => {
     // Adjust facial expression based on mouse distance from center
     const eyebrows = 1;
-    const eyes = 2;
     const distance = Math.sqrt(mousePos.x ** 2 + mousePos.y ** 2);
-    let anger = Math.max(0, 1.5 - distance);
+    let anger: number = Math.max(0, 1.5 - distance);
 
     if (anger > 0.7) anger = 0.7;
-    if (headRef.current?.morphTargetInfluences) {
-      headRef.current.morphTargetInfluences[eyebrows] = -anger;
-    }
 
-    console.log("Anger level set to:", anger);
-    // Adjust head rotation based on mouse position
+    if (headRef.current?.morphTargetInfluences)
+      headRef.current.morphTargetInfluences[eyebrows] = -anger;
+
+    // Adjust eyes rotation based on mouse position
     if (headRef.current) {
       const head = headRef.current as Mesh;
 
-      const rotationSpeed = 0.02;
-      const Xclamp = 0.2; // Limit rotation to avoid unnatural movement
-      const Yclamp = 0.1; // Limit rotation to avoid unnatural movement
+      const rotationSpeed = 0.03;
 
-      if (originalHeadRotation) {
-        if (
-          originalHeadRotation.y + head.rotation.y > Yclamp &&
-          originalHeadRotation.y - head.rotation.y < -Yclamp
-        ) {
-          head.rotation.y =
-            originalHeadRotation.y + mousePos.x * Math.PI * rotationSpeed;
-        }
-        if (
-          originalHeadRotation.x + head.rotation.x > Xclamp &&
-          originalHeadRotation.x - head.rotation.x < -Xclamp
-        ) {
-          head.rotation.x =
-            originalHeadRotation.x - mousePos.y * Math.PI * rotationSpeed;
-        }
-      }
+      // min max values
+      const XclampMax = 0.09;
+      const XclampMin = -0.09;
+      const ZclampMax = 0.09;
+      const ZclampMin = -0.09;
 
-      head.rotation.z = mousePos.x * Math.PI * rotationSpeed;
-      head.rotation.x = -mousePos.y * Math.PI * rotationSpeed;
+      let newXRotation = -mousePos.y * Math.PI * rotationSpeed;
+      let newZRotation = mousePos.x * Math.PI * rotationSpeed;
+
+      // Clamp the rotations to the defined range
+      head.rotation.x = Math.max(XclampMin, Math.min(XclampMax, newXRotation));
+      head.rotation.z = Math.max(ZclampMin, Math.min(ZclampMax, newZRotation));
     } else console.warn("Head mesh not found for morph target manipulation.");
   });
 
   return <primitive object={model} />;
 }
-
 // Preload commonly used models for better performance
 useGLTF.preload("/3d-assets/AnimatedRobot.glb");

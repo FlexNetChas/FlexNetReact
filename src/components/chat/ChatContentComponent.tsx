@@ -35,25 +35,25 @@ export default function ChatContentComponent({
     // Listen for WebGL context loss
     const handleWebGLContextLost = (event: Event) => {
       console.log("WebGL context lost");
-      setIsWebGLContextLost(true); // Set the flag for WebGL context loss
-      setShouldRender(false); // Disable rendering of 3D scene
-      setRetrying(true); // Start retrying to restore the context
+      setIsWebGLContextLost(true);
+      setShouldRender(false);
+      setRetrying(true);
     };
 
     // Listen for WebGL context restoration
     const handleWebGLContextRestored = (event: Event) => {
       console.log("WebGL context restored");
-      setIsWebGLContextLost(false); // Reset the flag
-      setShouldRender(true); // Enable rendering of 3D scene
-      setRetrying(false); // Stop retrying
+      setIsWebGLContextLost(false);
+      setShouldRender(true);
+      setRetrying(false);
     };
 
-    // Attach the event listeners to the window object
+    // Attach the event listeners
     window.addEventListener("webglcontextlost", handleWebGLContextLost);
     window.addEventListener("webglcontextrestored", handleWebGLContextRestored);
 
+    // Cleanup
     return () => {
-      // Cleanup event listeners on component unmount
       window.removeEventListener("webglcontextlost", handleWebGLContextLost);
       window.removeEventListener(
         "webglcontextrestored",
@@ -69,16 +69,15 @@ export default function ChatContentComponent({
     if (isWebGLContextLost && retrying) {
       console.log("Starting context restoration retry loop...");
       interval = setInterval(() => {
-        console.log("Polling to check WebGL context status...");
         if (!isWebGLContextLost) {
           console.log("WebGL context restored, stopping retry loop.");
-          clearInterval(interval as NodeJS.Timeout); // Stop polling when context is restored
-          setShouldRender(true); // Trigger re-render if context is restored
+          clearInterval(interval as NodeJS.Timeout);
+          setShouldRender(true);
         }
       }, 1000); // Check every 1 second
     } else if (!retrying) {
-      console.log("Stopping retry loop since no longer retrying.");
-      if (interval) clearInterval(interval); // Stop the interval when retrying is false
+      // console.log("Stopping retry loop since no longer retrying.");
+      // if (interval) clearInterval(interval); // Stop the interval when retrying is false
     }
 
     return () => {
@@ -89,14 +88,6 @@ export default function ChatContentComponent({
     };
   }, [isWebGLContextLost, retrying, setShouldRender]);
 
-  // Log values for debugging
-  useEffect(() => {
-    console.log("isFocused:", isFocused);
-    console.log("shouldRender:", shouldRender);
-    console.log("isWebGLContextLost:", isWebGLContextLost);
-    console.log("retrying:", retrying);
-  }, [isFocused, shouldRender, isWebGLContextLost, retrying]);
-
   return (
     <div className="w-full flex flex-col items-center justify-between py-6">
       <div
@@ -104,7 +95,7 @@ export default function ChatContentComponent({
         style={{ width: 400, height: 400 }}
       >
         {isFocused ? (
-          shouldRender && !isWebGLContextLost ? (
+          shouldRender ? (
             // If focused, shouldRender is true, and WebGL context is not lost, render 3D scene
             <ClientSideSceneLoader key={"Attempt-" + retrying} />
           ) : (
