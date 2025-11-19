@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
 import { Loader2 } from "lucide-react";
 import { messageSchema } from "@/lib/validations/messageValidator";
+import { Button } from "../ui/button";
 
 export default function ChatBoxComponent({
   savedSession,
@@ -207,7 +208,7 @@ export default function ChatBoxComponent({
   };
 
   return (
-    <div className="w-full h-[60vh] flex flex-col text-white rounded-xl overflow-hidden">
+    <div className="w-full h-[60vh] flex flex-col rounded-xl overflow-hidden">
       <div
         ref={logRef}
         className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1 scrollbar"
@@ -218,10 +219,10 @@ export default function ChatBoxComponent({
         {messages.map((msg, idx) => (
           <div
             key={`${msg.timeStamp}-${msg.role}-${idx}`}
-            className={`p-2 rounded max-w-[90%] ${
+            className={`p-2 rounded-2xl max-w-[90%] ${
               msg.role === "assistant"
-                ? "border border-blue-600 self-end"
-                : "border border-gray-700 self-start bg-muted"
+                ? " self-end"
+                : "border border-border self-start bg-muted"
             }`}
           >
             {msg.messageText}
@@ -229,15 +230,15 @@ export default function ChatBoxComponent({
         ))}
       </div>
 
-      <div className="flex gap-2 px-6 my-1 flex-shrink-0">
+      <div className="flex gap-2 px-6 my-1 ">
         <div className="relative flex-1">
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className={`w-full p-2 pr-12 rounded bg-border border ${
+            className={`w-full p-2 pr-12 rounded bg-border border text-foreground ${
               input.length > 1000 ? "border-error" : "border-border"
-            } text-white focus:outline-none resize-none`}
+            } focus:outline-none resize-none`}
             placeholder="Type a message..."
             disabled={isStreaming}
             onKeyDown={(e) => {
@@ -257,21 +258,21 @@ export default function ChatBoxComponent({
             {input.length}/1000
           </span>
           {input.length > 1000 && (
-            <p className="text-red-500 absolute bottom right-3 text-xs mt-1">
+            <p className="text-error absolute bottom right-3 text-xs mt-1">
               Max characters reached
             </p>
           )}
-          <button
+          <Button
             onClick={sendMessage}
+            variant="default"
             disabled={isStreaming || input.length > 1000}
-            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isStreaming ? (
               <Loader2 className="mr2 size-4 animate-spin" />
             ) : (
               "Send"
             )}
-          </button>
+          </Button>
         </div>
         {/* 
         <div className="text-sm mt-1 text-right">
