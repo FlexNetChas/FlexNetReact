@@ -296,7 +296,7 @@ function Section({
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <div className="flex flex-col gap-2 text-muted-foreground text-sm">
+      <div className="flex flex-col gap-2 text-muted-foreground text-sm truncate">
         {children}
       </div>
     </div>
