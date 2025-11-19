@@ -119,14 +119,14 @@ export default function PreviousChatSessions() {
 
         {isMinimized && user && (
           <div className="md:hidden px-3 py-3 mt-8">
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center bg-transparent">
               <video
                 src="/3d-assets/2d-animated.webm"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="object-cover size-15"
+                className="object-cover size-15 bg-transparent"
               />
               <div className="text-sm">
                 <p className="font-semibold  truncate">
