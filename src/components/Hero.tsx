@@ -33,7 +33,7 @@ function Hero() {
               <Link href="/register">
                 <Button
                   variant="default"
-                  className="sm:px-6 sm:py-6 px-4 py-4 font-semibold "
+                  className="sm:px-6 sm:py-6 px-4 py-4 font-semibold border-4 border-blue-600/60 dark:border-blue-500/40 bg-blue-500/10 dark:bg-blue-500/5 text-blue-700 dark:text-foreground"
                 >
                   Get Started Free
                 </Button>
