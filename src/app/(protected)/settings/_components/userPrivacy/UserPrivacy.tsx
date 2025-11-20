@@ -111,7 +111,12 @@ export default function UserPrivacy({}) {
               </>
             )}
           </Button>
-          <p className="text-xs text-muted-foreground mt-3">
+
+          {exportError && (
+            <p className="mt-2 text-sm text-red-500">{exportError}</p>
+          )}
+
+          <p className="text-muted-foreground mt-3 text-xs">
             GDPR Article 20 - Right to Data Portability
           </p>
         </div>
