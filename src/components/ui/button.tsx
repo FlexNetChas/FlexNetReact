@@ -48,7 +48,7 @@ const buttonVariants = cva(
 
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -70,7 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Default neon to true only for 'default' variant, false for others
     const shouldShowNeon = neon !== undefined ? neon : variant === "default";
@@ -94,8 +94,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         <span
           className={cn(
-            "absolute h-px opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-x-0 inset-y-0 bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden",
-            shouldShowNeon && "block"
+            "absolute inset-x-0 inset-y-0 mx-auto hidden h-px w-3/4 bg-gradient-to-r from-transparent via-blue-600 to-transparent opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 dark:via-blue-500",
+            shouldShowNeon && "block",
           )}
         />
 
@@ -103,13 +103,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         <span
           className={cn(
-            "absolute group-hover:opacity-30 transition-all duration-500 ease-in-out inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden",
-            shouldShowNeon && "block"
+            "absolute inset-x-0 -bottom-px mx-auto hidden h-px w-3/4 bg-gradient-to-r from-transparent via-blue-600 to-transparent transition-all duration-500 ease-in-out group-hover:opacity-30 dark:via-blue-500",
+            shouldShowNeon && "block",
           )}
         />
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

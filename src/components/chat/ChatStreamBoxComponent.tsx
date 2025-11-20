@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 import { ChatMessageResponseDto } from "@/types/chatMessage";
-import { useRouter } from "next/navigation";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
 import { Loader2 } from "lucide-react";
 import { messageSchema } from "@/lib/validations/messageValidator";
@@ -15,22 +14,15 @@ export default function ChatBoxComponent({
   savedSession: CompleteChatSessionResponseDto | null;
 }) {
   const logRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const chatSessionIdRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const { setAnimationState } = useAnimation();
   const { refreshSessions } = useChatSessions();
-  const [firstChunk, setFirstChunk] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
-    savedSession?.chatMessages || []
+    savedSession?.chatMessages || [],
   );
-  const [currentSession, setCurrentSession] =
-    useState<CompleteChatSessionResponseDto | null>(savedSession || null);
 
-  const [chatSessionId, setChatSessionId] = useState<number | null>(
-    savedSession?.id || null
-  );
+  const [chatSessionId] = useState<number | null>(savedSession?.id ?? null);
 
   const [isStreaming, setIsStreaming] = useState(false);
 
@@ -70,33 +62,33 @@ export default function ChatBoxComponent({
   }, [input]);
 
   // OLD: Non-streaming fallback (keep for error cases)
-  const fetchAIResponse = async (message: string): Promise<string> => {
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, chatSessionId }),
-      });
+  // const fetchAIResponse = async (message: string): Promise<string> => {
+  //   try {
+  //     const res = await fetch("/api/chat", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ message, chatSessionId }),
+  //     });
 
-      if (!res.ok) throw new Error("Server error");
+  //     if (!res.ok) throw new Error("Server error");
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      chatSessionIdRef.current = data.sessionId;
-      setChatSessionId(chatSessionIdRef.current);
+  //     chatSessionIdRef.current = data.sessionId;
+  //     setChatSessionId(chatSessionIdRef.current);
 
-      return data.reply ?? "🤷‍♂️ No reply from backend.";
-    } catch (err) {
-      return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
-    }
-  };
+  //     return data.reply ?? "🤷‍♂️ No reply from backend.";
+  //   } catch {
+  //     return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
+  //   }
+  // };
 
   // NEW: Streaming function
   const fetchAIResponseStreaming = (
     message: string,
     onChunk: (chunk: string) => void,
     onComplete: () => void,
-    onError: (error: string) => void
+    onError: (error: string) => void,
   ): EventSource => {
     const url = `/api/chat/stream?message=${encodeURIComponent(message)}${
       chatSessionId ? `&chatSessionId=${chatSessionId}` : ""
@@ -109,17 +101,17 @@ export default function ChatBoxComponent({
       onChunk(e.data);
     });
 
-    eventSource.addEventListener("error", (e: any) => {
+    eventSource.addEventListener("error", (e: Event) => {
       let errorMessage = "Stream error occurred";
 
+      const data = (e as unknown as MessageEvent).data;
+
       try {
-        if (e.data) {
-          const errorData = JSON.parse(e.data);
+        if (data) {
+          const errorData = JSON.parse(data);
           errorMessage = errorData.error || errorMessage;
         }
-      } catch (parseError) {
-        // If we can't parse, use default message
-      }
+      } catch {}
 
       onError(errorMessage);
       eventSource.close();
@@ -203,15 +195,15 @@ export default function ChatBoxComponent({
         });
         setAnimationState("Death", true, { loop: false });
         setIsStreaming(false);
-      }
+      },
     );
   };
 
   return (
-    <div className="w-full h-[60vh] flex flex-col rounded-xl overflow-hidden">
+    <div className="flex h-[60vh] w-full flex-col overflow-hidden rounded-xl">
       <div
         ref={logRef}
-        className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1 scrollbar"
+        className="scrollbar flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-2"
       >
         {/* {messages.length === 0 && (
           <p className="text-gray-400">No messages yet...</p>
@@ -219,10 +211,10 @@ export default function ChatBoxComponent({
         {messages.map((msg, idx) => (
           <div
             key={`${msg.timeStamp}-${msg.role}-${idx}`}
-            className={`p-2 rounded-2xl max-w-[90%] ${
+            className={`max-w-[90%] rounded-2xl p-2 ${
               msg.role === "assistant"
-                ? " self-end"
-                : "border border-border self-start bg-muted"
+                ? "self-end"
+                : "border-border bg-primary/40 text-foreground self-start border"
             }`}
           >
             {msg.messageText}
@@ -230,15 +222,15 @@ export default function ChatBoxComponent({
         ))}
       </div>
 
-      <div className="flex gap-2 px-6 my-1 ">
+      <div className="my-1 flex gap-2 px-6">
         <div className="relative flex-1">
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className={`w-full p-2 pr-12 rounded bg-border border text-foreground ${
+            className={`bg-input text-foreground w-full rounded border p-2 pr-12 ${
               input.length > 1000 ? "border-error" : "border-border"
-            } focus:outline-none resize-none`}
+            } resize-none focus:outline-none`}
             placeholder="Type a message..."
             disabled={isStreaming}
             onKeyDown={(e) => {
@@ -249,7 +241,7 @@ export default function ChatBoxComponent({
             }}
           />
           <span
-            className={`absolute bottom-2 right-3 text-xs ${
+            className={`absolute right-3 bottom-2 text-xs ${
               input.length > 1000
                 ? "text-error font-semibold"
                 : "text-muted-foreground"
@@ -258,7 +250,7 @@ export default function ChatBoxComponent({
             {input.length}/1000
           </span>
           {input.length > 1000 && (
-            <p className="text-error absolute bottom right-3 text-xs mt-1">
+            <p className="text-error bottom absolute right-3 mt-1 text-xs">
               Max characters reached
             </p>
           )}

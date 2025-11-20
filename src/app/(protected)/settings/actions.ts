@@ -16,7 +16,7 @@ export const getUserDescription = cache(
     } catch {
       return null;
     }
-  }
+  },
 );
 
 // Type for field values
@@ -35,7 +35,7 @@ function hasChanged(oldValue: FieldValue, newValue: FieldValue): boolean {
 // Compare initial data with new data and return only changed fields
 function getChangedFields(
   initialData: UserDescription | null,
-  newData: Partial<UserDescription>
+  newData: Partial<UserDescription>,
 ): Partial<UserDescription> {
   const changes: Partial<UserDescription> = {};
 
@@ -75,7 +75,7 @@ export async function patchUserDescription(
   userId: number,
   currentData: UserDescription | null,
   _prevState: UserDescriptionState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<UserDescriptionState> {
   const formDataObject = Object.fromEntries(formData);
   const result = userDescriptionSchema.safeParse(formDataObject);
@@ -101,7 +101,7 @@ export async function patchUserDescription(
 
     const updatedFromServer = await userDescriptionService.patch(
       userId,
-      changedFields
+      changedFields,
     );
 
     return {

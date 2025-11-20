@@ -22,7 +22,7 @@ interface AnimationContextType {
   setAnimationState: (
     animation: AnimationState,
     state: boolean,
-    options?: AnimationOptions
+    options?: AnimationOptions,
   ) => void;
   defaultAnimation: AnimationState;
 }
@@ -60,7 +60,7 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
   const setAnimationState = (
     animation: AnimationState,
     state: boolean,
-    options?: AnimationOptions
+    options?: AnimationOptions,
   ) => {
     // clear previous timeout if any
     if (timeoutRef.current) {
@@ -69,12 +69,15 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
 
     // set animation state, using reduce to avoid mutating state directly.
     setActiveAnimations((prev) =>
-      (Object.keys(prev) as AnimationState[]).reduce((acc, key) => {
-        return {
-          ...acc,
-          [key]: key === animation ? state : false,
-        };
-      }, {} as typeof prev)
+      (Object.keys(prev) as AnimationState[]).reduce(
+        (acc, key) => {
+          return {
+            ...acc,
+            [key]: key === animation ? state : false,
+          };
+        },
+        {} as typeof prev,
+      ),
     );
 
     // Handle timeout

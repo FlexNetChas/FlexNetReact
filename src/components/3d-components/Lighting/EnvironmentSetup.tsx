@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Environment, Lightformer, Stars } from "@react-three/drei";
+import { Environment, Lightformer } from "@react-three/drei";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { HDRLoader } from "three/examples/jsm/Addons.js";
@@ -39,7 +39,7 @@ export default function EnvironmentSetup({ degraded }: EnvironmentSetupProps) {
       undefined,
       (error) => {
         console.error("Error loading HDR texture:", error);
-      }
+      },
     );
   }, [scene, gl, hdrTexture]);
 

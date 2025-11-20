@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { z } from "zod";
 
 export const messageSchema = z.object({

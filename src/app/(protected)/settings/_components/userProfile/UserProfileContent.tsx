@@ -6,6 +6,7 @@ import { deleteAccount } from "../../actions";
 import { useState } from "react";
 import { Section } from "@/components/layout/Section";
 import { Circle } from "lucide-react";
+import { useToasts } from "@/hooks/useToasts";
 
 export default function UserProfileContent({
   user,
@@ -17,7 +18,7 @@ export default function UserProfileContent({
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  async function formAction(formData: FormData) {
+  async function formAction() {
     setIsDeleting(true);
     setDeleteError(null);
 
@@ -29,12 +30,16 @@ export default function UserProfileContent({
       } else if (result.success) {
         return;
       }
-    } catch (error) {
+    } catch {
       setDeleteError("An unexpected error occurred");
     } finally {
       setIsDeleting(false);
     }
   }
+
+  useToasts(deleteError ? { errors: { form: [deleteError] } } : undefined, {
+    duration: 5000,
+  });
 
   return (
     <>

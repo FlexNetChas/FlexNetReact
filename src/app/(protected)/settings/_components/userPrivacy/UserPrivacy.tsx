@@ -3,9 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
-type Props = {};
+interface CookieYesAPI {
+  show: () => void;
+}
 
-export default function UserPrivacy({}: Props) {
+declare global {
+  interface Window {
+    CookieYes?: CookieYesAPI;
+  }
+}
+
+export default function UserPrivacy({}) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -30,8 +38,8 @@ export default function UserPrivacy({}: Props) {
       }
     }
 
-    if (typeof window !== "undefined" && (window as any).CookieYes) {
-      (window as any).CookieYes.show();
+    if (window.CookieYes) {
+      window.CookieYes.show();
       return;
     }
   };

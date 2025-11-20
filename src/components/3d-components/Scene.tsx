@@ -60,14 +60,14 @@ export default function Scene() {
         canvas.addEventListener(
           "webglcontextrestored",
           handleContextRestored,
-          false
+          false,
         );
 
         return () => {
           canvas.removeEventListener("webglcontextlost", handleContextLost);
           canvas.removeEventListener(
             "webglcontextrestored",
-            handleContextRestored
+            handleContextRestored,
           );
         };
       }}

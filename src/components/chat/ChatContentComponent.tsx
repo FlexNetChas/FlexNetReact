@@ -5,6 +5,7 @@ import ClientSideSceneLoader from "@/components/3d-components/ClientSideSceneLoa
 import { useSceneContext } from "@/components/3d-components/SceneContext";
 import { CompleteChatSessionResponseDto } from "@/types/chatSession";
 import ChatBoxComponent from "./ChatStreamBoxComponent";
+import Image from "next/image";
 
 export default function ChatContentComponent({
   savedSession,
@@ -14,13 +15,13 @@ export default function ChatContentComponent({
   const { shouldRender } = useSceneContext();
 
   return (
-    <div className="w-full flex flex-col items-center justify-between">
+    <div className="flex w-full flex-col items-center justify-between">
       <div
-        className="overflow-hidden h-[30vh] relative flex items-center justify-center"
+        className="relative flex h-[30vh] items-center justify-center overflow-hidden"
         style={{ width: 200, height: 200 }}
       >
         {shouldRender === false ? (
-          <img
+          <Image
             src="/3d-assets/temp-2d-fallback-image.png"
             alt="fallback 2D image if 3D fails"
             style={{
@@ -29,12 +30,13 @@ export default function ChatContentComponent({
               height: "100%",
               backgroundColor: "transparent",
             }}
+            className="w-full"
           />
         ) : (
           <ClientSideSceneLoader />
         )}
       </div>
-      <div className="w-full flex-1 mt-auto mb-6">
+      <div className="mt-auto mb-6 w-full flex-1">
         <ChatBoxComponent savedSession={savedSession} />
       </div>
     </div>

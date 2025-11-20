@@ -1,12 +1,10 @@
 import React from "react";
 
-type Props = {};
-
-export default function LoadingSpinner({}: Props) {
+export default function LoadingSpinner({}) {
   return (
     // We take advantage of tailwind css inbuilt spinner classes
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="animate-spin rounded-full size-12 border-t-4 border-b-4 border-primary"></div>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="border-primary size-12 animate-spin rounded-full border-t-4 border-b-4"></div>
     </div>
   );
 }

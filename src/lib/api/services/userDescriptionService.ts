@@ -17,7 +17,7 @@ export const userDescriptionService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
-      }
+      },
     );
 
     const body = await response.json();
@@ -31,7 +31,7 @@ export const userDescriptionService = {
 
   patch: async (
     userId: number,
-    data: PatchUserDescriptionRequest
+    data: PatchUserDescriptionRequest,
   ): Promise<UserDescription> => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/UserDescription/user/${userId}`,
@@ -43,7 +43,7 @@ export const userDescriptionService = {
         },
         body: JSON.stringify(data),
         cache: "no-store",
-      }
+      },
     );
 
     const body = await response.json();

@@ -48,10 +48,11 @@ export default function Reviews() {
     <Section
       spacing="lg"
       className="bg-secondary relative py-10 md:py-15 lg:py-20"
+      id="reviews"
     >
       <PageContainer>
         {/* Article - Framer Motion Animation */}
-        <div className="flex-col flex md:grid md:grid-cols-[40%_1fr] justify-between items-center lg:gap-16 xl:gap-20">
+        <div className="flex flex-col items-center justify-between md:grid md:grid-cols-[40%_1fr] lg:gap-16 xl:gap-20">
           <motion.article
             initial={{ opacity: 80, x: -40 }}
             whileInView={{ opacity: 100, x: 0 }}
@@ -65,14 +66,14 @@ export default function Reviews() {
               </span>
             </h2>
 
-            <article className="mx-auto space-y-6 md:mx-0 mb-4 text-center md:text-left">
+            <article className="mx-auto mb-4 space-y-6 text-center md:mx-0 md:text-left">
               <p className="text-muted-foreground leading-relaxed md:text-lg">
-                "This system gave me clear guidance and helped me plan my
-                studies easily. Highly recommend!"
+                &quot;This system gave me clear guidance and helped me plan my
+                studies easily. Highly recommend!&quot;
               </p>
               <p className="text-muted-foreground leading-relaxed md:text-lg">
-                "Very intuitive and personalized. I could see different options
-                and decide what was best for me."
+                &quot;Very intuitive and personalized. I could see different
+                options and decide what was best for me.&quot;
               </p>
             </article>
           </motion.article>
@@ -83,7 +84,7 @@ export default function Reviews() {
             whileInView={{ opacity: 100, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1.1, ease: "easeOut" }}
-            className="relative hidden md:block overflow-hidden rounded-2xl h-75 w-2/3 mx-auto"
+            className="relative mx-auto hidden h-75 w-2/3 overflow-hidden rounded-2xl md:block"
           >
             <Image
               src="/feedback.png"
@@ -103,7 +104,7 @@ export default function Reviews() {
           transition={{ duration: 1.1, ease: "easeOut" }}
         >
           <Carousel
-            className="relative w-full py-6 px-6"
+            className="relative w-full px-6 py-6"
             opts={{ align: "start" }}
           >
             <CarouselContent>
@@ -122,12 +123,12 @@ export default function Reviews() {
 
             <CarouselPrevious
               variant="default"
-              className="absolute left-1 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full "
+              className="bg-background/50 absolute top-1/2 left-1 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full p-5"
             />
 
             <CarouselNext
               variant="default"
-              className="absolute right-1 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 p-5 bg-background/50 rounded-full "
+              className="bg-background/50 absolute top-1/2 right-1 z-10 translate-x-1/2 -translate-y-1/2 rounded-full p-5"
             />
           </Carousel>
         </motion.div>
@@ -140,14 +141,14 @@ function ReviewCard({ rating, text, author }: Review) {
   return (
     <Card className="review-card linear-card-gradient">
       <CardContent className="p-0">
-        <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-800">
+        <div className="inline-flex items-center gap-1 rounded-full bg-green-800 px-2 py-1">
           <span className="font-bold">{rating}</span>
           <Star className="size-4 text-yellow-600" />
         </div>
 
         <p className="mt-3 font-sans text-sm">{text}</p>
 
-        <p className="text-muted-foreground font-semibold text-sm mt-1 text-right">
+        <p className="text-muted-foreground mt-1 text-right text-sm font-semibold">
           - {author}
         </p>
       </CardContent>
