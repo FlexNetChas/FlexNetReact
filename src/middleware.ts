@@ -34,7 +34,15 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const cookie = (await cookies()).get("session")?.value;
 
-  const publicRoutes = ["/", "/login", "/register", "/contact", "/about"];
+  const publicRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/contact",
+    "/about",
+    "/robots.txt",
+    "/sitemap.xml",
+  ];
   const isPublicRoute = publicRoutes.includes(path);
   const isProtectedRoute = !isPublicRoute;
 
@@ -96,6 +104,6 @@ export default async function middleware(req: NextRequest) {
  */
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|hdr|glb|mp4)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|hdr|glb|mp4)$).*)",
   ],
 };
