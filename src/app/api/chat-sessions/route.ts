@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthHeaders } from "@/lib/api/getAuthHeaders";
 import {
-  CompleteChatSessionResponseDto,
   CreateChatSessionRequestDto,
   UpdateChatSessionsRequestDto,
 } from "@/types/chatSession";
@@ -14,13 +13,13 @@ export async function GET() {
       method: "GET",
       headers,
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     return NextResponse.json(
       { error: "Failed to fetch chat sessions" },
-      { status: response.status }
+      { status: response.status },
     );
   }
 
@@ -39,13 +38,13 @@ export async function POST(request: Request) {
       headers,
       cache: "no-store",
       body: JSON.stringify(newSession),
-    }
+    },
   );
 
   if (!response.ok) {
     return NextResponse.json(
       { error: "Failed to create chat session" },
-      { status: response.status }
+      { status: response.status },
     );
   }
 
@@ -63,13 +62,13 @@ export async function PATCH(request: Request) {
       headers,
       cache: "no-store",
       body: JSON.stringify(newSession),
-    }
+    },
   );
 
   if (!response.ok) {
     return NextResponse.json(
       { error: "Failed to create chat session" },
-      { status: response.status }
+      { status: response.status },
     );
   }
 

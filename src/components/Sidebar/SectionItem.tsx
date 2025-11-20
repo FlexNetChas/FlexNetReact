@@ -1,22 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { CompactChatSessionResponseDto } from "@/types/chatSession";
 import { Trash2 } from "lucide-react";
 import { useChatSessions } from "@/components/chat/ChatSessionContext";
 import LoadingSpinner from "../LoadingSpinner";
 
 const SectionItem = () => {
-  const { sessions, refreshSessions, addSession } = useChatSessions();
+  const { sessions, refreshSessions } = useChatSessions();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const router = useRouter();
   const params = useParams();
 
   useEffect(() => {
     refreshSessions();
     setIsLoading(false);
-  }, []);
+  }, [refreshSessions]);
 
   const handleClick = (sessionId: number) => {
     if (sessionId) {
@@ -28,7 +27,7 @@ const SectionItem = () => {
 
   const handleClickDelete = async (
     sessionId: number,
-    event: React.MouseEvent
+    event: React.MouseEvent,
   ) => {
     event.stopPropagation();
     try {
@@ -68,13 +67,13 @@ const SectionItem = () => {
                   <div
                     key={`session-${session.id}`}
                     onClick={() => handleClick(session.id)}
-                    className="p-3 rounded hover:bg-primary/50 transition-colors cursor-pointer text-sm"
+                    className="hover:bg-primary/50 cursor-pointer rounded p-3 text-sm transition-colors"
                   >
-                    <div className="flex flex-row gap-2 justify-between items-center">
-                      <div className="flex flex-row gap-2 justify-between items-center">
+                    <div className="flex flex-row items-center justify-between gap-2">
+                      <div className="flex flex-row items-center justify-between gap-2">
                         <Trash2
                           size={18}
-                          className="hover:text-error transition-colors cursor-pointer"
+                          className="hover:text-error cursor-pointer transition-colors"
                           key={`delete-${session.id}`}
                           onClick={(event) => {
                             if (!session.hasBeenDeleted) {
@@ -84,7 +83,7 @@ const SectionItem = () => {
                           }}
                         />
 
-                        <span className="text-xs max-w-[160px] truncate block">
+                        <span className="block max-w-[160px] truncate text-xs">
                           {session.summary || "No Summary"}
                         </span>
                       </div>

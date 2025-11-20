@@ -5,9 +5,17 @@ import { useEffect, useState } from "react";
 import { exportUserData } from "@/lib/api/actions/userDataExportActions";
 import { Download, Loader2 } from "lucide-react";
 
-type Props = {};
+interface CookieYesAPI {
+  show: () => void;
+}
 
-export default function UserPrivacy({}: Props) {
+declare global {
+  interface Window {
+    CookieYes?: CookieYesAPI;
+  }
+}
+
+export default function UserPrivacy({}) {
   const [isMounted, setIsMounted] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
@@ -34,8 +42,8 @@ export default function UserPrivacy({}: Props) {
       }
     }
 
-    if (typeof window !== "undefined" && (window as any).CookieYes) {
-      (window as any).CookieYes.show();
+    if (window.CookieYes) {
+      window.CookieYes.show();
       return;
     }
   };
@@ -103,7 +111,12 @@ export default function UserPrivacy({}: Props) {
               </>
             )}
           </Button>
-          <p className="text-xs text-muted-foreground mt-3">
+
+          {exportError && (
+            <p className="mt-2 text-sm text-red-500">{exportError}</p>
+          )}
+
+          <p className="text-muted-foreground mt-3 text-xs">
             GDPR Article 20 - Right to Data Portability
           </p>
         </div>

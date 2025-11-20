@@ -1,4 +1,3 @@
-// app/api/chat/route.ts
 import { NextResponse } from "next/server";
 import { chatService } from "@/lib/api/services/chatMessageService";
 
@@ -8,7 +7,8 @@ export async function POST(req: Request) {
   try {
     const data = await chatService.sendMessage(message, chatSessionId);
     return NextResponse.json(data);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

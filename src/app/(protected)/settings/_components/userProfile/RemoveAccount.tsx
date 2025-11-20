@@ -17,7 +17,7 @@ export function RemoveAccount({ formAction }: DeleteAccountDialogProps) {
   const isConfirmValid = confirmText.toLowerCase() === "delete";
 
   return (
-    <form action={formAction} className="space-y-5 max-w-9/10 ">
+    <form action={formAction} className="max-w-9/10 space-y-5">
       <Label>
         To confirm, type <span className="text-error font-bold">DELETE</span>
         &nbsp;below:

@@ -38,7 +38,7 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
       ...props
     },
 
-    ref
+    ref,
   ) => {
     const [isHovered, setIsHovered] = React.useState(false);
 
@@ -63,13 +63,13 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex justify-center items-center", className)}
+        className={cn("flex items-center justify-center", className)}
         {...props}
       >
         <motion.h1
           className={cn(
-            "text-[2.5rem] sm:text-[3.5rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem] leading-normal font-mono",
-            textClassName
+            "font-mono text-[2.5rem] leading-normal sm:text-[3.5rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem]",
+            textClassName,
           )}
           style={{
             background: gradientColors,
@@ -92,7 +92,7 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
         </motion.h1>
       </div>
     );
-  }
+  },
 );
 
 AnimatedText.displayName = "AnimatedText";

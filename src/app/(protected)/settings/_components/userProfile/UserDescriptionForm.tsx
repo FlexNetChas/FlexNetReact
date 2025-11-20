@@ -50,16 +50,16 @@ export function UserDescriptionForm({
   const [state, formAction] = useActionState(
     async (
       prevState: UserDescriptionState,
-      formData: FormData
+      formData: FormData,
     ): Promise<UserDescriptionState> => {
       return await patchUserDescription(
         userId,
         currentSavedData,
         prevState,
-        formData
+        formData,
       );
     },
-    { success: false }
+    { success: false },
   );
 
   // Ref for textarea to adjust height dynamically
@@ -106,7 +106,7 @@ export function UserDescriptionForm({
   return (
     <form action={formAction} className="space-y-5">
       <div className="flex flex-col gap-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {/* Age */}
           <div className="space-y-2">
             <Label htmlFor="age">Age</Label>
@@ -125,7 +125,7 @@ export function UserDescriptionForm({
                   age: value ? parseInt(value, 10) : 0,
                 }));
               }}
-              className={`bg-input rounded-lg w-full h-10 mt-2  ${
+              className={`bg-input mt-2 h-10 w-full rounded-lg ${
                 hasError("age")
                   ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                   : "border-border"
@@ -148,7 +148,7 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="gender"
-                className={`bg-input rounded-lg w-full h-10 mt-2  ${
+                className={`bg-input mt-2 h-10 w-full rounded-lg ${
                   hasError("gender")
                     ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                     : "border-border"
@@ -156,7 +156,7 @@ export function UserDescriptionForm({
               >
                 <SelectValue placeholder="Select gender" />
               </SelectTrigger>
-              <SelectContent className="min-w-full bg-secondary">
+              <SelectContent className="bg-secondary min-w-full">
                 <SelectItem value="Man">Man</SelectItem>
                 <SelectItem value="Woman">Woman</SelectItem>
                 <SelectItem value="Prefer not to say">
@@ -181,7 +181,7 @@ export function UserDescriptionForm({
             >
               <SelectTrigger
                 id="education"
-                className={`bg-input rounded-lg w-full h-10 mt-2  ${
+                className={`bg-input mt-2 h-10 w-full rounded-lg ${
                   hasError("education")
                     ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                     : "border-border"
@@ -189,7 +189,7 @@ export function UserDescriptionForm({
               >
                 <SelectValue placeholder="Select level" />
               </SelectTrigger>
-              <SelectContent className="min-w-full bg-secondary">
+              <SelectContent className="bg-secondary min-w-full">
                 <SelectItem value="Primary school">Primary school</SelectItem>
                 <SelectItem value="High school">High school</SelectItem>
                 <SelectItem value="University">University</SelectItem>
@@ -204,7 +204,7 @@ export function UserDescriptionForm({
         </div>
 
         {/* Purpose */}
-        <div className="space-y-2 relative">
+        <div className="relative space-y-2">
           <Label htmlFor="purpose">What do you hope to achieve?</Label>
           <textarea
             ref={textareaRef}
@@ -218,7 +218,7 @@ export function UserDescriptionForm({
               }));
             }}
             placeholder="I want guidance on choosing the right educational path"
-            className={`bg-input rounded-lg w-full h-10 mt-2 resize-y p-2 ${
+            className={`bg-input mt-2 h-10 w-full resize-y rounded-lg p-2 ${
               hasError("purpose")
                 ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
                 : "border-border"
@@ -236,7 +236,7 @@ export function UserDescriptionForm({
           />
           {/* Character counter */}
           <span
-            className={`absolute bottom-0 right-3 text-xs ${
+            className={`absolute right-3 bottom-0 text-xs ${
               formValues.purpose.length > 50
                 ? "text-error font-semibold"
                 : "text-muted-foreground"
@@ -246,7 +246,7 @@ export function UserDescriptionForm({
           </span>
 
           {formValues.purpose.length > 50 && (
-            <p className="text-error text-xs mt-1">Max characters reached</p>
+            <p className="text-error mt-1 text-xs">Max characters reached</p>
           )}
         </div>
       </div>
@@ -262,7 +262,7 @@ function SubmitButton() {
       disabled={pending}
       type="submit"
       variant="default"
-      className="w-2/10 "
+      className="w-2/10"
     >
       {pending ? "Saving..." : "Save"}
     </Button>

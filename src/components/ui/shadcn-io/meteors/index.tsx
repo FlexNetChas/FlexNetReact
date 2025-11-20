@@ -30,20 +30,23 @@ export const Meteors = ({
     }>
   >([]);
 
-  const northenLightColors = [
-    { bg: "bg-green-400", from: "from-green-400" },
-    { bg: "bg-green-300", from: "from-green-300" },
-    { bg: "bg-lime-300", from: "from-lime-300" },
-    { bg: "bg-emerald-400", from: "from-emerald-400" },
-    { bg: "bg-teal-300", from: "from-teal-300" },
-    { bg: "bg-cyan-300", from: "from-cyan-300" },
-    { bg: "bg-sky-300", from: "from-sky-300" },
-    { bg: "bg-blue-400", from: "from-blue-400" },
-    { bg: "bg-indigo-400", from: "from-indigo-400" },
-    { bg: "bg-purple-400", from: "from-purple-400" },
-    { bg: "bg-fuchsia-400", from: "from-fuchsia-400" },
-    { bg: "bg-pink-400", from: "from-pink-400" },
-  ];
+  const northenLightColors = React.useMemo(
+    () => [
+      { bg: "bg-green-400", from: "from-green-400" },
+      { bg: "bg-green-300", from: "from-green-300" },
+      { bg: "bg-lime-300", from: "from-lime-300" },
+      { bg: "bg-emerald-400", from: "from-emerald-400" },
+      { bg: "bg-teal-300", from: "from-teal-300" },
+      { bg: "bg-cyan-300", from: "from-cyan-300" },
+      { bg: "bg-sky-300", from: "from-sky-300" },
+      { bg: "bg-blue-400", from: "from-blue-400" },
+      { bg: "bg-indigo-400", from: "from-indigo-400" },
+      { bg: "bg-purple-400", from: "from-purple-400" },
+      { bg: "bg-fuchsia-400", from: "from-fuchsia-400" },
+      { bg: "bg-pink-400", from: "from-pink-400" },
+    ],
+    [],
+  );
 
   useEffect(() => {
     const screenWidth = window.innerWidth;
@@ -81,7 +84,14 @@ export const Meteors = ({
     });
 
     setMeteors(newMeteors);
-  }, [number, minDelay, maxDelay, minDuration, maxDuration]);
+  }, [
+    northenLightColors,
+    number,
+    minDelay,
+    maxDelay,
+    minDuration,
+    maxDuration,
+  ]);
 
   return (
     <>
@@ -91,17 +101,17 @@ export const Meteors = ({
           key={idx}
           style={meteor.style}
           className={cn(
-            "pointer-events-none absolute size-0.5 animate-meteor rounded-full shadow-[0_0_10px_currentColor]",
+            "animate-meteor pointer-events-none absolute size-0.5 rounded-full shadow-[0_0_10px_currentColor]",
             "aurora-pulse",
             meteor.colorClass,
-            className
+            className,
           )}
         >
           <div
             className={cn(
               "pointer-events-none absolute top-1/2 -z-10 h-px w-[100px] -translate-y-1/2 bg-gradient-to-r to-transparent",
-              "blur-md opacity-90 aurora-tail-pulse",
-              meteor.gradientFrom
+              "aurora-tail-pulse opacity-90 blur-md",
+              meteor.gradientFrom,
             )}
           />
         </span>

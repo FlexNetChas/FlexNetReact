@@ -14,16 +14,34 @@ import { SessionUser } from "@/types/user";
 import { LoginState, RegisterState } from "@/types/auth";
 
 const loginSchema = z.object({
-  email: z.string().trim().pipe(z.email({ message: "Invalid email address" })),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }).trim(),
+  email: z
+    .string()
+    .trim()
+    .pipe(z.email({ message: "Invalid email address" })),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" })
+    .trim(),
 });
 
 const registerSchema = z
   .object({
-    firstName: z.string().min(2, { message: "First name must be at least 2 characters" }).trim(),
-    lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }).trim(),
-    email: z.string().trim().pipe(z.email({ message: "Invalid email address" })),
-    password: z.string().min(6, { message: "Password must be at least 6 characters" }).trim(),
+    firstName: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters" })
+      .trim(),
+    lastName: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters" })
+      .trim(),
+    email: z
+      .string()
+      .trim()
+      .pipe(z.email({ message: "Invalid email address" })),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" })
+      .trim(),
     confirmPassword: z.string().trim(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -31,10 +49,9 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
-
 export async function login(
   prevState: LoginState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<LoginState | undefined> {
   const result = loginSchema.safeParse(Object.fromEntries(formData));
 
@@ -93,7 +110,7 @@ export async function login(
 }
 export async function register(
   prevState: RegisterState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<RegisterState | undefined> {
   const result = registerSchema.safeParse(Object.fromEntries(formData));
 
@@ -181,5 +198,3 @@ export async function requireAuth(): Promise<SessionUser> {
   }
   return user;
 }
-
-

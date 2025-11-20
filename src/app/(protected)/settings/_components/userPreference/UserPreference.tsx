@@ -7,9 +7,7 @@ import {
 } from "@/components/ui/select";
 import { useTheme } from "next-themes";
 
-type Props = {};
-
-export default function UserPreference({}: Props) {
+export default function UserPreference({}) {
   const { setTheme } = useTheme();
 
   return (

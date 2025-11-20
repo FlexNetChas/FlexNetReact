@@ -4,7 +4,7 @@ import { SceneContextProvider } from "@/components/3d-components/SceneContext";
 import ChatContentComponent from "@/components/chat/ChatContentComponent";
 import { useSearchParams } from "next/navigation";
 
-export default function page() {
+export default function ChatPage() {
   const searchParams = useSearchParams();
   const ts = searchParams.get("ts");
   return (

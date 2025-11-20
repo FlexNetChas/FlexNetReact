@@ -10,7 +10,7 @@ import { extractBackendErrors } from "@/lib/api/errors";
 
 export async function login(
   prevState: LoginState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<LoginState | undefined> {
   /* Validate client input in frontend before sending a API request to backend. This will reduce API calls */
   const result = loginSchema.safeParse(Object.fromEntries(formData));

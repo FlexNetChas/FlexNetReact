@@ -15,7 +15,7 @@ export function ProtectedLayoutWrapper({
   const pathname = usePathname()?.toLowerCase() ?? "";
 
   return (
-    <div className="flex bg-secondary">
+    <div className="bg-secondary flex">
       <PreviousChatSessions />
       {/* Subtile fade in animation for child components */}
       <motion.main

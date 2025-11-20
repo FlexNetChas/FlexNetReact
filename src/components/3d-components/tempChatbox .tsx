@@ -51,7 +51,7 @@ export default function TempChatbox() {
       }
 
       return data.reply ?? "🤷‍♂️ No reply from backend.";
-    } catch (err) {
+    } catch {
       return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
     }
   };
@@ -75,7 +75,6 @@ export default function TempChatbox() {
     }, 500);
   };
 
-
   // Auto-scroll to bottom when new message is added
   useEffect(() => {
     if (logRef.current) {
@@ -84,11 +83,11 @@ export default function TempChatbox() {
   }, [messages]);
 
   return (
-    <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
+    <div className="flex h-[250px] w-full flex-col overflow-hidden rounded-xl text-white">
       {/* Scrollable chat log */}
       <div
         ref={logRef}
-        className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1"
+        className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-2"
       >
         {messages.length === 0 && (
           <p className="text-gray-400">No messages yet...</p>
@@ -96,10 +95,10 @@ export default function TempChatbox() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`p-2 rounded max-w-[70%] ${
+            className={`max-w-[70%] rounded p-2 ${
               msg.sender === "ai"
-                ? "border border-blue-600 self-end"
-                : "border border-gray-700 self-start"
+                ? "self-end border border-blue-600"
+                : "self-start border border-gray-700"
             }`}
           >
             {msg.text}
@@ -108,7 +107,7 @@ export default function TempChatbox() {
       </div>
 
       {/* Input area pinned at bottom */}
-      <div className="px-6 my-1 flex-shrink-0">
+      <div className="my-1 flex-shrink-0 px-6">
         <PromptInput
           value={inputValue}
           onValueChange={setInputValue}
@@ -116,7 +115,7 @@ export default function TempChatbox() {
           isLoading={isLoading}
           disabled={isLoading}
           maxHeight={240}
-          className="bg-white/10 dark:bg-slate-800/10 backdrop-blur-sm border-white/20"
+          className="border-white/20 bg-white/10 backdrop-blur-sm dark:bg-slate-800/10"
         >
           <PromptInputTextarea
             placeholder="Type a message..."
@@ -128,24 +127,24 @@ export default function TempChatbox() {
                 type="button"
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isLoading}
-                className="group relative flex items-center justify-center size-11 rounded-xl transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 overflow-hidden"
+                className="group relative flex size-11 items-center justify-center overflow-hidden rounded-xl transition-all duration-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 {/* Background gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700" />
-                
+
                 {/* Animated shine effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12" />
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <div className="absolute inset-0 translate-x-[-100%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
                 </div>
-                
+
                 {/* Top highlight */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-                
+
                 {/* Glow effect */}
-                <div className="absolute inset-0 rounded-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] transition-shadow duration-300" />
-                
+                <div className="absolute inset-0 rounded-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] transition-shadow duration-300 group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)]" />
+
                 {/* Icon */}
-                <Send className="size-4 relative z-10 text-white transition-transform duration-200 group-hover:scale-110" />
+                <Send className="relative z-10 size-4 text-white transition-transform duration-200 group-hover:scale-110" />
               </button>
             </PromptInputAction>
           </PromptInputActions>

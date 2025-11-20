@@ -7,7 +7,7 @@ export class ApiError extends Error {
   constructor(
     status: number,
     message: string,
-    errors?: Record<string, string[]>
+    errors?: Record<string, string[]>,
   ) {
     super(message);
     this.name = "ApiError";
@@ -18,7 +18,7 @@ export class ApiError extends Error {
 
 export class NetworkError extends Error {
   constructor(
-    message: string = "Network connection failed. Please check your internet connection"
+    message: string = "Network connection failed. Please check your internet connection",
   ) {
     super(message);
     this.name = "NetworkError";

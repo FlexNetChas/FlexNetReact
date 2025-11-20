@@ -32,6 +32,6 @@ export function useContainer(options: UseContainerOptions = {}) {
       className:
         `container mx-auto ${sizeClasses[size]} ${paddingClasses[padding]} ${className}`.trim(),
     }),
-    [size, padding, className]
+    [size, padding, className],
   );
 }

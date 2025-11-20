@@ -16,14 +16,14 @@ export default function About() {
       <UspCards />
 
       <PageContainer className="mt-16 lg:mt-20">
-        <div className="flex-col flex md:grid md:grid-cols-[1fr_40%] justify-between items-center lg:gap-16 xl:gap-20">
+        <div className="flex flex-col items-center justify-between md:grid md:grid-cols-[1fr_40%] lg:gap-16 xl:gap-20">
           {/* Image - Framer Motion Animation */}
           <motion.div
             initial={{ opacity: 80, x: -40 }}
             whileInView={{ opacity: 100, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.1, ease: "easeOut" }}
-            className="relative hidden md:block overflow-hidden rounded-2xl shadow-xl h-96 w-2/3 mx-auto"
+            className="relative mx-auto hidden h-96 w-2/3 overflow-hidden rounded-2xl shadow-xl md:block"
           >
             <Image
               src="/About.Logo.jpg"
@@ -48,7 +48,7 @@ export default function About() {
               </span>
             </h2>
 
-            <article className="mx-auto text-center md:text-right space-y-6 md:mx-0">
+            <article className="mx-auto space-y-6 text-center md:mx-0 md:text-right">
               <p className="text-muted-foreground leading-relaxed md:text-lg">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
                 quia tempora ex corrupti inventore voluptate a sapiente magnam

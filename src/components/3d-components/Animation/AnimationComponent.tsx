@@ -1,6 +1,6 @@
 import { AnimationMixer, Group, AnimationClip, AnimationAction } from "three";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { AnimationState, useAnimation } from "./AnimationContext";
 import { LoopOnce } from "three";
 
@@ -36,8 +36,7 @@ export default function useAnimationComponent({
 }: AnimationComponentProps) {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const actionRef = useRef<AnimationAction | null>(null);
-  const { activeAnimations, setAnimationState, defaultAnimation } =
-    useAnimation();
+  const { activeAnimations, setAnimationState } = useAnimation();
 
   useEffect(() => {
     if (!model || !animations?.length) return;
@@ -68,14 +67,14 @@ export default function useAnimationComponent({
       mixerRef.current?.stopAllAction();
       mixerRef.current = null;
     };
-  }, [model, animations, animationIndexMap]);
+  }, [model, animations, animationIndexMap, setAnimationState]);
 
   // Effect to update animation based on active state from the context
   useEffect(() => {
     if (!mixerRef.current || !activeAnimations) return;
 
     const activeName = Object.keys(activeAnimations).find(
-      (key) => activeAnimations[key]
+      (key) => activeAnimations[key],
     );
     if (!activeName) return;
 
@@ -85,14 +84,11 @@ export default function useAnimationComponent({
     const clip = animations[clipIdx];
     const newAction = mixerRef.current.clipAction(clip);
 
-    // Stop any old actions
     mixerRef.current.stopAllAction();
-
-    // Use loop mode depending on name or future context options
     newAction.clampWhenFinished = true;
 
     if (activeName === "Death") {
-      newAction.setLoop(LoopOnce, 0); // Set loop to once for death animation
+      newAction.setLoop(LoopOnce, 0);
       newAction.clampWhenFinished = true;
     }
 
@@ -101,7 +97,7 @@ export default function useAnimationComponent({
 
     newAction.reset().play();
     actionRef.current = newAction;
-  }, [activeAnimations]);
+  }, [activeAnimations, animationIndexMap, animations, setAnimationState]);
 
   useFrame((_, delta) => {
     mixerRef.current?.update(delta); // Apply the animation updates every frame

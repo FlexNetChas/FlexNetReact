@@ -12,7 +12,7 @@ import { authService } from "./lib/api/services/authService";
 
 async function attemptTokenRefresh(
   refreshToken: string,
-  attempt: number = 1
+  attempt: number = 1,
 ): Promise<boolean> {
   try {
     const newTokens = await authService.refresh(refreshToken);
@@ -63,7 +63,7 @@ export default async function middleware(req: NextRequest) {
         const refreshed = await attemptTokenRefresh(refreshToken);
         if (!refreshed) {
           const response = NextResponse.redirect(
-            new URL("/login", req.nextUrl)
+            new URL("/login", req.nextUrl),
           );
           response.cookies.delete("session");
           response.cookies.delete("refreshToken");
@@ -77,9 +77,13 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-
   const allowedPublicRoutesForLoggedIn = ["/contact", "/about"];
-  if (isPublicRoute && cookie && isValidToken && !allowedPublicRoutesForLoggedIn.includes(path)) {
+  if (
+    isPublicRoute &&
+    cookie &&
+    isValidToken &&
+    !allowedPublicRoutesForLoggedIn.includes(path)
+  ) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 

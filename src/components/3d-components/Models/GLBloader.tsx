@@ -4,8 +4,7 @@ import { useEffect } from "react";
 import useAnimationComponent from "../Animation/AnimationComponent";
 import { fixModelTextures } from "../Utility/FixTextureUtility";
 import { useMemo } from "react";
-import { set } from "zod";
-import { useAnimation } from "@/components/3d-components/Animation/AnimationContext";
+
 interface ModelGLBProps {
   path: string;
 }
@@ -14,7 +13,6 @@ interface ModelGLBProps {
 export default function GLBloader({ path }: ModelGLBProps) {
   // We load the model and animations using useGLTF, then pass them to the animation component
   const { scene: model, animations } = useGLTF(path);
-  const { setAnimationState } = useAnimation();
   //Clean up the animation names and pass it to animationContext.
   const normalizeAnimationName = (name: string) => {
     return name.split("_").pop() || name;

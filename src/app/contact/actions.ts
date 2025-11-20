@@ -31,7 +31,7 @@ interface ContactFormState {
 
 export async function submitContact(
   prevState: ContactFormState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<ContactFormState> {
   const result = contactSchema.safeParse(Object.fromEntries(formData));
 
@@ -43,13 +43,12 @@ export async function submitContact(
   }
 
   try {
-    
     console.log("Contact form submission:", result.data);
 
     return {
       success: true,
     };
-  } catch (error) {
+  } catch {
     return {
       errors: {
         form: ["Failed to send message. Please try again later."],
@@ -58,4 +57,3 @@ export async function submitContact(
     };
   }
 }
-

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getAuthHeaders } from "@/lib/api/getAuthHeaders";
 import { chatService } from "@/lib/api/services/chatMessageService";
 
 export async function GET(req: Request) {
@@ -21,7 +20,8 @@ export async function GET(req: Request) {
         Connection: "keep-alive",
       },
     });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

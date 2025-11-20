@@ -11,11 +11,11 @@ function Hero() {
   return (
     <Section
       spacing="sm"
-      className="min-h-[calc(100vh-50px)] relative overflow-hidden"
+      className="relative min-h-[calc(100vh-50px)] overflow-hidden"
     >
       <Meteors number={200} />
 
-      <PageContainer className="flex items-center relative z-10">
+      <PageContainer className="relative z-10 flex items-center">
         <div className="grid w-full grid-cols-1 items-center gap-0 md:gap-16 lg:grid-cols-2">
           <div className="space-y-8">
             <AnimatedText
@@ -33,7 +33,7 @@ function Hero() {
               <Link href="/register">
                 <Button
                   variant="default"
-                  className="sm:px-6 sm:py-6 px-4 py-4 font-semibold border-4 border-blue-600/60 dark:border-blue-500/40 bg-blue-500/10 dark:bg-blue-500/5 text-blue-700 dark:text-foreground"
+                  className="dark:text-foreground border-4 border-blue-600/60 bg-blue-500/10 px-4 py-4 font-semibold text-blue-700 sm:px-6 sm:py-6 dark:border-blue-500/40 dark:bg-blue-500/5"
                 >
                   Get Started Free
                 </Button>
@@ -41,10 +41,10 @@ function Hero() {
             </div>
           </div>
 
-          <div className="relative h-40 lg:h-50 w-full mt-10 md:mb-15 max-w-md mx-auto aspect-square flex items-center justify-center">
+          <div className="relative mx-auto mt-10 flex aspect-square h-40 w-full max-w-md items-center justify-center bg-transparent md:mb-15 lg:h-50">
             <video
               src="/3d-assets/2d-animateda.webm"
-              className="w-full h-full object-contain rounded-2xl"
+              className="h-full w-full rounded-2xl bg-transparent object-contain"
               autoPlay
               loop
               muted

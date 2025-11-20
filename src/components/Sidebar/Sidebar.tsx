@@ -26,7 +26,7 @@ export default function PreviousChatSessions() {
     setIsLoggingOut(true);
     try {
       await logout();
-    } catch (error) {
+    } catch {
       setIsLoggingOut(false);
     }
   };
@@ -37,7 +37,7 @@ export default function PreviousChatSessions() {
       {!isMinimized && (
         <button
           onClick={toggleSidebar}
-          className="md:hidden fixed top-4 left-5 p-2 rounded-lg hover:bg-gray-800 border border-gray-700"
+          className="fixed top-4 left-5 rounded-lg border border-gray-700 p-2 hover:bg-gray-800 md:hidden"
           aria-label="Toggle menu"
         >
           <ChevronRight size={20} />
@@ -45,23 +45,15 @@ export default function PreviousChatSessions() {
       )}
 
       <aside
-        className={`
-          fixed md:relative
-          top-0 left-0
-          h-screen bg-background backdrop-blur-lg border-r border-border
-          flex flex-col
-          z-50
-          ${isMinimized ? "md:w-20 md:items-center w-64" : "w-64"}
-          ${
-            isMinimized ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-          }
-        `}
+        className={`bg-background border-border fixed top-0 left-0 z-50 flex h-screen flex-col border-r backdrop-blur-lg md:relative ${isMinimized ? "w-64 md:w-20 md:items-center" : "w-64"} ${
+          isMinimized ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        } `}
       >
         {/* Close btn on mobil displays */}
         {isMinimized && (
           <button
             onClick={() => setIsMinimized(false)}
-            className="md:hidden absolute top-4 right-4 p-1 rounded-lg bg-blue-950 hover:bg-primary/10 border border-gray-700"
+            className="hover:bg-primary/10 absolute top-4 right-4 rounded-lg border border-gray-700 bg-blue-950 p-1 md:hidden"
             aria-label="Close menu"
           >
             <ChevronLeft size={20} />
@@ -70,7 +62,7 @@ export default function PreviousChatSessions() {
 
         {/* Open close sidebar & lil animation */}
         <div
-          className={`flex items-center justify-between w-full px-3 ${
+          className={`flex w-full items-center justify-between px-3 ${
             isMinimized ? "flex-col gap-3 pt-3 pb-2" : "h-16"
           }`}
         >
@@ -83,7 +75,7 @@ export default function PreviousChatSessions() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full"
+                  className="h-full w-full bg-transparent object-cover"
                 />
               </div>
             </Link>
@@ -91,7 +83,7 @@ export default function PreviousChatSessions() {
           <button
             onClick={toggleSidebar}
             title={isMinimized ? "Open Sidebar" : "Close Sidebar"}
-            className="hidden md:block hover:text-muted-foreground focus:outline-none transition-all duration-300 p-2 cursor-pointer rounded-md hover:bg-gray-800"
+            className="hover:text-muted-foreground hidden cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-800 focus:outline-none md:block"
           >
             {isMinimized ? (
               <ChevronRight size={20} />
@@ -106,11 +98,11 @@ export default function PreviousChatSessions() {
           <div className="px-3 py-3">
             <div className="text-sm">
               <Link href="/dashboard">
-                <p className="font-semibold truncate">
+                <p className="truncate font-semibold">
                   {user.firstName} {user.lastName}
                 </p>
               </Link>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-muted-foreground truncate text-xs">
                 {user.email}
               </p>
             </div>
@@ -118,21 +110,21 @@ export default function PreviousChatSessions() {
         )}
 
         {isMinimized && user && (
-          <div className="md:hidden px-3 py-3 mt-8">
-            <div className="flex gap-4 items-center">
+          <div className="mt-8 px-3 py-3 md:hidden">
+            <div className="flex items-center gap-4 bg-transparent">
               <video
                 src="/3d-assets/2d-animated.webm"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="object-cover size-15"
+                className="size-15 bg-transparent object-cover"
               />
               <div className="text-sm">
-                <p className="font-semibold  truncate">
+                <p className="truncate font-semibold">
                   {user.firstName} {user.lastName}
                 </p>
-                <p className="text-xs text-muted-foreground truncate">
+                <p className="text-muted-foreground truncate text-xs">
                   {user.email}
                 </p>
               </div>
@@ -142,10 +134,10 @@ export default function PreviousChatSessions() {
 
         {/* Border after user info */}
         {!isMinimized && (
-          <div className="hidden md:inline border-t border-border mx-2"></div>
+          <div className="border-border mx-2 hidden border-t md:inline"></div>
         )}
         {isMinimized && (
-          <div className="md:hidden inline border-t border-border mx-2"></div>
+          <div className="border-border mx-2 inline border-t md:hidden"></div>
         )}
 
         {/* Menu section, temp buttons in same file here sicne layout and flow not finalized */}
@@ -166,13 +158,13 @@ export default function PreviousChatSessions() {
           >
             <Link
               href={"/"}
-              className="flex items-center gap-2 w-full no-underline"
+              className="flex w-full items-center gap-2 no-underline"
             >
               {<Book size={18} />}
               {!isMinimized && (
-                <span className="hidden md:inline text-sm">Home</span>
+                <span className="hidden text-sm md:inline">Home</span>
               )}
-              {isMinimized && <span className="md:hidden text-sm">Home</span>}
+              {isMinimized && <span className="text-sm md:hidden">Home</span>}
             </Link>
           </Button>
 
@@ -180,9 +172,9 @@ export default function PreviousChatSessions() {
           <Button
             variant="default"
             size="default"
-            className={`!no-underline cursor-pointer ${
+            className={`cursor-pointer !no-underline ${
               isMinimized ? "justify-center" : "justify-start"
-            } flex w-full gap-2 text-primary hover:underline`}
+            } text-primary flex w-full gap-2 hover:underline`}
             title="New chat"
             onClick={async () => {
               setIsMinimized(false);
@@ -190,13 +182,13 @@ export default function PreviousChatSessions() {
               router.refresh();
             }}
           >
-            <div className="flex items-center gap-2 w-full no-underline">
+            <div className="flex w-full items-center gap-2 no-underline">
               <SquarePen size={18} />
               {!isMinimized && (
-                <span className="hidden md:inline text-sm">New chat</span>
+                <span className="hidden text-sm md:inline">New chat</span>
               )}
               {isMinimized && (
-                <span className="md:hidden text-sm">New chat</span>
+                <span className="text-sm md:hidden">New chat</span>
               )}
             </div>
           </Button>
@@ -213,14 +205,14 @@ export default function PreviousChatSessions() {
           >
             <Link
               href={"/settings"}
-              className="flex items-center gap-2 w-full no-underline"
+              className="flex w-full items-center gap-2 no-underline"
             >
               <Settings size={18} />
               {!isMinimized && (
-                <span className="hidden md:inline text-sm">Settings</span>
+                <span className="hidden text-sm md:inline">Settings</span>
               )}
               {isMinimized && (
-                <span className="md:hidden text-sm">Settings</span>
+                <span className="text-sm md:hidden">Settings</span>
               )}
             </Link>
           </Button>
@@ -229,20 +221,20 @@ export default function PreviousChatSessions() {
           <Button
             variant="default"
             size="default"
-            className={`!no-underline cursor-pointer ${
+            className={`cursor-pointer !no-underline ${
               isMinimized ? "justify-center" : "justify-start"
-            } flex w-full gap-2 text-primary hover:underline`}
+            } text-primary flex w-full gap-2 hover:underline`}
             title="Logout"
             onClick={handleLogout}
             disabled={isLoggingOut}
           >
-            <div className="flex items-center gap-2 w-full  ">
+            <div className="flex w-full items-center gap-2">
               <LogOut size={18} />
               {!isMinimized && (
-                <span className="hidden md:inline text-sm ">Logout</span>
+                <span className="hidden text-sm md:inline">Logout</span>
               )}
               {isMinimized && (
-                <span className="md:hidden text-sm ">
+                <span className="text-sm md:hidden">
                   {isLoggingOut ? "Logging out..." : "Logout"}
                 </span>
               )}
@@ -252,16 +244,16 @@ export default function PreviousChatSessions() {
 
         {/* Border after settings */}
         {!isMinimized && (
-          <div className="hidden md:inline border-t border-border mx-2"></div>
+          <div className="border-border mx-2 hidden border-t md:inline"></div>
         )}
         {isMinimized && (
-          <div className="md:hidden inline border-t border-border-primary/60 mx-2"></div>
+          <div className="border-border-primary/60 mx-2 inline border-t md:hidden"></div>
         )}
 
         {/* Previous chats listed here, scrollable window. Getting previous chats and handling onclick setup chat logic should be handled elsewhere, 
       this here just handle the visual and onclick call  */}
         {!isMinimized && (
-          <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
+          <div className="scrollbar flex-1 space-y-6 overflow-y-auto px-3 py-4">
             {/* <Section title="Projects">
               <SectionItems />
             </Section> */}
@@ -273,7 +265,7 @@ export default function PreviousChatSessions() {
         )}
 
         {isMinimized && (
-          <div className="md:hidden flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar">
+          <div className="scrollbar flex-1 space-y-6 overflow-y-auto px-3 py-4 md:hidden">
             {/* <Section title="Projects">
               <SectionItems />
             </Section> */}
@@ -298,7 +290,7 @@ function Section({
 }) {
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <h3 className="mb-2 text-lg font-semibold">{title}</h3>
       {children}
     </div>
   );

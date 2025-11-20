@@ -200,7 +200,7 @@
 
 @layer utilities {
   .blurred-container {
-    @apply backdrop-blur-xl bg-background/90;
+    @apply bg-background/90 backdrop-blur-xl;
   }
 
   .header-section-layout {
@@ -215,13 +215,15 @@
       var(--card-color-2) 100%
     );
     opacity: 0.85;
-    box-shadow: #70779333 0px 4px 6px -1px, #7077931a 0px 2px 4px -1px;
+    box-shadow:
+      #70779333 0px 4px 6px -1px,
+      #7077931a 0px 2px 4px -1px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
 
   .review-card {
-    @apply p-4 rounded-xl shadow-sm flex-shrink-0;
+    @apply flex-shrink-0 rounded-xl p-4 shadow-sm;
   }
 
   .glass-no-hover {
@@ -233,7 +235,8 @@
   }
 
   /* Hide Cookie revisit btn */
-  .cky-btn-revisit .cky-btn-revisit-wrapper .cky-revisit-bottom-left {
+  .cky-btn-revisit-wrapper.cky-revisit-bottom-left,
+  .cky-btn-revisit {
     display: none !important;
   }
 }

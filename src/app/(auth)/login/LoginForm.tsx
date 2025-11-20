@@ -98,7 +98,7 @@ function LoginForm() {
           <SubmitButton />
         </div>
       </form>
-      <p className="mt-4 text-center text-sm ">
+      <p className="mt-4 text-center text-sm">
         Don&apos;t have an account yet?
         <br />
         <Link href="/register" className="text-sm">
