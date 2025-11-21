@@ -30,7 +30,7 @@ export default function ChatContentComponent({
               height: "100%",
               backgroundColor: "transparent",
             }}
-            className="w-full"
+            className="h-full w-full"
           />
         ) : (
           <ClientSideSceneLoader />
