@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   authors: [siteConfig.author],
   creator: siteConfig.author.name,
   robots: { index: true, follow: true },
-  manifest: "/favicon/site.webmanifest",
 
   icons: {
     icon: "/favicon/favicon.ico",
