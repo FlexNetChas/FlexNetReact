@@ -12,7 +12,7 @@ export default function Page() {
   const params = useParams();
   const id = params?.Id as string;
   const [session, setSession] = useState<CompleteChatSessionResponseDto | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -17,13 +17,11 @@ export default function ChatBoxComponent({
   const { refreshSessions } = useChatSessions();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
-    savedSession?.chatMessages || []
+    savedSession?.chatMessages || [],
   );
-  const [currentSession, setCurrentSession] =
-    useState<CompleteChatSessionResponseDto | null>(savedSession || null);
 
   const [chatSessionId, setChatSessionId] = useState<number | null>(
-    savedSession?.id || null
+    savedSession?.id || null,
   );
 
   useEffect(() => {
@@ -48,7 +46,7 @@ export default function ChatBoxComponent({
       setChatSessionId(chatSessionIdRef.current);
 
       return data.reply ?? "🤷‍♂️ No reply from backend.";
-    } catch (err) {
+    } catch {
       return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
     }
   };
@@ -64,7 +62,6 @@ export default function ChatBoxComponent({
       lastUpdated: null,
     };
 
-    const userInput = input; // Capture current input
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
@@ -95,10 +92,10 @@ export default function ChatBoxComponent({
   };
 
   return (
-    <div className="w-full h-[250px] flex flex-col text-white rounded-xl overflow-hidden">
+    <div className="flex h-[250px] w-full flex-col overflow-hidden rounded-xl text-white">
       <div
         ref={logRef}
-        className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1 scrollbar"
+        className="scrollbar flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-2"
       >
         {messages.length === 0 && (
           <p className="text-gray-400">No messages yet...</p>
@@ -106,10 +103,10 @@ export default function ChatBoxComponent({
         {messages.map((msg) => (
           <div
             key={msg.timeStamp + msg.role}
-            className={`p-2 rounded max-w-[70%] ${
+            className={`max-w-[70%] rounded p-2 ${
               msg.role === "assistant"
-                ? "border border-blue-600 self-end"
-                : "border border-gray-700 self-start"
+                ? "self-end border border-blue-600"
+                : "self-start border border-gray-700"
             }`}
           >
             {msg.messageText}
@@ -117,12 +114,12 @@ export default function ChatBoxComponent({
         ))}
       </div>
 
-      <div className="flex gap-2 px-6 my-1 flex-shrink-0">
+      <div className="my-1 flex flex-shrink-0 gap-2 px-6">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-1 p-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none"
+          className="flex-1 rounded border border-gray-700 bg-gray-800 p-2 text-white focus:outline-none"
           placeholder="Type a message..."
           onKeyDown={(e) => {
             if (e.key === "Enter") sendMessage();
@@ -130,7 +127,7 @@ export default function ChatBoxComponent({
         />
         <button
           onClick={sendMessage}
-          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
+          className="rounded bg-blue-600 px-4 py-2 hover:bg-blue-500"
         >
           Send
         </button>

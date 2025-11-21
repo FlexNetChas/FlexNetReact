@@ -1,12 +1,13 @@
 import { getAuthHeaders } from "@/lib/api/getAuthHeaders";
+import { ChatMessageResponseDto } from "@/types/chatMessage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const chatService = {
   sendMessage: async (
     message: string,
-    chatSessionId: string | null
-  ): Promise<any> => {
+    chatSessionId: string | null,
+  ): Promise<ChatMessageResponseDto> => {
     const headers = await getAuthHeaders();
 
     const response = await fetch(`${API_BASE_URL}/Counsellor/message`, {
@@ -29,7 +30,7 @@ export const chatService = {
   },
   streamMessage: async (
     message: string,
-    chatSessionId: string | null
+    chatSessionId: string | null,
   ): Promise<Response> => {
     const headers = await getAuthHeaders();
 

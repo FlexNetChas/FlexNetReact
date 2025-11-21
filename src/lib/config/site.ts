@@ -3,7 +3,7 @@ export const siteConfig = {
   title: "FlexNet! Your AI Study Guidance Companion",
   description:
     "FlexNet is a personalized AI avatar. Created to help you navigate your academic journey. From choosing the right path to achieving study goals, FlexNet is here to assist you every step of the way",
-  url: process.env.NEXT_PUBLIC_DOMAIN_PAGE || "",
+  url: (process.env.NEXT_PUBLIC_DOMAIN_PAGE || "").replace(/\/$/, ""),
   keywords: [
     // Core product keywords
     "AI study companion",
@@ -12,7 +12,7 @@ export const siteConfig = {
     "study assistant",
     "educational AI",
 
-    // Feature-focused keywords
+    // keywords
     "AI tutor",
     "study planner",
     "academic advisor",
@@ -33,14 +33,14 @@ export const siteConfig = {
     "adaptive learning",
     "personalized education",
 
-    // Problem/solution keywords
+    // Problem keywords
     "study help",
     "academic planning",
     "course selection",
     "career guidance",
     "educational path",
 
-    // Brand and niche keywords
+    // Brand keywords
     "FlexNet AI",
     "digital study partner",
     "virtual academic advisor",
@@ -48,7 +48,7 @@ export const siteConfig = {
   ] as string[],
   author: {
     name: "FlexNet Team",
-    url: process.env.NEXT_PUBLIC_DOMAIN_PAGE || "",
+    url: (process.env.NEXT_PUBLIC_DOMAIN_PAGE || "").replace(/\/$/, ""),
   },
 } as const;
 

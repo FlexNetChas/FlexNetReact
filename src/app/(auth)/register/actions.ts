@@ -10,7 +10,7 @@ import { extractBackendErrors } from "@/lib/api/errors";
 
 export async function register(
   prevState: RegisterState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<RegisterState | undefined> {
   const result = registerSchema.safeParse(Object.fromEntries(formData));
 

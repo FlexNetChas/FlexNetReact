@@ -65,12 +65,12 @@ export async function createRefreshCookie(refreshToken: string) {
   // Check if we're in testing mode
   if (process.env.NEXT_PUBLIC_TESTING_MODE === "true") {
     const expiryMinutes = parseInt(
-      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_MINUTES || "2"
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_MINUTES || "2",
     );
     expiresAt.setMinutes(expiresAt.getMinutes() + expiryMinutes);
   } else {
     const expiryDays = parseInt(
-      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_DAYS || "7"
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY_DAYS || "7",
     );
     expiresAt.setDate(expiresAt.getDate() + expiryDays);
   }
@@ -90,7 +90,7 @@ export async function getRefreshtoken(): Promise<string | null> {
 }
 
 export async function verifyToken(
-  accessToken: string
+  accessToken: string,
 ): Promise<JWTClaims | null> {
   try {
     // Verify the JWT token using the secret key with JOSE
@@ -110,7 +110,7 @@ export async function verifyToken(
 
 export function isTokenExpiringSoon(
   expiresAt: Date,
-  bufferHours: number = 1
+  bufferHours: number = 1,
 ): boolean {
   const now = new Date();
   const bufferHs = bufferHours * 60 * 60 * 1000;

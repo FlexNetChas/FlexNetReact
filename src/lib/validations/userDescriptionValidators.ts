@@ -13,7 +13,7 @@ export const userDescriptionSchema = z.object({
       .number()
       .min(0, "Age must be between 0 and 100")
       .max(100, "Age must be between 0 and 100")
-      .optional()
+      .optional(),
   ),
   purpose: z.string().max(50, "Purpose cannot exceed 50 characters").optional(),
 });

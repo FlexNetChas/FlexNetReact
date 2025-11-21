@@ -40,14 +40,13 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
   const rotationSpeedRef = useRef({ x: 0, y: 0 });
 
   const [isMounted, setIsMounted] = useState(false);
-  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
 
     if (!mountRef.current) return;
 
-    let mountElement = mountRef.current;
+    const mountElement = mountRef.current;
     let renderer: THREE.WebGLRenderer | null = null;
 
     try {
@@ -61,7 +60,7 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
         30,
         mountElement.clientWidth / mountElement.clientHeight,
         0.1,
-        5
+        5,
       );
       camera.position.z = 3.2;
       cameraRef.current = camera;
@@ -169,15 +168,15 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
 
       particlesGeometry.setAttribute(
         "position",
-        new THREE.BufferAttribute(positions, 3)
+        new THREE.BufferAttribute(positions, 3),
       );
       particlesGeometry.setAttribute(
         "size",
-        new THREE.BufferAttribute(sizes, 1)
+        new THREE.BufferAttribute(sizes, 1),
       );
       particlesGeometry.setAttribute(
         "color",
-        new THREE.BufferAttribute(colorsArray, 3)
+        new THREE.BufferAttribute(colorsArray, 3),
       );
 
       // Configure particle material size and opacity
@@ -220,7 +219,7 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
 
         globeGroupRef.current.rotation.x = Math.max(
           -Math.PI / 2,
-          Math.min(Math.PI / 2, globeGroupRef.current.rotation.x)
+          Math.min(Math.PI / 2, globeGroupRef.current.rotation.x),
         );
 
         previousMousePositionRef.current = {
@@ -326,22 +325,21 @@ export function InteractiveGlobe({ className }: InteractiveGlobeProps) {
       };
     } catch (error) {
       console.error("Error initializing 3D globe:", error);
-      setHasError(true);
     }
   }, []);
 
   return (
     <div
       ref={mountRef}
-      className={`md:w-full w-2/3 h-30 md:h-48 rounded-lg relative overflow-hidden ${
+      className={`relative h-30 w-2/3 overflow-hidden rounded-lg md:h-48 md:w-full ${
         className || ""
       }`}
     >
       {!isMounted && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
-            <div className="size-8 rounded-full bg-cyan-400/20 animate-pulse" />
-            <p className="text-cyan-400/60 text-xs">Loading globe...</p>
+            <div className="size-8 animate-pulse rounded-full bg-cyan-400/20" />
+            <p className="text-xs text-cyan-400/60">Loading globe...</p>
           </div>
         </div>
       )}

@@ -60,7 +60,7 @@ export default function SettingsPage() {
   return (
     <>
       {/* Tabs */}
-      <nav className="ml-6 flex space-x-10 mt-12">
+      <nav className="mt-12 ml-6 flex space-x-10">
         {[
           { key: "profile" as Tab, label: "Profile" },
           { key: "preferences" as Tab, label: "Preferences" },
@@ -68,7 +68,7 @@ export default function SettingsPage() {
         ].map((tab) => (
           <button
             key={tab.key}
-            className={` ${activeTab === tab.key ? "text-primary " : ""}`}
+            className={` ${activeTab === tab.key ? "text-primary" : ""}`}
             onClick={() => setActiveTab(tab.key)}
           >
             {tab.label}

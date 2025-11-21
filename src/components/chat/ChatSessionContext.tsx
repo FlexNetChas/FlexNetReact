@@ -12,14 +12,14 @@ type ChatSessionsContextType = {
 };
 
 const ChatSessionsContext = createContext<ChatSessionsContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const useChatSessions = () => {
   const context = useContext(ChatSessionsContext);
   if (!context) {
     throw new Error(
-      "useChatSessions must be used within a ChatSessionsProvider"
+      "useChatSessions must be used within a ChatSessionsProvider",
     );
   }
   return context;

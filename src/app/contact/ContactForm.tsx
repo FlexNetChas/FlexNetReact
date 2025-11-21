@@ -11,17 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 
-interface ContactFormState {
-  errors?: {
-    name?: string[];
-    email?: string[];
-    subject?: string[];
-    message?: string[];
-    form?: string[];
-  };
-  success?: boolean;
-}
-
 function ContactForm() {
   const [state, submitAction] = useActionState(submitContact, undefined);
 
@@ -45,7 +34,7 @@ function ContactForm() {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -67,9 +56,11 @@ function ContactForm() {
 
   return (
     <form action={submitAction} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="name" className="text-sm">Name</Label>
+          <Label htmlFor="name" className="text-sm">
+            Name
+          </Label>
           <Input
             id="name"
             name="name"
@@ -87,7 +78,9 @@ function ContactForm() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm">Email</Label>
+          <Label htmlFor="email" className="text-sm">
+            Email
+          </Label>
           <Input
             id="email"
             name="email"
@@ -106,7 +99,9 @@ function ContactForm() {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="subject" className="text-sm">Subject</Label>
+        <Label htmlFor="subject" className="text-sm">
+          Subject
+        </Label>
         <Input
           id="subject"
           name="subject"
@@ -124,7 +119,9 @@ function ContactForm() {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="message" className="text-sm">Message</Label>
+        <Label htmlFor="message" className="text-sm">
+          Message
+        </Label>
         <Textarea
           id="message"
           name="message"
@@ -132,7 +129,7 @@ function ContactForm() {
           value={formData.message}
           onChange={handleInputChange}
           rows={4}
-          className={`bg-input rounded-lg border p-2 text-sm resize-none ${
+          className={`bg-input resize-none rounded-lg border p-2 text-sm ${
             hasError("message")
               ? "border-error focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
               : "border-border"
@@ -171,4 +168,3 @@ function SubmitButton() {
 }
 
 export default ContactForm;
-

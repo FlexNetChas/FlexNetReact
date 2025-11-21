@@ -12,7 +12,7 @@ import { authService } from "./lib/api/services/authService";
 
 async function attemptTokenRefresh(
   refreshToken: string,
-  attempt: number = 1
+  attempt: number = 1,
 ): Promise<boolean> {
   try {
     const newTokens = await authService.refresh(refreshToken);
@@ -34,7 +34,15 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const cookie = (await cookies()).get("session")?.value;
 
-  const publicRoutes = ["/", "/login", "/register", "/contact", "/about"];
+  const publicRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/contact",
+    "/about",
+    "/robots.txt",
+    "/sitemap.xml",
+  ];
   const isPublicRoute = publicRoutes.includes(path);
   const isProtectedRoute = !isPublicRoute;
 
@@ -63,7 +71,7 @@ export default async function middleware(req: NextRequest) {
         const refreshed = await attemptTokenRefresh(refreshToken);
         if (!refreshed) {
           const response = NextResponse.redirect(
-            new URL("/login", req.nextUrl)
+            new URL("/login", req.nextUrl),
           );
           response.cookies.delete("session");
           response.cookies.delete("refreshToken");
@@ -77,9 +85,13 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-
   const allowedPublicRoutesForLoggedIn = ["/contact", "/about"];
-  if (isPublicRoute && cookie && isValidToken && !allowedPublicRoutesForLoggedIn.includes(path)) {
+  if (
+    isPublicRoute &&
+    cookie &&
+    isValidToken &&
+    !allowedPublicRoutesForLoggedIn.includes(path)
+  ) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
@@ -92,6 +104,6 @@ export default async function middleware(req: NextRequest) {
  */
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|hdr|glb|mp4)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|hdr|glb|mp4)$).*)",
   ],
 };

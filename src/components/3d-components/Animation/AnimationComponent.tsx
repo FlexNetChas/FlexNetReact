@@ -1,6 +1,6 @@
 import { AnimationMixer, Group, AnimationClip, AnimationAction } from "three";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { AnimationState, useAnimation } from "./AnimationContext";
 import { LoopOnce } from "three";
 
@@ -36,8 +36,7 @@ export default function useAnimationComponent({
 }: AnimationComponentProps) {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const actionRef = useRef<AnimationAction | null>(null);
-  const { activeAnimations, setAnimationState, defaultAnimation } =
-    useAnimation();
+  const { activeAnimations, setAnimationState } = useAnimation();
 
   useEffect(() => {
     if (!model || !animations?.length) return;
@@ -75,7 +74,7 @@ export default function useAnimationComponent({
     if (!mixerRef.current || !activeAnimations) return;
 
     const activeName = Object.keys(activeAnimations).find(
-      (key) => activeAnimations[key]
+      (key) => activeAnimations[key],
     );
     if (!activeName) return;
 

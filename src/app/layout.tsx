@@ -21,9 +21,11 @@ export const metadata: Metadata = {
   authors: [siteConfig.author],
   creator: siteConfig.author.name,
   robots: { index: true, follow: true },
+  manifest: "/favicon/site.webmanifest",
+
   icons: {
     icon: "/favicon/favicon.ico",
-    shortcut: "/favicon/favicon-16x16.png",
+    shortcut: "/favicon/favicon-96x96.png",
     apple: "/favicon/apple-touch-icon.png",
   },
 
@@ -31,15 +33,25 @@ export const metadata: Metadata = {
     url: siteConfig.url,
     title: siteConfig.title,
     description: siteConfig.description,
-    siteName: siteConfig.title,
-    images: "/opengraph-image.jpg",
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: "/favicon/web-app-manifest-512x512.png",
+        width: 512,
+        height: 512,
+        alt: siteConfig.title,
+      },
+    ],
     type: "website",
+    locale: "en_US",
   },
+
   twitter: {
     card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
-    images: "/opengraph-image.jpg",
+    images: ["/favicon/web-app-manifest-512x512.png"],
+    creator: "@flexnet",
   },
 };
 

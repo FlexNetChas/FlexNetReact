@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -64,7 +63,7 @@ function RegisterForm() {
           priority
         /> */
 
-    <form action={registerAction} className="space-y-4  ">
+    <form action={registerAction} className="space-y-4">
       {/* First Name and Last Name */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">

@@ -26,7 +26,7 @@ interface ToastOptions {
 
 export const useToasts = (
   state: GenericState | undefined,
-  options?: ToastOptions
+  options?: ToastOptions,
 ) => {
   const { successMessage = "Success", duration = 5000 } = options || {};
 
@@ -43,7 +43,7 @@ export const useToasts = (
                 <span className="text-error">{errorMessage}</span>
               </div>
               <div
-                className="rounded-full border border-error p-1 cursor-pointer bg-red-50 text-error transition transform hover:scale-105 hover:bg-red-100 flex-shrink-0"
+                className="border-error text-error flex-shrink-0 transform cursor-pointer rounded-full border bg-red-50 p-1 transition hover:scale-105 hover:bg-red-100"
                 onClick={() => toast.dismiss(id)}
               >
                 <X size={13} />
@@ -53,7 +53,7 @@ export const useToasts = (
               duration: Infinity,
               className: "bg-white text-black shadow-md",
               icon: null,
-            }
+            },
           );
         });
       });
@@ -73,7 +73,7 @@ export const useToasts = (
           duration,
           className: "bg-white text-black shadow-md",
           icon: null,
-        }
+        },
       );
     }
   }, [state, successMessage, duration]);

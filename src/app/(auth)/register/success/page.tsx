@@ -1,18 +1,17 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Mail, User, ArrowRight, Check } from "lucide-react";
+import { CheckCircle, Mail, Check } from "lucide-react";
 
 function RegistrationSuccessPage() {
   return (
-    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-4">
-      <div className="w-full max-w-md border-2 border-cyan-400 p-8 rounded-sm text-center">
+    <div className="bg-background flex min-h-screen items-center justify-center p-4">
+      <div className="border-border w-full max-w-md rounded-sm border-2 p-8 text-center">
         {/* Success Icon */}
         <div className="mb-6">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+          <CheckCircle className="mx-auto size-13 text-green-500" />
         </div>
 
         {/* Logo */}
@@ -27,33 +26,31 @@ function RegistrationSuccessPage() {
 
         {/* Success Message */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">
-            Registration Successful!
-          </h1>
-          <p className="text-gray-400 text-sm">
+          <h1 className="mb-2 text-2xl font-bold">Registration Successful!</h1>
+          <p className="text-muted-foreground text-sm">
             Welcome to FlexNet! Your account has been created successfully.
           </p>
         </div>
 
         {/* Success Details */}
-        <div className="bg-[#1a2332] rounded-lg p-4 mb-6 text-left">
-          <h3 className="text-white font-medium mb-3">What's Next?</h3>
+        <div className="bg-background mb-6 rounded-lg p-4 text-left">
+          <h3 className="mb-3 font-medium">What&apos;s Next?</h3>
           <div className="space-y-3">
             <div className="flex items-center">
-              <Check className="w-4 h-4 text-green-500 mr-3" />
-              <span className="text-gray-300 text-sm">
+              <Check className="mr-3 size-4 text-green-500" />
+              <span className="text-muted-foreground text-sm">
                 Account created successfully
               </span>
             </div>
             <div className="flex items-center">
-              <Check className="w-4 h-4 text-green-500 mr-3" />
-              <span className="text-gray-300 text-sm">
-                You're automatically logged in
+              <Check className="mr-3 size-4 text-green-500" />
+              <span className="text-muted-foreground text-sm">
+                You&apos;re automatically logged in
               </span>
             </div>
             <div className="flex items-center">
-              <Mail className="w-4 h-4 text-cyan-400 mr-3" />
-              <span className="text-gray-300 text-sm">
+              <Mail className="text-primary mr-3 size-4" />
+              <span className="text-muted-foreground text-sm">
                 Check your email for verification
               </span>
             </div>
@@ -62,24 +59,17 @@ function RegistrationSuccessPage() {
 
         {/* Action Buttons */}
         <div className="space-y-3">
-          <Button
-            asChild
-            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
-          >
+          <Button asChild variant="default" className="w-full">
             <Link href="/settings">Update Profile</Link>
           </Button>
 
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white"
-          >
+          <Button asChild variant="default" className="w-full">
             <Link href="/">Back to Home</Link>
           </Button>
         </div>
 
         {/* Additional Info */}
-        <p className="text-xs text-gray-500 mt-6">
+        <p className="text-muted-foreground mt-6 text-xs">
           You can now log in with your credentials to access all features.
         </p>
       </div>
