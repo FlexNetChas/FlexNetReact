@@ -67,7 +67,7 @@ export default function useAnimationComponent({
       mixerRef.current?.stopAllAction();
       mixerRef.current = null;
     };
-  }, [model, animations, animationIndexMap]);
+  }, [model, animations, animationIndexMap, setAnimationState]);
 
   // Effect to update animation based on active state from the context
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function useAnimationComponent({
 
     newAction.reset().play();
     actionRef.current = newAction;
-  }, [activeAnimations]);
+  }, [activeAnimations, animationIndexMap, animations]);
 
   useFrame((_, delta) => {
     mixerRef.current?.update(delta); // Apply the animation updates every frame
