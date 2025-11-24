@@ -2,6 +2,8 @@
 
 Flexnet is an innovative web application designed to help users find the right higher education courses based on their academic performance. It also provides recommendations for the grades users need to improve in order to meet admission requirements. Whether you're aiming for your dream job or just exploring educational options, Flexnet is your personalized guide to the right studies.
 
+Live version hosted at: https://flexnetfrontend.netlify.app
+
 ---
 
 ## Features
@@ -27,6 +29,8 @@ Flexnet is an innovative web application designed to help users find the right h
 * **Tailwind CSS**: Utility-first CSS framework for fast styling and layout.
 * **Shadcn Components**: A modern component library to help streamline the UI development.
 
+### Backend:
+https://github.com/FlexNetChas/FlexNetBackend
 
 ## Getting Started
 
