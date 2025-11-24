@@ -5,7 +5,17 @@ import { Button } from "@/components/ui/button";
 import { AnimatedText } from "@/components/ui/animated-text";
 import { Section } from "./layout/Section";
 import { PageContainer } from "./layout/PageContainer";
-import { Meteors } from "./ui/shadcn-io/meteors";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const Meteors = dynamic(
+  () =>
+    import("./ui/shadcn-io/meteors").then((mod) => ({ default: mod.Meteors })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 function Hero() {
   return (
@@ -13,7 +23,10 @@ function Hero() {
       spacing="sm"
       className="relative min-h-[calc(100vh-50px)] overflow-hidden"
     >
-      <Meteors number={200} />
+      {/* Null - Don't show any stars until Meteors is loaded */}
+      <Suspense fallback={null}>
+        <Meteors number={150} />
+      </Suspense>
 
       <PageContainer className="relative z-10 flex items-center">
         <div className="grid w-full grid-cols-1 items-center gap-0 md:gap-16 lg:grid-cols-2">
@@ -42,6 +55,12 @@ function Hero() {
           </div>
 
           <div className="relative mx-auto mt-10 flex aspect-square h-40 w-full max-w-md items-center justify-center bg-transparent md:mb-15 lg:h-50">
+            <link
+              rel="preload"
+              href="/3d-assets/2d-animateda.webm"
+              as="video"
+              type="video/webm"
+            />
             <video
               src="/3d-assets/2d-animateda.webm"
               className="h-full w-full rounded-2xl bg-transparent object-contain"
@@ -49,6 +68,7 @@ function Hero() {
               loop
               muted
               playsInline
+              preload="metadata"
               aria-label="Animated illustration of a person exploring different paths and options"
             />
           </div>

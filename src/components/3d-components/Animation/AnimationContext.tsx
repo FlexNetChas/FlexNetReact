@@ -1,5 +1,12 @@
 "use client";
-import { createContext, useContext, useState, ReactNode, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useRef,
+  useCallback,
+} from "react";
 
 export type AnimationState =
   | "Dance"
@@ -57,43 +64,42 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
   const defaultAnimation: AnimationState = "Idle";
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const setAnimationState = (
-    animation: AnimationState,
-    state: boolean,
-    options?: AnimationOptions,
-  ) => {
-    // clear previous timeout if any
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  const setAnimationState = useCallback(
+    (animation: AnimationState, state: boolean, options?: AnimationOptions) => {
+      // clear previous timeout if any
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
-    // set animation state, using reduce to avoid mutating state directly.
-    setActiveAnimations((prev) =>
-      (Object.keys(prev) as AnimationState[]).reduce(
-        (acc, key) => {
-          return {
-            ...acc,
-            [key]: key === animation ? state : false,
-          };
-        },
-        {} as typeof prev,
-      ),
-    );
+      // set animation state, using reduce to avoid mutating state directly.
+      setActiveAnimations((prev) =>
+        (Object.keys(prev) as AnimationState[]).reduce(
+          (acc, key) => {
+            return {
+              ...acc,
+              [key]: key === animation ? state : false,
+            };
+          },
+          {} as typeof prev,
+        ),
+      );
 
-    // Handle timeout
-    // if no callback, revert to default unless its death
-    if (options?.timeout && state) {
-      timeoutRef.current = setTimeout(() => {
-        options?.onComplete?.();
+      // Handle timeout
+      // if no callback, revert to default unless its death
+      if (options?.timeout && state) {
+        timeoutRef.current = setTimeout(() => {
+          options?.onComplete?.();
 
-        if (!options?.onComplete) {
-          if (animation !== "Death") {
-            setAnimationState(defaultAnimation, true, { loop: true });
+          if (!options?.onComplete) {
+            if (animation !== "Death") {
+              setAnimationState(defaultAnimation, true, { loop: true });
+            }
           }
-        }
-      }, options.timeout);
-    }
-  };
+        }, options.timeout);
+      }
+    },
+    [defaultAnimation],
+  );
 
   return (
     <AnimationContext.Provider
