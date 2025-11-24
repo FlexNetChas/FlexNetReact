@@ -18,11 +18,14 @@ export default function ChatBoxComponent({
   const { setAnimationState } = useAnimation();
   const { refreshSessions } = useChatSessions();
   const [input, setInput] = useState("");
+  const streamingTextRef = useRef("");
   const [messages, setMessages] = useState<ChatMessageResponseDto[]>(
     savedSession?.chatMessages || [],
   );
 
-  const [chatSessionId] = useState<number | null>(savedSession?.id ?? null);
+  const [chatSessionId, setChatSessionId] = useState<number | null>(
+    savedSession?.id ?? null,
+  );
 
   const [isStreaming, setIsStreaming] = useState(false);
 
@@ -61,29 +64,7 @@ export default function ChatBoxComponent({
     }
   }, [input]);
 
-  // OLD: Non-streaming fallback (keep for error cases)
-  // const fetchAIResponse = async (message: string): Promise<string> => {
-  //   try {
-  //     const res = await fetch("/api/chat", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ message, chatSessionId }),
-  //     });
-
-  //     if (!res.ok) throw new Error("Server error");
-
-  //     const data = await res.json();
-
-  //     chatSessionIdRef.current = data.sessionId;
-  //     setChatSessionId(chatSessionIdRef.current);
-
-  //     return data.reply ?? "🤷‍♂️ No reply from backend.";
-  //   } catch {
-  //     return "⚠️ Server died. We're blaming DevOps until proven otherwise.";
-  //   }
-  // };
-
-  // NEW: Streaming function
+  // Streaming function
   const fetchAIResponseStreaming = (
     message: string,
     onChunk: (chunk: string) => void,
@@ -117,7 +98,18 @@ export default function ChatBoxComponent({
       eventSource.close();
     });
 
-    eventSource.addEventListener("done", () => {
+    eventSource.addEventListener("done", (e: Event) => {
+      const data = (e as MessageEvent).data;
+      try {
+        if (data && data !== "{}") {
+          const result = JSON.parse(data);
+          if (result.sessionId) {
+            setChatSessionId(result.sessionId);
+          }
+        }
+      } catch (err) {
+        console.error("Error parsing done event:", err);
+      }
       onComplete();
       eventSource.close();
     });
@@ -146,14 +138,15 @@ export default function ChatBoxComponent({
       lastUpdated: null,
     };
 
-    const userInput = input; // Capture current input
+    const userInput = input;
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsStreaming(true);
-    setAnimationState("Dance", true, { loop: true }); // thinking animation
+    setAnimationState("Dance", true, { loop: true });
 
     // 2. Add empty AI message that will be populated by streaming
     const aiMessageIndex = messages.length + 1;
+    streamingTextRef.current = "";
     setMessages((prev) => [
       ...prev,
       {
@@ -173,9 +166,13 @@ export default function ChatBoxComponent({
           firstChunkRef.current = true;
           setAnimationState("Yes", true, { loop: true });
         }
+        streamingTextRef.current += chunk;
         setMessages((prev) => {
           const newMessages = [...prev];
-          newMessages[aiMessageIndex].messageText += chunk;
+          const lastIndex = newMessages.length - 1;
+          if (newMessages[lastIndex]?.role === "assistant") {
+            newMessages[lastIndex].messageText = streamingTextRef.current;
+          }
           return newMessages;
         });
       },
@@ -184,7 +181,9 @@ export default function ChatBoxComponent({
         setIsStreaming(false);
         firstChunkRef.current = false;
         setAnimationState("Idle", true, { loop: true });
-        refreshSessions();
+        setTimeout(() => {
+          refreshSessions();
+        }, 500);
       },
       // onError: Something went wrong
       (error) => {
@@ -205,13 +204,10 @@ export default function ChatBoxComponent({
         ref={logRef}
         className="scrollbar flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-2"
       >
-        {/* {messages.length === 0 && (
-          <p className="text-gray-400">No messages yet...</p>
-        )} */}
         {messages.map((msg, idx) => (
           <div
             key={`${msg.timeStamp}-${msg.role}-${idx}`}
-            className={`max-w-[90%] rounded-2xl p-2 ${
+            className={`max-w-[90%] rounded-2xl p-2 whitespace-pre-wrap ${
               msg.role === "assistant"
                 ? "self-end"
                 : "border-border bg-primary/40 text-foreground self-start border"
@@ -266,10 +262,6 @@ export default function ChatBoxComponent({
             )}
           </Button>
         </div>
-        {/* 
-        <div className="text-sm mt-1 text-right">
-
-        </div> */}
       </div>
     </div>
   );
